@@ -1,0 +1,29 @@
+\begin{thebibliography}{1}
+
+\bibitem{backtraderdoc}
+Documentaci\'on de backtrader.
+\newblock 2015.
+\newblock \url{(https://www.backtrader.com/docu/index.html)}.
+
+\bibitem{quandldoc}
+Documentaci\'on de quandl.
+\newblock 2018.
+\newblock \url{(https://docs.quandl.com/docs/python-installation)}.
+
+\bibitem{backtraderweb}
+P\'agina web de backtrader.
+\newblock 2018.
+\newblock \url{(https://www.backtrader.com)}.
+
+\bibitem{metatraderweb}
+P\'agina web de metatrader5.
+\newblock 2018.
+\newblock \url{(https://www.metatrader5.com)}.
+
+\bibitem{quandlerror}
+Quand data feed - futures data.
+\newblock 2018.
+\newblock
+  \url{(https://community.backtrader.com/topic/797/quandl-data-feed-futures-data)}.
+
+\end{thebibliography}

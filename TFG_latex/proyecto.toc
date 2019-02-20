@@ -1,0 +1,18 @@
+\contentsline {section}{\numberline {1}Fundamentos de Bolsa}{3}
+\contentsline {subsection}{\numberline {1.1}Mercado de valores}{3}
+\contentsline {subsection}{\numberline {1.2}El valor de las acciones}{3}
+\contentsline {subsection}{\numberline {1.3}Corredores de bolsa o brokers}{5}
+\contentsline {section}{\numberline {2}Plataformas de Trading}{6}
+\contentsline {subsection}{\numberline {2.1}MetaTrader5}{6}
+\contentsline {subsection}{\numberline {2.2}Backtrader}{6}
+\contentsline {subsubsection}{\numberline {2.2.1}Instalaci\'on}{6}
+\contentsline {subsubsection}{\numberline {2.2.2}Preparaci\'on del entorno}{7}
+\contentsline {subsubsection}{\numberline {2.2.3}La primera estrategia}{8}
+\contentsline {subsection}{\numberline {2.3}Otras plataformas}{11}
+\contentsline {section}{\numberline {3}Conseguir datos hist\'oricos para realizar backtesting}{12}
+\contentsline {subsection}{\numberline {3.1}Quandl}{12}
+\contentsline {subsection}{\numberline {3.2}YAHOO! Finance}{13}
+\contentsline {section}{\numberline {4}Bibliotecas de algor\'itmos gen\'eticos}{14}
+\contentsline {subsection}{\numberline {4.1}Pyvolution}{14}
+\contentsline {subsection}{\numberline {4.2}DEAP}{15}
+\contentsline {section}{\numberline {5}Estrategias complejas con Backtrader}{16}
