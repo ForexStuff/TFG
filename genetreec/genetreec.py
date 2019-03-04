@@ -12,14 +12,14 @@ class Genetreec:
 
 
 class Node:
-	feature = None  #column to split the data
+	func = None  #func to evaluate to split the data
 	pivot = None    #value to split the data
 
 	right = None   #node or leaf positive
 	left = None    #node or leaf negative
 
-	def __init__(self, feature, pivot):
-		self.feature = feature
+	def __init__(self, func, pivot, data):
+		self.func = func
 		self.pivot = pivot
 
 class Leaf:
@@ -27,5 +27,6 @@ class Leaf:
 	data = None  #the partition of data which verifies the branch's nodes restrictions
 
 	def __init__(self, data):
+		self.data = data
 
 

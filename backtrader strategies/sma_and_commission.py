@@ -12,6 +12,7 @@ class DoubleDownStrategy(bt.Strategy):
 	def log(self, txt, dt=None):
 		dt = dt or self.datas[0].datetime.date(0)
 		print('%s, %s' % (dt.isoformat(), txt))
+		print(self.position)
 
 	def __init__(self):
 		self.dataclose = self.datas[0].close
@@ -46,11 +47,11 @@ class DoubleDownStrategy(bt.Strategy):
 		if not self.position:
 			if self.dataclose[0] > self.sma[0]:
 				self.log('BUY CREATE, %.2f' % self.dataclose[0])
-				self.order = self.buy()
+				self.order = self.buy(size = self.broker.get_cash()/self.datas[0].open)
 		else:
-			if self.dataclose[0] < self.sma[0]:
+			if self.dataclose[0] < self.sma[0]*1.05:
 				self.log('SELL CREATE, %.2f' % self.dataclose[0])
-				self.order = self.sell()
+				self.order = self.sell(size=self.position.size)
 
 
 
@@ -80,9 +81,13 @@ if __name__ == '__main__':
     # Activar los datos en el cerebro
 	cerebro.adddata(df)
     # Establecer dinero inicial    
-	cerebro.broker.setcash(100000.0)
+	cerebro.broker.setcash(1000.0)
 	cerebro.broker.setcommission(commission=0.001)
 
 	print('Starting Portfolio Value: %.2f' % cerebro.broker.getvalue())
 	cerebro.run()   # EJECUTAR BACKTESTING (AHORA MISMO, SIN NINGUNA ESTRATEGIA)
 	print('Final Portfolio Value: %.2f' % cerebro.broker.getvalue())
+
+	cerebro.plot()
+
+
