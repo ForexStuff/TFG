@@ -1,7 +1,8 @@
 import pandas as pd
-
+from ta import *
 
 df = pd.read_csv('Data/SAN.csv')
-df['sma2'] = (df['Close'].rolling(2).mean())
+df['macd'] = macd(df['Close'])
 
 print(df)
+

@@ -75,7 +75,7 @@ if __name__ == '__main__':
 
 	# Crear un paquete de datos con YAHOO FINANCE API
 
-	data = yf.download("BBVA", "2017-01-01", "2018-12-31")
+	data = yf.download("BBVA", "2010-01-01", "2018-12-31")
 	df = bt.feeds.PandasData(dataname = data)
 
     # Activar los datos en el cerebro
