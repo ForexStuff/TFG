@@ -1,8 +1,7 @@
 import pandas as pd
-from ta import *
-from functools import partial
+import talib 
 
-class MACD:
+class _MACD:
 
 	def __init__(self, df, lowday=5, highday=10):
 		self.df = df
@@ -13,12 +12,11 @@ class MACD:
 		return 'MACD_' + str(self.lowday) + '_' + str(self.highday) 
 
 	def calculate(self):
-		return macd(self.df['Close'], 
+		return talib.MACD(self.df['Close'], 
 				self.lowday, 
-				self.highday, 
-				True)
+				self.highday)[0]
 
-class ATR:
+class _ATR:
 
 	def __init__(self, df, period=7):
 		self.df = df
@@ -28,15 +26,14 @@ class ATR:
 		return 'ATR_' + str(self.period)
 
 	def calculate(self):
-		return average_true_range(self.df['High'],
+		return talib.ATR(self.df['High'],
 							self.df['Low'], 
 							self.df['Close'], 
-							self.period, 
-							True)
+							self.period)
 
 def indivector(df):
-	return [MACD(df), 
-			ATR(df)]
+	return [_MACD(df), 
+			_ATR(df)]
 
 
 
