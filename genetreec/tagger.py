@@ -39,31 +39,38 @@ def acumtag(data):
 	negative_acum = 0
 	positive_acum = 0
 	ichange = 0
-	max_negative_acum = (-max_negative_acum)/6
+	max_negative_acum = (max_negative_acum)/6
 	max_positive_acum = (max_positive_acum)	/6
 
 
 	for dif,i in zip(data['dif'],list(range(0,data.shape[0]))): 
 		if positive:
+			data_tag[i] = 1 #crescent
 			if dif < 0:
+				if negative_acum == 0:
+					ichange = i-1
 				negative_acum += dif
 				if negative_acum < max_negative_acum:
-					data_tag[ichange] = 1 #sell
+					data_tag[ichange:i+1] = [-1]*(i-ichange+1)
+					data_tag[ichange] = 2 #max
 					positive = False
 					positive_acum = 0
 					ichange = i+1
 			else:
 				negative_acum += dif
-				if negative_acum > 0 :
+				if negative_acum > 0:
 					negative_acum = 0
 				if negative_acum == 0:
 					ichange = i
 		else:
+			data_tag[i] = -1 #decrescent
 			if dif > 0:
+				if positive_acum == 0:
+					ichange = i-1
 				positive_acum += dif
 				if positive_acum > max_positive_acum:
-					print(i)
-					data_tag[ichange] = -1 #buy
+					data_tag[ichange:i+1] = [1]*(i-ichange+1) 
+					data_tag[ichange] = -2 #min
 					positive = True
 					negative_acum = 0
 					ichange = i+1
