@@ -365,8 +365,13 @@ class DoubleDownStrategy(bt.Strategy):
 		\end{lstlisting}		
 		
 	\newpage	
-	\section{Bibliotecas de algor\'itmos gen\'eticos}
+	\section{Algor\'itmos gen\'eticos}
 	
+		\subsection{Definici\'on}
+			\subsubsection{Poblaci\'on}
+			\subsubsection{Funci\'on fitness}
+			\subsubsection{Cruce}
+			\subsubsection{Mutaci\'on}
 		\subsection{Pyvolution}
 		
 		Pyvolution es un paquete de Python de algoritmos gen\'eticos. Aunque la \'ultima versi\'on fue lanzada en 2012, es un paquete completo y sencillo de utilizar. En apenas 30 lineas y sin necesidad de dar muchas especificaciones se pueden realizar algoritmos completos. Una ejecuci\'on normal consta de varios par\'ametros donde se pueden controlar las generaciones, los individuos por generaci\'on, probabilidad y severidad de las mutaciones, cantidad indiviudos elitistas e incluso el tiempo m\'aximo de ejecuci\'on.\\
@@ -437,14 +442,25 @@ class DoubleDownStrategy(bt.Strategy):
 	#Ejecutamos	
 	result = em.run()
 		\end{lstlisting}
-		
-		
-		\subsection{DEAP}
-	
-		Demasiado enrevesado. La sintaxis es bastante confusa y los ejemplos o tutoriales no aclaran mucho las cosas.
 	
 	\newpage
-	\section{Estrategias complejas con Backtrader}\label{sec:deep_backtrader}	
+	\section{\'Arbol de Decisi\'on}\label{sec:Decision_tree}
+	
+		Los \'arboles se utilizan en diversos campos de la inform\'atica y, en concreto, en la toma de decisiones y/o predicciones. A pesar de que son dif\'iciles de representar y visualizar de forma global, resultan una herramienta muy \'util para separar situaciones o datos seg\'un una serie de condiciones dadas previamente.
+		
+		\subsection{Definici\'on}
+			Un grafo simple es un grafo sin lazos ni aristas m\'ultiples entre sus v\'ertices. Un \'arbol es un grafo simple G tal que
+			para cada dos v\'ertices de G existe un \'unico camino simple entre ellos.
+			
+			Un \'arbol de decisi\'on ser\'a, por tanto, un \'arbol compuesto por:
+			\begin{itemize}
+				\item Un v\'ertice especial, llamado nodo ra\'iz, que se considera el inicio del camino de decisi\'on.
+				\item Un conjunto de v\'ertices, llamados nodos, conectados con al menos otros 2 v\'ertices. En cada nodo hay una condici\'on. La verficaci\'on de dicha condici\'on determina que nodo es el siguiente en el camino de decisi\'on.
+				\item Un conjunto de v\'ertices, llamados hojas o nodos terminales, conectados con un \'unico v\'ertice. En cada hoja hay una decisi\'on que deber\'ia ser tomada si el camino de decisi\'on lleva hasta \'el.
+			\end{itemize}
+			\subsubsection{Etiquetado}
+			\subsubsection{Generaci\'on de un \'arbol}
+			\subsubsection{Sobreaprendizaje}
 	
 	
 	
