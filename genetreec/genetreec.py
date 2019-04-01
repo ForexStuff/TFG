@@ -10,8 +10,8 @@ indivector = indicator.indivector(df)
 
 
 
-def entropy(v):
-	if v==0 or v==1:
+def entropy(v):           # v is the class proportion (frec/total)
+	if v==0 or v==1:      #    Just works with 2-classes problem
 		return 0
 	return -(v*math.log(v,2)+(1-v)*math.log(1-v,2))
 
