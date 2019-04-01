@@ -82,9 +82,9 @@ def acumtag(data):
 					ichange = i
 					
 	data['tag'] = data_tag
-	print('max_neg_acum:' + str(max_negative_acum) + ' max_pos_acum:' + str(max_positive_acum))
-	np.set_printoptions(threshold=0)
-	print(data)
+	#print('max_neg_acum:' + str(max_negative_acum) + ' max_pos_acum:' + str(max_positive_acum))
+	return data
+	
 
 
 df = pd.read_csv('../Data/SAN.csv')
