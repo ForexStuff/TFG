@@ -22,5 +22,4 @@
 \contentsline {section}{\numberline {5}\'Arbol de Decisi\'on}{16}
 \contentsline {subsection}{\numberline {5.1}Definici\'on}{16}
 \contentsline {subsubsection}{\numberline {5.1.1}Etiquetado}{16}
-\contentsline {subsubsection}{\numberline {5.1.2}Generaci\'on de un \'arbol}{16}
-\contentsline {subsubsection}{\numberline {5.1.3}Sobreaprendizaje}{16}
+\contentsline {subsubsection}{\numberline {5.1.2}Conjunto de entrenamiento}{17}

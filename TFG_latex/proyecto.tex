@@ -456,11 +456,20 @@ class DoubleDownStrategy(bt.Strategy):
 			\begin{itemize}
 				\item Un v\'ertice especial, llamado nodo ra\'iz, que se considera el inicio del camino de decisi\'on.
 				\item Un conjunto de v\'ertices, llamados nodos, conectados con al menos otros 2 v\'ertices. En cada nodo hay una condici\'on. La verficaci\'on de dicha condici\'on determina que nodo es el siguiente en el camino de decisi\'on.
-				\item Un conjunto de v\'ertices, llamados hojas o nodos terminales, conectados con un \'unico v\'ertice. En cada hoja hay una decisi\'on que deber\'ia ser tomada si el camino de decisi\'on lleva hasta \'el.
+				\item Un conjunto de v\'ertices, llamados hojas o nodos terminales, conectados con un \'unico v\'ertice. En cada hoja hay una clasificaci\'on del dato que cumple todas las condiciones que tienen los nodos del camino desde la ra\'iz hasta la hoja. 
 			\end{itemize}
+			
+			El objetivo de un \'arbol de decisi\'on es, por tanto, clasificar datos de una determinada naturaleza seg\'un una serie de condiciones. La construcci\'on de dicho \'arbol y la elecci\'on de las condiciones las veremos en los siguientes apartados.
+			 
 			\subsubsection{Etiquetado}
-			\subsubsection{Generaci\'on de un \'arbol}
-			\subsubsection{Sobreaprendizaje}
+			Para poder clasificar un dato, es necesario saber cu\'ales son las posibles clasificaciones o, como se suele nombrar, cuales son las clases. Esta clase viene dada por la etiqueta o \textit{tag}. 
+			
+			En el caso que nos ocupa, el \textit{trading} en bolsa, no se tiene una clasificaci\'on natural. Crear estas clases de manera que representen un buen momento para comprar o vender ser\'a objeto de estudio en nuestro trabajo.
+			
+			\subsubsection{Conjunto de entrenamiento}
+			Una vez que la estructura del \'arbol esta hecha es sencillo clasificar un dato. Basta con ir comprobando las condiciones de cada nodo y continuar el recorrido del grafo seg\'un los resultados de estas. Cuando una condici\'on nos dirija a una hoja, encontraremos la clase predicha para ese dato concreto. Pero, ¿c\'omo podemos crear el \'arbol?\\
+			
+			Aqu\'i entra el juego el conjunto de entrenamiento. Un conjunto de entrenamiento es un compendio de datos, de la misma naturaleza que los que queremos clasificar, de los que ya sabemos su clase real. Por tanto, a partir de este conjunto, deberemos inducir un \'arbol de decisi\'on cuyas hojas clasifiquen bien los datos conocidos. De esta forma, si los datos con clase desconocida tienen una procedencia parecida a los datos del conjunto de entrenamiento, ser\'an correctamente clasificados. O al menos esta es la intenci\'on.
 	
 	
 	
