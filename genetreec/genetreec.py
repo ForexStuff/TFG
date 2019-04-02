@@ -12,7 +12,7 @@ indivector = indicator.indivector(df)
 
 def entropy(v):           # v is the class proportion (frec/total)
 	if v==0 or v==1:      #    Just works with 2-classes problem
-		return 0
+		return 1
 	return -(v*math.log(v,2)+(1-v)*math.log(1-v,2))
 
 
@@ -59,7 +59,7 @@ class Leaf:
 		self.data = data
 		self.partition = partition
 
-	def train(self):
+	def train(self): # Take the actual partition and a new function indicator, calculate the entropic pivot and split into 2 leaves
 		func = indivector[random.randint(0,1)]
 		(criteria, pivot) = self.select_pivot(func.calculate())
 
@@ -69,32 +69,30 @@ class Leaf:
 		return Node(func, pivot, right, left)
 
 	def select_pivot(self, values):
-		grill = [x/10 for x in range(1,10)]
+		grill = [x/10 for x in range(1,10)]   # Make a grill to test pivots, not so good method
 		grill_entropy = []
 
-		for x in grill:
-			n_left  = sum(values['values'] < x)
-			n_right = sum(values['values'] >= x)
-			total_inverse = 1 / (n_left + n_right)
+		total_inverse = 1 / sum(self.partition)
+		for x in grill:								# For each point on grill
+			n_left  = sum(values['values'][self.partition] < x)		# Calculate left and right data
+			n_right = sum(values['values'][self.partition] >= x)	# Calculate the first class frecuency on both
+													  				# Calculate the total entropy and save to take the best 
 			if n_left == 0:
 				l_entropy = 0
 			else:
-				l_entropy  = n_left*total_inverse   * entropy( sum( (values['values']<x)  & (values['tag']<0)) / n_left )
+				l_entropy  = n_left*total_inverse * entropy( sum( (values['values'][self.partition]<x)  & (values['tag'][self.partition]<0)) / n_left )
 			if n_right == 0:
 				r_entropy = 0
 			else:			
-				r_entropy = n_right* total_inverse * entropy( sum( (values['values']>=x) & (values['tag']<0)) / n_right ) 
+				r_entropy = n_right* total_inverse * entropy( sum( (values['values'][self.partition]>=x) & (values['tag'][self.partition]<0)) / n_right ) 
 			grill_entropy.append(l_entropy + r_entropy)
 
-		#grill_entropy = [entropy(sum(values['values'] < x and values['tag'] < 0)/sum(values['values'] < x)) for x in grill]
 		max_index = grill_entropy.index(min( grill_entropy ))
-
 		pivot = grill[max_index]
-		print(grill_entropy)
-		criteria = values['values'] < pivot
-		return (criteria, pivot)
+		criteria = values['values'] < pivot			# Take the best pivot and make the boolean vector of the left leaf
+		return (criteria, pivot)					# Return the pivot and vector.
 
-	def plot(self):
+	def plot(self):   # Future graphical plot. By now, print the data
 		print(df[self.partition])
 		return None
 

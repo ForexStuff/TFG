@@ -4,7 +4,6 @@ import talib
 
 def minimax(data):
 	data = data.fillna(data.mean())
-	print(max(data))
 	return (data - min(data)) / (max(data) - min(data))
 
 class _MACD:
