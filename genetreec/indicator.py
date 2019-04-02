@@ -18,9 +18,9 @@ class _MACD:
 
 	def calculate(self):
 		data = pd.DataFrame()
-		data['values'] = minimax(talib.MACD(self.df['Close'], 
+		data['values'] = talib.MACD(self.df['Close'], 
 				self.lowday, 
-				self.highday)[0])
+				self.highday)[0]
 		data['tag'] = self.df['tag']
 		return data
 
@@ -35,10 +35,10 @@ class _ATR:
 
 	def calculate(self):
 		data = pd.DataFrame()
-		data['values'] = minimax(talib.ATR(self.df['High'],
+		data['values'] = talib.ATR(self.df['High'],
 							self.df['Low'], 
 							self.df['Close'], 
-							self.period))
+							self.period)
 		data['tag'] = self.df['tag']
 		return data
 

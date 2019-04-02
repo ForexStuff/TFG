@@ -69,7 +69,9 @@ class Leaf:
 		return Node(func, pivot, right, left)
 
 	def select_pivot(self, values):
-		grill = [x/10 for x in range(1,10)]   # Make a grill to test pivots, not so good method
+		max_val = values['values'].min()
+		min_val = values['values'].max()
+		grill = [(max_val - min_val)*(x/10)+min_val for x in range(1,10)]   # Make a grill to test pivots, not so good method
 		grill_entropy = []
 
 		total_inverse = 1 / sum(self.partition)
