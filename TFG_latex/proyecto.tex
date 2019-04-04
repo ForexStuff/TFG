@@ -366,12 +366,26 @@ class DoubleDownStrategy(bt.Strategy):
 		
 	\newpage	
 	\section{Algor\'itmos gen\'eticos}
-	
+		La evoluci\'on es un proceso de optimizaci\'on cuyo objetivo es la mejora continua de una habilidad o caracter\'istica. Este proceso se observa en la mayor\'ia de los seres vivos que, en un intento de adaptarse al medio y fortalecerse, cambian progresivamente.\\
+		
+		Los algoritmos gen\'eticos tienen como inspiraci\'on este comportamiento. Para hallar la soluci\'on \'optima de un problema, se genera una poblaci\'on de soluciones, no necesariamente buenas. Se simula una descendencia de estas, es decir, nuevas soluciones del problema que se parecen a las anteriores y, mediante selecci\'on natural, se favorece la evoluci\'on de la soluci\'on hacia una mejora.
+		
 		\subsection{Definici\'on}
+		Un algoritmo gen\'etico se compone de cinco elementos b\'asicos:
+		
+		\begin{itemize}
+			\item \textbf{Poblaci\'on.} Un conjunto de soluciones del problema que queremos resolver. Su representaci\'on computacional definir\'a al resto de los elementos.
+			\item \textbf{Funci\'on fitness o funci\'on de evaluaci\'on.} Una funci\'on cuyo dominio sea la poblaci\'on del problema y que tenga por imagen alg\'un subconjunto de ${\rm I\!R}$. Representa como de buena es una soluci\'on.
+			\item \textbf{Cruce.} Un proceso mediante el cual una o varias soluciones produzcan una o varias soluciones combinadas nuevas.
+			\item \textbf{Mutaci\'on} Un proceso que act\'ue sobre un individuo de la poblaci\'on y le produce una transformaci\'on signficativa. Este procedimiento no es imprescindible, pero ayuda a que las soluciones sigan variando tras muchas generaciones.
+			\item \textbf{Selecci\'on.} Un criterio de eliminaci\'on que permite descartar individuos de la poblaci\'on.
+		\end{itemize}
+		
 			\subsubsection{Poblaci\'on}
 			\subsubsection{Funci\'on fitness}
 			\subsubsection{Cruce}
 			\subsubsection{Mutaci\'on}
+			\subsubsection{Selecci\'on}
 		\subsection{Pyvolution}
 		
 		Pyvolution es un paquete de Python de algoritmos gen\'eticos. Aunque la \'ultima versi\'on fue lanzada en 2012, es un paquete completo y sencillo de utilizar. En apenas 30 lineas y sin necesidad de dar muchas especificaciones se pueden realizar algoritmos completos. Una ejecuci\'on normal consta de varios par\'ametros donde se pueden controlar las generaciones, los individuos por generaci\'on, probabilidad y severidad de las mutaciones, cantidad indiviudos elitistas e incluso el tiempo m\'aximo de ejecuci\'on.\\

@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015/Debian) (preloaded format=pdflatex 2018.10.14)  2 APR 2019 19:06
+This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015/Debian) (preloaded format=pdflatex 2018.10.14)  4 APR 2019 17:12
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -347,57 +347,63 @@ Underfull \hbox (badness 10000) in paragraph at lines 351--352
  []
 
 [13 <./imagenes/yahoo_finance.png>]
-Underfull \hbox (badness 10000) in paragraph at lines 377--378
+Underfull \hbox (badness 10000) in paragraph at lines 369--370
 
  []
 
-LaTeX Font Info:    Font shape `OMS/cmr/m/n' in size <6> not available
-(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 383.
 
-Overfull \hbox (10.39944pt too wide) in paragraph at lines 414--417
-[][][][][][][][][][][][][][][][][][][][][][][][][][][] 
+Underfull \hbox (badness 10000) in paragraph at lines 391--392
+
  []
 
 [14]
-Overfull \hbox (1.59946pt too wide) in paragraph at lines 427--428
+LaTeX Font Info:    Font shape `OMS/cmr/m/n' in size <6> not available
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 397.
+
+Overfull \hbox (10.39944pt too wide) in paragraph at lines 428--431
+[][][][][][][][][][][][][][][][][][][][][][][][][][][] 
+ []
+
+[15]
+Overfull \hbox (1.59946pt too wide) in paragraph at lines 441--442
 [][][][][][][][][][][][][][][][][][][][][][][][][][][] 
  []
 
 
-Overfull \hbox (1.59946pt too wide) in paragraph at lines 431--432
+Overfull \hbox (1.59946pt too wide) in paragraph at lines 445--446
 [][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][] 
  []
 
 
-Overfull \hbox (19.19943pt too wide) in paragraph at lines 432--433
+Overfull \hbox (19.19943pt too wide) in paragraph at lines 446--447
 [][][][][][][][][][][][][][][][][][][][][][] 
  []
 
 
-Overfull \hbox (19.19943pt too wide) in paragraph at lines 433--434
+Overfull \hbox (19.19943pt too wide) in paragraph at lines 447--448
 [][][][][][][][][][][][][][][][][][][][][][] 
  []
 
 
-Overfull \hbox (19.19943pt too wide) in paragraph at lines 434--436
+Overfull \hbox (19.19943pt too wide) in paragraph at lines 448--450
 [][][][][][][][][][][][][][][][][][][][][][] 
  []
 
-[15]
+[16]
 Missing character: There is no Â in font cmr12!
 Missing character: There is no ¿ in font cmr12!
 
-Underfull \hbox (badness 10000) in paragraph at lines 470--471
+Underfull \hbox (badness 10000) in paragraph at lines 484--485
 
  []
 
-[16] [17] (./proyecto.bbl
+[17] [18] (./proyecto.bbl
 Underfull \hbox (badness 1584) in paragraph at lines 24--28
 []\OT1/cmr/m/n/12 Quand data feed - fu-tures data.  2018.  $\OT1/cmtt/m/n/12 (h
 ttps : / / community .
  []
 
-) [18] (./proyecto.aux)
+) [19] (./proyecto.aux)
 
 LaTeX Warning: There were undefined references.
 
@@ -405,7 +411,7 @@ LaTeX Warning: There were undefined references.
 Here is how much of TeX's memory you used:
  2925 strings out of 494953
  42468 string characters out of 6180976
- 122775 words of memory out of 5000000
+ 125775 words of memory out of 5000000
  6175 multiletter control sequences out of 15000+600000
  10266 words of font info for 36 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
@@ -419,10 +425,10 @@ fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/share/texlive/texmf-dist/fonts/
 type1/public/amsfonts/cm/cmsy6.pfb></usr/share/texlive/texmf-dist/fonts/type1/p
 ublic/amsfonts/cm/cmti12.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/
 amsfonts/cm/cmtt12.pfb>
-Output written on proyecto.pdf (20 pages, 510723 bytes).
+Output written on proyecto.pdf (21 pages, 512540 bytes).
 PDF statistics:
- 112 PDF objects out of 1000 (max. 8388607)
- 74 compressed objects within 1 object stream
+ 115 PDF objects out of 1000 (max. 8388607)
+ 76 compressed objects within 1 object stream
  0 named destinations out of 1000 (max. 500000)
  26 words of extra memory for PDF output out of 10000 (max. 10000000)
 
