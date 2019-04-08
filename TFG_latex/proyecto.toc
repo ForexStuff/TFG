@@ -14,13 +14,13 @@
 \contentsline {subsection}{\numberline {3.2}YAHOO! Finance}{13}
 \contentsline {section}{\numberline {4}Algor\'itmos gen\'eticos}{14}
 \contentsline {subsection}{\numberline {4.1}Definici\'on}{14}
-\contentsline {subsubsection}{\numberline {4.1.1}Poblaci\'on}{15}
+\contentsline {subsubsection}{\numberline {4.1.1}Poblaci\'on}{14}
 \contentsline {subsubsection}{\numberline {4.1.2}Funci\'on fitness}{15}
-\contentsline {subsubsection}{\numberline {4.1.3}Cruce}{15}
-\contentsline {subsubsection}{\numberline {4.1.4}Mutaci\'on}{15}
-\contentsline {subsubsection}{\numberline {4.1.5}Selecci\'on}{15}
-\contentsline {subsection}{\numberline {4.2}Pyvolution}{15}
-\contentsline {section}{\numberline {5}\'Arbol de Decisi\'on}{17}
-\contentsline {subsection}{\numberline {5.1}Definici\'on}{17}
-\contentsline {subsubsection}{\numberline {5.1.1}Etiquetado}{17}
-\contentsline {subsubsection}{\numberline {5.1.2}Conjunto de entrenamiento}{18}
+\contentsline {subsubsection}{\numberline {4.1.3}Selecci\'on}{16}
+\contentsline {subsubsection}{\numberline {4.1.4}Cruce}{16}
+\contentsline {subsubsection}{\numberline {4.1.5}Mutaci\'on}{16}
+\contentsline {subsection}{\numberline {4.2}Pyvolution}{16}
+\contentsline {section}{\numberline {5}\'Arbol de Decisi\'on}{18}
+\contentsline {subsection}{\numberline {5.1}Definici\'on}{18}
+\contentsline {subsubsection}{\numberline {5.1.1}Etiquetado}{18}
+\contentsline {subsubsection}{\numberline {5.1.2}Conjunto de entrenamiento}{19}
