@@ -411,7 +411,20 @@ class DoubleDownStrategy(bt.Strategy):
 				\item En la selecci\'on de la nueva generaci\'on, para filtrar los individuos m\'as fuertes (hablando en t\'erminos de la funci\'on \textit{fitness}).
 				\item En el cruce de los individuos para producir una nueva generaci\'on. Es razonable que los individuos con mejores caracter\'isticas tengan m\'as posibilidades de tener descendientes en la pr\'oxima generaci\'on.
 			\end{itemize}
-			Existen multitud de formas de aplicar la selecci\'on, las m\'as comunes son las siguientes.
+			Existen multitud de formas de aplicar la selecci\'on, las m\'as comunes son las siguientes.\\
+			
+			\textbf{Selecci\'on aleatoria}
+			
+			Cada individuo de la poblaci\'on tiene la misma probabilidad de salir elegido, $\frac{1}{s}$ donde $s$ es el n\'umero de individuos.\\
+			
+			\textbf{Selecci\'on proporcional}
+			
+			La probabilidad de que un individuo sea seleccionado viene dado por la funci\'on $\varphi:\Gamma\rightarrow [0,1]$ definida como
+			\[\varphi(x_i)=\frac{f(x_i)}{\sum_{j=1}^{s}f(x_j)}\]
+			
+			\textbf{Selecci\'on por torneo}
+			
+			Se extrae una muestra (con o sin devoluci\'on) de la poblaci\'on de tama\~no $k$ con $k<s$. Se selecciona entonces el individuo con mayor puntuaci\'on en la funci\'on \textit{fitness}.
 			
 			\subsubsection{Cruce}
 			
