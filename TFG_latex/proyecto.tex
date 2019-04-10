@@ -465,6 +465,30 @@ class DoubleDownStrategy(bt.Strategy):
 			
 			\subsubsection{Mutaci\'on}
 
+			El objetivo de las mutaciones es la introducci\'on de nuevo material gen\'etico en la poblaci\'on, m\'as all\'a de las combinaciones entre los individuos. Una mutaci\'on demasiado com\'um o demasiado agresiva producir\'a que se pierda el factor evolutivo, no obstante, en determinadas dosis puede llegar a ser efectivo para explorar m\'as en el espacio de b\'usqueda.\\
+			
+			Al igual que en la secci\'on de cruce, tenemos distintas variantes de esta operaci\'on basadas en la forma de escoger los bits a mutar.\\
+			
+			\textbf{Mutaci\'on uniforme}
+
+			Dado un individuo, se seleccionan, a partir de una distribuci\'on uniforme, los bits a mutar. La mutaci\'on consiste en poner el valor contrario al original (0 si era 1 y 1 si era 0).\\			
+		
+		
+			\textbf{Mutaci\'on \textit{inorder}}
+		
+			Similar a la anterior, pero los bits mutables son solo un subconjunto de los totales. Dicho subconjunto inmutable puede ser producto de una aleatorizaci\'on o seleccionado manualmente si se quiere proteger una zona de este operador.\\
+			
+
+			\textbf{Mutaci\'on Gaussiana}
+
+			Esta es una mutaci\'on basada en el m\'etodo de ruido Gaussiano. Si se ha usado la codificaci\'on binaria de los individuos, es necesario volver al valor decimal que este representa. 
+			
+			Ahora se usa el m\'etodo de ruido Gaussiano sobre el valor decimal, esto es, $x_j = x_j + N(0,\sigma_j)$ con $N$ la distribuci\'on normal y $\sigma_j = x_j * 0.1$
+			
+			Para concluir se devuelve la variable a la codificaci\'on binaria.\\
+			
+			Con este \'ultimo m\'etodo se pueden proteger los cambios dr\'asticos en los valores, ya que la distribuci\'on normal controla que no se cambien los bits m\'as significativos en la codificaci\'on binaria.\\
+							
 		\subsection{Pyvolution}
 		
 		Pyvolution es un paquete de Python de algoritmos gen\'eticos. Aunque la \'ultima versi\'on fue lanzada en 2012, es un paquete completo y sencillo de utilizar. En apenas 30 lineas y sin necesidad de dar muchas especificaciones se pueden realizar algoritmos completos. Una ejecuci\'on normal consta de varios par\'ametros donde se pueden controlar las generaciones, los individuos por generaci\'on, probabilidad y severidad de las mutaciones, cantidad indiviudos elitistas e incluso el tiempo m\'aximo de ejecuci\'on.\\
