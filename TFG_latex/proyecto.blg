@@ -1,8 +1,6 @@
-This is BibTeX, Version 0.99d (TeX Live 2015/Debian)
-Capacity: max_strings=35307, hash_size=35307, hash_prime=30011
-The top-level auxiliary file: proyecto.aux
+This is BibTeX, Version 0.99dThe top-level auxiliary file: proyecto.aux
 The style file: plain.bst
-Database file #1: bibliografia.bib.bib
+Database file #1: bibliografia.bib
 Warning--to sort, need author or key in metatraderweb
 Warning--to sort, need author or key in backtraderweb
 Warning--to sort, need author or key in backtraderdoc
@@ -18,45 +16,4 @@ Warning--empty author in metatraderweb
 Warning--empty journal in metatraderweb
 Warning--empty author in quandlerror
 Warning--empty journal in quandlerror
-You've used 5 entries,
-            2118 wiz_defined-function locations,
-            514 strings with 4464 characters,
-and the built_in function-call counts, 880 in all, are:
-= -- 85
-> -- 5
-< -- 0
-+ -- 5
-- -- 0
-* -- 57
-:= -- 124
-add.period$ -- 15
-call.type$ -- 5
-change.case$ -- 15
-chr.to.int$ -- 0
-cite$ -- 20
-duplicate$ -- 50
-empty$ -- 91
-format.name$ -- 0
-if$ -- 186
-int.to.chr$ -- 0
-int.to.str$ -- 5
-missing$ -- 5
-newline$ -- 28
-num.names$ -- 0
-pop$ -- 25
-preamble$ -- 1
-purify$ -- 10
-quote$ -- 0
-skip$ -- 35
-stack$ -- 0
-substring$ -- 25
-swap$ -- 0
-text.length$ -- 0
-text.prefix$ -- 0
-top$ -- 0
-type$ -- 20
-warning$ -- 15
-while$ -- 0
-width$ -- 6
-write$ -- 47
 (There were 15 warnings)

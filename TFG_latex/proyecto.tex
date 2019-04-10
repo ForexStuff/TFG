@@ -371,6 +371,8 @@ class DoubleDownStrategy(bt.Strategy):
 		
 		Los algoritmos gen\'eticos tienen como inspiraci\'on este comportamiento. Para hallar la soluci\'on \'optima de un problema, se genera una poblaci\'on de soluciones, no necesariamente buenas. Se simula una descendencia de estas, es decir, nuevas soluciones del problema que se parecen a las anteriores y, mediante selecci\'on natural, se favorece la evoluci\'on de la soluci\'on hacia una mejora.
 		
+		A continuaci\'on se ofrece una aproximaci\'on a los algortimos gen\'eticos. Un desarrollo m\'as profundo puede encontrarse en \cite{comput_intelli}.
+		
 		\subsection{Definici\'on}
 		Un algoritmo gen\'etico se compone de cinco elementos b\'asicos:
 		
@@ -424,9 +426,42 @@ class DoubleDownStrategy(bt.Strategy):
 			
 			\textbf{Selecci\'on por torneo}
 			
-			Se extrae una muestra (con o sin devoluci\'on) de la poblaci\'on de tama\~no $k$ con $k<s$. Se selecciona entonces el individuo con mayor puntuaci\'on en la funci\'on \textit{fitness}.
+			Se extrae una muestra (con o sin devoluci\'on) de la poblaci\'on de tama\~no $k$ con $k<s$. Se selecciona entonces el individuo con mayor puntuaci\'on en la funci\'on \textit{fitness}.\\
+			
+			\textbf{Selecci\'on basada en posición}
+			
+			En lugar de usar directamente la puntuaci\'on de la funci\'on \textit{fitness}, se usa la posici\'on respecto al resto de individuos de la poblaci\'on.
+			
+			Se selecciona el elemento $x_i$ donde $i=Entera(Z)$ y $Z\sim U(0,U(0,s))$ siendo U la distribuci\'on uniforme.\\
+			
+			\textbf{Selecci\'on con elitismo}
+			
+			En ciertos casos conviene mantener a los mejores individuos de una poblaci\'on. Esto asegurar\'a que la nueva poblaci\'on tendr\'a alg\'un individuo al menos tan bueno como en la generaci\'on anterior.
+			
+			Seleccionar varios individuos para que permanezcan en la poblaci\'on suele ser una buena pr\'actica.
 			
 			\subsubsection{Cruce}
+			
+			La reproducci\'on es el proceso mediante el cual los individuos de una poblaci\'on generan las siguiente poblaci\'on. Un cruce es una operaci\'on que, dados uno o varios individuos padres, genera uno o varios individuos hijos que pasar\'an a la pr\'oxima generaci\'on.\\
+			
+			La forma t\'ecnica de hacer un cruce depende directamente de la representaci\'on de los individuos. Vamos a presentar algunas formas de hacer cruces cuando tenemos representaci\'on binaria pura.\\
+			
+			\textbf{Cruce de un punto}
+			
+			Dados dos padres a cruzar, se toma un valor $i$ donde $i=Entera(Z)$ y $Z\sim U(1,l-1)$ con $l$ la longitud del vector de bits que representa a un individuo. 
+			
+			Se generan entonces dos individuos. El primero tendr\'a los $i$ primeros bits del primer padre y los $l-i$ \'ultimos del segundo progenitor. El segundo individuo se genera con los bits que no se han tomado en el primero.\\
+			
+			\textbf{Cruce de dos puntos}
+
+			Similar al cruce de un punto. La diferencia con este es que la parte que se toma del primer padre para el primer hijo viene dada por una subcadena de los bits del padre de inicio y final dos \'indices generados con una distribuci\'on uniforme, como venimos haciendo.
+			
+			Notar que aleatorizar el final de la subcadena es equivalente a aleatorizar la dimensi\'on de la misma. En ocasiones se puede optar por una subcadena de tama\~no fijo. \\
+			
+			\textbf{Cruce uniforme}
+			
+			Es un procedimiento similar a los anteriores, solo que bit a bit. Se inicializa una m\'ascara de tama\~no $l$ a 0. Por cada elemento de la m\'ascara, se toma un valor de $X \sim U(0,1)$, si $x > p$ entonces el valor de la m\'ascara se actualiza a 1. El primer hijo tendr\'a los bits del primer padre que tengan 0 en la m\'ascara y el resto del segundo padre. El segundo hijo se construye de forma contraria. 
+			
 			
 			\subsubsection{Mutaci\'on}
 
@@ -535,6 +570,6 @@ class DoubleDownStrategy(bt.Strategy):
 \newpage
 
 \bibliographystyle{plain}
-\bibliography{bibliografia.bib}
+\bibliography{bibliografia}
 
 \end{document}
