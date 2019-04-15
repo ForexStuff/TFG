@@ -1,6 +1,7 @@
 import pandas as pd
 import talib 
 
+df = None
 
 def minimax(data):
 	data = data.fillna(data.mean())
@@ -8,8 +9,7 @@ def minimax(data):
 
 class _MACD:
 
-	def __init__(self, df, lowday=5, highday=10):
-		self.df = df
+	def __init__(self, lowday=5, highday=10):
 		self.lowday = lowday
 		self.highday = highday	
 
@@ -18,16 +18,15 @@ class _MACD:
 
 	def calculate(self):
 		data = pd.DataFrame()
-		data['values'] = talib.MACD(self.df['Close'], 
+		data['values'] = talib.MACD(df['Close'], 
 				self.lowday, 
 				self.highday)[0]
-		data['tag'] = self.df['tag']
+		data['tag'] = df['tag']
 		return data
 
 class _ATR:
 
-	def __init__(self, df, period=7):
-		self.df = df
+	def __init__(self, period=7):
 		self.period = period
 
 	def name(self):
@@ -35,16 +34,37 @@ class _ATR:
 
 	def calculate(self):
 		data = pd.DataFrame()
-		data['values'] = talib.ATR(self.df['High'],
-							self.df['Low'], 
-							self.df['Close'], 
+		data['values'] = talib.ATR(df['High'],
+							df['Low'], 
+							df['Close'], 
 							self.period)
-		data['tag'] = self.df['tag']
+		data['tag'] = df['tag']
 		return data
 
-def indivector(df):
-	return [_MACD(df), 
-			_ATR(df)]
+
+class _ROC:
+
+	def __init__(self, period=7):
+		self.period = period
+
+	def name(self):
+		return 'ROC_' + str(self.period)
+
+	def calculate(self):
+		data = pd.DataFrame()
+		data['values'] = talib.ROC(df['Close'],
+							timeperiod=10)
+		data['tag'] = df['tag']
+		return data
+
+
+
+def indivector(data):
+	global df 
+	df = data
+	return [_MACD(), 
+			_ATR(),
+			_ROC()]
 
 
 

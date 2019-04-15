@@ -104,7 +104,6 @@ class Leaf:
 		criteria = values['values'] < pivot			# Take the best pivot and make the boolean vector of the left leaf
 		data_count = sum(criteria)
 		if data_count < 3 or sum(self.partition)-data_count < 3: # To few data to split
-			print('\n\nNO DATA\n\n')
 			return (0,0)
 
 		return (criteria, pivot)					# Return the pivot and vector.
