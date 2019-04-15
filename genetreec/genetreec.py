@@ -24,7 +24,7 @@ class Genetreec:
 		self.root = Leaf(data, [True] * data.shape[0])
 		
 	def train(self):
-		self.root = self.root.train(3)
+		self.root = self.root.train(5)
 		self.root.plot()
 
 	def test(self, data):
@@ -63,14 +63,16 @@ class Leaf:
 	def train(self, levels): # Take the actual partition and a new function indicator, calculate the entropic pivot and split into 2 leaves
 		func = copy.deepcopy(indivector[random.randint(0,1)])
 		(criteria, pivot) = self.select_pivot(func.calculate())
-
-		right = Leaf(df[criteria & self.partition], criteria & self.partition)
-		left = Leaf(df[~criteria & self.partition], ~criteria & self.partition)
-		
-		if levels>1 :
-			right = right.train(levels-1)
-			left = left.train(levels-1)
-		return Node(func, pivot, right, left)
+		if isinstance(criteria, int) :    # Fail recieved, pivot to split not found, return the leaf
+			return self
+		else:		# Pivot found, return the Node with two son leaves
+			right = Leaf(df[criteria & self.partition], criteria & self.partition)
+			left = Leaf(df[~criteria & self.partition], ~criteria & self.partition)
+			
+			if levels>1 :
+				right = right.train(levels-1)
+				left = left.train(levels-1)
+			return Node(func, pivot, right, left)
 
 	def select_pivot(self, values):
 		max_val = values['values'].min()
@@ -78,25 +80,33 @@ class Leaf:
 		grill = [(max_val - min_val)*(x/10)+min_val for x in range(1,10)]   # Make a grill to test pivots
 		grill_entropy = []
 
-		total_inverse = 1 / sum(self.partition)
+		total = sum(self.partition)
+
+		total_inverse = 1 / total
 		for x in grill:								# For each point on grill
 			n_left  = sum(values['values'][self.partition] < x)		# Calculate left and right data
 			n_right = sum(values['values'][self.partition] >= x)	# Calculate the first class frecuency on both
 													  				# Calculate the total entropy and save to take the best 
 			if n_left == 0:
-				l_entropy = 0
+				l_entropy = 1
 			else:
 				l_entropy  = n_left*total_inverse * entropy( sum( (values['values'][self.partition]<x)  & (values['tag'][self.partition]<0)) / n_left )
 			if n_right == 0:
-				r_entropy = 0
+				r_entropy = 1
 			else:			
 				r_entropy = n_right* total_inverse * entropy( sum( (values['values'][self.partition]>=x) & (values['tag'][self.partition]<0)) / n_right ) 
 			grill_entropy.append(l_entropy + r_entropy)
 
 		print(grill_entropy)
-		max_index = grill_entropy.index(min( grill_entropy ))
-		pivot = grill[max_index]
+
+		min_index = grill_entropy.index(min( grill_entropy ))
+		pivot = grill[min_index]
 		criteria = values['values'] < pivot			# Take the best pivot and make the boolean vector of the left leaf
+		data_count = sum(criteria)
+		if data_count < 3 or sum(self.partition)-data_count < 3: # To few data to split
+			print('\n\nNO DATA\n\n')
+			return (0,0)
+
 		return (criteria, pivot)					# Return the pivot and vector.
 
 	def plot(self):   # Future graphical plot. By now, print the data
