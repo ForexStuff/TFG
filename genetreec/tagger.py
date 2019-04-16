@@ -2,9 +2,10 @@ import pandas as pd
 import numpy as np
 import talib
 import math
+from pandas_datareader import data as pdr
 
-def acumtag(data):
-
+def acumtag():
+	data = pdr.get_data_yahoo("SAN", start="2017-01-01", end="2019-03-30")
 	data['dif'] = talib.MOM(data['Close'],1)  # Calculate the difference with last day
 	data['dif'][0] = -0.01
 	data_tag = [0] * data.shape[0]
@@ -83,11 +84,6 @@ def acumtag(data):
 					
 	data['tag'] = data_tag
 	#print('max_neg_acum:' + str(max_negative_acum) + ' max_pos_acum:' + str(max_positive_acum))
-	return data
-	
+	data.to_csv("tagged_data/SAN.csv")
 
-
-df = pd.read_csv('../Data/SAN.csv')
-acumtag(df)
-
-
+acumtag()

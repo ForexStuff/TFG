@@ -96,7 +96,7 @@ class _OBV:
 		a = None		
 
 	def name(self):
-		return 'OBV_'
+		return 'OBV'
 
 	def calculate(self):
 		data = pd.DataFrame()
@@ -112,7 +112,7 @@ class _AD:
 		a = None		
 
 	def name(self):
-		return 'AD_'
+		return 'AD'
 
 	def calculate(self):
 		data = pd.DataFrame()
@@ -130,7 +130,7 @@ class _TRANGE:
 		a = None
 
 	def name(self):
-		return 'TRANGE_'
+		return 'TRANGE'
 
 	def calculate(self):
 		data = pd.DataFrame()
@@ -149,7 +149,7 @@ class _BBANDS_lambda_high	:
 		self.nbdevdn = nbdevdn
 
 	def name(self):
-		return 'BBANDS_lambda_high' + str(self.period) + '_' + str(self.nbdevup) + '_' + str(self.nbdevdn)
+		return 'BBANDS_lambda_high_' + str(self.period) + '_' + str(self.nbdevup) + '_' + str(self.nbdevdn)
 
 	def calculate(self):
 		data = pd.DataFrame()
@@ -157,7 +157,7 @@ class _BBANDS_lambda_high	:
 									self.period,
 									self.nbdevup,
 									self.nbdevdn)
-		data['value'] = (df['High'] - data['upperband']) / (data['lowerband'] - data['upperband'])
+		data['values'] = (df['High'] - data['upperband']) / (data['lowerband'] - data['upperband'])
 		data = data.drop(columns=['upperband','lowerband', 'middleband'])
 		data['tag'] = df['tag']
 		return data
@@ -171,7 +171,7 @@ class _BBANDS_lambda_low	:
 		self.nbdevdn = nbdevdn
 
 	def name(self):
-		return 'BBANDS_lambda_low' + str(self.period) + '_' + str(self.nbdevup) + '_' + str(self.nbdevdn)
+		return 'BBANDS_lambda_low_' + str(self.period) + '_' + str(self.nbdevup) + '_' + str(self.nbdevdn)
 
 	def calculate(self):
 		data = pd.DataFrame()
@@ -179,7 +179,7 @@ class _BBANDS_lambda_low	:
 									self.period,
 									self.nbdevup,
 									self.nbdevdn)
-		data['value'] = (df['Low'] - data['upperband']) / (data['lowerband'] - data['upperband'])
+		data['values'] = (df['Low'] - data['upperband']) / (data['lowerband'] - data['upperband'])
 		data = data.drop(columns=['upperband','lowerband', 'middleband'])
 		data['tag'] = df['tag']
 		return data
@@ -197,6 +197,3 @@ def indivector(data):
 			_TRANGE(),
 			_BBANDS_lambda_high(),
 			_BBANDS_lambda_low()]
-
-
-

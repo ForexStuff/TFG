@@ -4,13 +4,8 @@ import pandas as pd
 import math
 import tagger
 import copy
-from pandas_datareader import data as pdr
 
-df = pdr.get_data_yahoo("SAN", start="2017-01-01", end="2019-03-30")
-df = tagger.acumtag(df)
-indivector = indicator.indivector(df)
-
-
+deepness = 5
 
 def entropy(v):           # v is the class proportion (frec/total)
 	if v==0 or v==1:      #    Just works with 2-classes problem
@@ -20,12 +15,14 @@ def entropy(v):           # v is the class proportion (frec/total)
 
 class Genetreec:
 	root = None #first Node
+	data = None #reference to data
 																																											
-	def __init__(self,data):
+	def __init__(self, data):
 		self.root = Leaf(data, [True] * data.shape[0])
+		self.data = data
 
 	def train(self):
-		self.root = self.root.train(5)
+		self.root = self.root.train(deepness)
 		self.root.plot()
 
 	def test(self, data):
@@ -53,27 +50,34 @@ class Node:
 		self.right.plot()
 
 class Leaf:
-	tag = None   #the final tag the data on the leaf will be classificated as (Used just when the tree is tagged)
-	data = None  #PROBABLY NOT USEFUL #the partition of data which verifies the branch's nodes restrictions
-	partition = None   #the boolean vector that represent data (data at branch) over df (data at root)
+	tag = None 			#the final tag the data on the leaf will be classificated as (Used just when the tree is tagged)
+	partition = None	#the boolean vector that represent data (data at branch) over df (data at root)
+	data = None			#the reference to data
 
 	def __init__(self, data, partition):
-		self.data = data
 		self.partition = partition
+		self.data = data
 
 	def train(self, levels): # Take the actual partition and a new function indicator, calculate the entropic pivot and split into 2 leaves
+		indivector = indicator.indivector(self.data)
 		func = copy.deepcopy(indivector[random.randint(0,9)])
+		print(func.name())
 		(criteria, pivot) = self.select_pivot(func.calculate())
-		if isinstance(criteria, int) :    # Fail recieved, pivot to split not found, return the leaf
-			return self
+		global deepness
+		if isinstance(criteria, int): # Fail recieved, pivot to split not found, return the leaf (except first leave)	
+				if deepness == levels:    # If first leave, restart the search of func and pivot
+					ret_node = self.train(levels)
+				else:
+					ret_node = self
 		else:		# Pivot found, return the Node with two son leaves
-			right = Leaf(df[criteria & self.partition], criteria & self.partition)
-			left = Leaf(df[~criteria & self.partition], ~criteria & self.partition)
+			right = Leaf(self.data, criteria & self.partition)
+			left = Leaf(self.data, ~criteria & self.partition)
 			
 			if levels>1 :
 				right = right.train(levels-1)
 				left = left.train(levels-1)
-			return Node(func, pivot, right, left)
+			ret_node = Node(func, pivot, right, left)	
+		return ret_node 
 
 	def select_pivot(self, values):
 		max_val = values['values'].min()
@@ -110,10 +114,6 @@ class Leaf:
 		return (criteria, pivot)					# Return the pivot and vector.
 
 	def plot(self):   # Future graphical plot. By now, print the data
-		print(df[self.partition])
+		print(self.data[self.partition])
 		return None
-
-
-genetri = Genetreec(df)
-genetri.train()
 
