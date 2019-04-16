@@ -53,18 +53,150 @@ class _ROC:
 	def calculate(self):
 		data = pd.DataFrame()
 		data['values'] = talib.ROC(df['Close'],
-							timeperiod=10)
+							self.period)
 		data['tag'] = df['tag']
 		return data
 
 
+class _EMA:
+
+	def __init__(self, period=10):
+		self.period = period
+
+	def name(self):
+		return 'EMA_' + str(self.period)
+
+	def calculate(self):
+		data = pd.DataFrame()
+		data['values'] = talib.EMA(df['Close'],
+							self.period)
+		data['tag'] = df['tag']
+		return data
+
+
+class _SMA:
+
+	def __init__(self, period=10):
+		self.period = period
+
+	def name(self):
+		return 'SMA_' + str(self.period)
+
+	def calculate(self):
+		data = pd.DataFrame()
+		data['values'] = talib.SMA(df['Close'],
+							self.period)
+		data['tag'] = df['tag']
+		return data
+
+
+class _OBV:
+
+	def __init__(self):
+		a = None		
+
+	def name(self):
+		return 'OBV_'
+
+	def calculate(self):
+		data = pd.DataFrame()
+		data['values'] = talib.OBV(df['Close'],
+							df['Volume'])
+		data['tag'] = df['tag']
+		return data
+
+
+class _AD:
+
+	def __init__(self):
+		a = None		
+
+	def name(self):
+		return 'AD_'
+
+	def calculate(self):
+		data = pd.DataFrame()
+		data['values'] = talib.AD(df['High'],
+							df['Low'],
+							df['Close'],
+							df['Volume'])
+		data['tag'] = df['tag']
+		return data
+
+
+class _TRANGE:
+
+	def __init__(self):
+		a = None
+
+	def name(self):
+		return 'TRANGE_'
+
+	def calculate(self):
+		data = pd.DataFrame()
+		data['values'] = talib.TRANGE(df['High'],
+							df['Low'],
+							df['Close'])
+		data['tag'] = df['tag']
+		return data
+
+
+class _BBANDS_lambda_high	:
+
+	def __init__(self, period=5, nbdevup=2, nbdevdn=2):
+		self.period = period
+		self.nbdevup = nbdevup
+		self.nbdevdn = nbdevdn
+
+	def name(self):
+		return 'BBANDS_lambda_high' + str(self.period) + '_' + str(self.nbdevup) + '_' + str(self.nbdevdn)
+
+	def calculate(self):
+		data = pd.DataFrame()
+		(data['upperband'],data['middleband'],data['lowerband']) = talib.BBANDS(df['Close'],
+									self.period,
+									self.nbdevup,
+									self.nbdevdn)
+		data['value'] = (df['High'] - data['upperband']) / (data['lowerband'] - data['upperband'])
+		data = data.drop(columns=['upperband','lowerband', 'middleband'])
+		data['tag'] = df['tag']
+		return data
+
+
+class _BBANDS_lambda_low	:
+
+	def __init__(self, period=5, nbdevup=2, nbdevdn=2):
+		self.period = period
+		self.nbdevup = nbdevup
+		self.nbdevdn = nbdevdn
+
+	def name(self):
+		return 'BBANDS_lambda_low' + str(self.period) + '_' + str(self.nbdevup) + '_' + str(self.nbdevdn)
+
+	def calculate(self):
+		data = pd.DataFrame()
+		(data['upperband'],data['middleband'],data['lowerband']) = talib.BBANDS(df['Close'],
+									self.period,
+									self.nbdevup,
+									self.nbdevdn)
+		data['value'] = (df['Low'] - data['upperband']) / (data['lowerband'] - data['upperband'])
+		data = data.drop(columns=['upperband','lowerband', 'middleband'])
+		data['tag'] = df['tag']
+		return data
 
 def indivector(data):
 	global df 
 	df = data
 	return [_MACD(), 
 			_ATR(),
-			_ROC()]
+			_ROC(),
+			_EMA(),
+			_SMA(),
+			_OBV(),
+			_AD(),
+			_TRANGE(),
+			_BBANDS_lambda_high(),
+			_BBANDS_lambda_low()]
 
 
 
