@@ -1,7 +1,7 @@
 import pandas as pd
 import talib 
 
-df = None
+df = pd.read_csv('tagged_data/SAN.csv')
 
 def minimax(data):
 	data = data.fillna(data.mean())
@@ -184,9 +184,7 @@ class _BBANDS_lambda_low	:
 		data['tag'] = df['tag']
 		return data
 
-def indivector(data):
-	global df 
-	df = data
+def indivector():
 	return [_MACD(), 
 			_ATR(),
 			_ROC(),

@@ -6,7 +6,11 @@ import pandas as pd
 
 #tagger.acumtag()   #Just needed one time, data tagged is saved between executions
 data = pd.read_csv('tagged_data/SAN.csv')
+population = []
 
+for i in range(100):
+	tree = gentree()
+	tree.train()
+	population.append(tree)
+	print('Tree ' + str(i) + ' trained.')
 
-tree = gentree(data)
-tree.train()
