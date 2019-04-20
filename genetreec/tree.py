@@ -4,14 +4,29 @@ import pandas as pd
 import math
 import tagger
 import copy
+import time
 
 deepness = 5
 data = pd.read_csv('tagged_data/SAN.csv')
+indivector = indicator.indivector()
 
 def entropy(v):           # v is the class proportion (frec/total)
 	if v==0 or v==1:      #    Just works with 2-classes problem
 		return 0
 	return -(v*math.log(v,2)+(1-v)*math.log(1-v,2))
+
+def timeit(method):
+	def timed(*args, **kw):
+		ts = time.time()
+		result = method(*args, **kw)
+		te = time.time()
+		if 'log_time' in kw:
+			name = kw.get('log_name', method.__name__.upper())
+			kw['log_time'][name] = int((te - ts) * 1000)
+		else:
+			print (method.__name__, (te - ts) * 1000)
+		return result
+	return timed
 
 
 class Genetreec:
@@ -24,7 +39,7 @@ class Genetreec:
 	def train(self):
 		self.root = self.root.train(deepness)
 		self.root.setLeaveActions()
-		self.root.plot()
+		#self.root.plot()
 
 	def test(self, data):
 		return None
@@ -66,11 +81,10 @@ class Leaf:
 	def __init__(self, partition):
 		self.partition = partition
 
+	
 	def train(self, levels): # Take the actual partition and a new function indicator, calculate the entropic pivot and split into 2 leaves
-		indivector = indicator.indivector()
 		func = copy.deepcopy(indivector[random.randint(0,9)])
-		(criteria, pivot) = self.select_pivot(func.calculate())
-		global deepness
+		(criteria, pivot) = self.select_pivot(func.getValues())
 		if isinstance(criteria, int): # Fail recieved, pivot to split not found, return the leaf (except first leave)	
 				if deepness == levels:    # If first leave, restart the search of func and pivot
 					ret_node = self.train(levels)
@@ -100,14 +114,17 @@ class Leaf:
 			n_right = sum(values['values'][self.partition] >= x)	# Calculate the first class frecuency on both
 			
 			# Calculate the total entropy and save to take the best 
-			if n_left == 0:
+			if n_left < 3: # To few data to split, dont waste time calculating entropy
 				l_entropy = 1
-			else:
-				l_entropy  = n_left*total_inverse * entropy( sum( (values['values'][self.partition]<x)  & (values['tag'][self.partition]<0)) / n_left )
-			if n_right == 0:
 				r_entropy = 1
-			else:			
-				r_entropy = n_right* total_inverse * entropy( sum( (values['values'][self.partition]>=x) & (values['tag'][self.partition]<0)) / n_right ) 
+			else:
+				if n_right < 3:  # To few data to split, dont waste time calculating entropy
+					l_entropy = 1
+					r_entropy = 1
+				else:			
+					r_entropy = n_right* total_inverse * entropy( sum( (values['values'][self.partition]>=x) & (values['tag'][self.partition]<0)) / n_right ) 
+					l_entropy  = n_left*total_inverse * entropy( sum( (values['values'][self.partition]<x)  & (values['tag'][self.partition]<0)) / n_left )
+
 			grill_entropy.append(l_entropy + r_entropy)
 
 		min_index = grill_entropy.index(min( grill_entropy ))
