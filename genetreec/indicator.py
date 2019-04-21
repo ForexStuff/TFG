@@ -18,6 +18,13 @@ def timeit(method):
 	return timed
 
 
+def setData(data):
+	global df
+	df = data
+
+def getValueByIndex(index, func)
+	return func.getValues()[df['Date']=index]
+
 class _indicator:
 	def getValues(self):
 		if self.name() in df.columns.values:

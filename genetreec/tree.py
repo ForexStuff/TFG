@@ -44,8 +44,8 @@ class Genetreec:
 	def test(self, data):
 		return None
 
-
-
+	def evaluate(self):
+		return self.root.evaluate()
 
 class Node:
 	func = None  #func to evaluate to split the data
@@ -63,6 +63,9 @@ class Node:
 	def setLeaveActions(self):
 		self.right.setLeaveActions()
 		self.left.setLeaveActions()
+
+	def evaluate(self):
+		return None
 
 	def plot(self):
 		print('---- Function ' + self.func.name() + ' < ' + str(self.pivot) + ' ----')
@@ -156,6 +159,9 @@ class Leaf:
 			else:
 				self.tag = 'Buy'
 		self.partition = None
+
+	def evaluate(self):
+		return self.tag
 
 	def plot(self):   # Future graphical plot. By now, print the tag
 		global data

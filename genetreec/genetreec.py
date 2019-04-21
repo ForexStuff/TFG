@@ -53,6 +53,7 @@ class TreeStrategy(bt.Strategy):
 
 df = yf.download("SAN", start="2017-01-01", end="2017-04-30")  # Set data
 df = bt.feeds.PandasData(dataname = df) ############################### ACEPTARÁ LOS DATOS TAGGEADOS ?????
+indicator.setData(df)
 treeScore = []
 for tree in population:
 	cerebro = bt.Cerebro()
