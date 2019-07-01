@@ -21,14 +21,16 @@ def entropy(v):           # v is the class proportion (frec/total)
 class Genetreec:
 	root = None #first Node
 	data = None #reference to data
+	index = 0 #tree index in the population
 
-	def __init__(self):
+	def __init__(self, ind):
 		self.root = Leaf([True] * data.shape[0])
+		self.index = ind
 
 	def train(self):
 		self.root = self.root.train(deepness)
 		self.root.setLeaveActions()
-		self.root.plot()
+		#self.root.plot()
 
 	def test(self, data):
 		return None

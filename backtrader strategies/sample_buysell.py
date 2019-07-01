@@ -84,7 +84,7 @@ if __name__ == '__main__':
 
     # Activar los datos en el cerebro
 	cerebro.adddata(data)
-    # Establecer dinero inicial    
+    # Establecer dinero inicial
 	cerebro.broker.setcash(100000.0)
 
 	print('Starting Portfolio Value: %.2f' % cerebro.broker.getvalue())
