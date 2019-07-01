@@ -3,7 +3,11 @@ import tagger
 import indicator
 import pandas as pd
 import backtrader as bt
-import fix_yahoo_finance as yf
+import yfinance as yf
+import time
+
+
+
 
 #tagger.acumtag()   #Just needed one time, data tagged is saved between executions
 data = pd.read_csv('tagged_data/SAN.csv')
@@ -55,20 +59,19 @@ df = yf.download("SAN", start="2017-01-01", end="2017-04-30")  # Set data
 df = bt.feeds.PandasData(dataname = df) ############################### ACEPTARÁ LOS DATOS TAGGEADOS ?????
 indicator.setData(df)
 treeScore = []
+
+ts = time.time()
 for tree in population:
-	cerebro = bt.Cerebro()
+	cerebro = bt.Cerebro(maxcpus=None)
 	cerebro.optstrategy(TreeStrategy,tree=population)   # Set strategy
 
 	cerebro.adddata(df)
-   
+
 	cerebro.broker.setcash(100000.0)	# Set money
 
-	cerebro.run()   # EJECUTAR BACKTESTING 
+	cerebro.run()   # EJECUTAR BACKTESTING
 	treeScore.append(cerebro.broker.getvalue())
 
-
-
-
-
-
-
+te = time.time()
+print((te - ts))
+print(treeScore)

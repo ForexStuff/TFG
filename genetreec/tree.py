@@ -4,7 +4,7 @@ import pandas as pd
 import math
 import tagger
 import copy
-import time
+
 
 deepness = 5
 data = pd.read_csv('tagged_data/SAN.csv')
@@ -15,31 +15,20 @@ def entropy(v):           # v is the class proportion (frec/total)
 		return 0
 	return -(v*math.log(v,2)+(1-v)*math.log(1-v,2))
 
-def timeit(method):
-	def timed(*args, **kw):
-		ts = time.time()
-		result = method(*args, **kw)
-		te = time.time()
-		if 'log_time' in kw:
-			name = kw.get('log_name', method.__name__.upper())
-			kw['log_time'][name] = int((te - ts) * 1000)
-		else:
-			print (method.__name__, (te - ts) * 1000)
-		return result
-	return timed
+
 
 
 class Genetreec:
 	root = None #first Node
 	data = None #reference to data
-																																											
+
 	def __init__(self):
 		self.root = Leaf([True] * data.shape[0])
 
 	def train(self):
 		self.root = self.root.train(deepness)
 		self.root.setLeaveActions()
-		#self.root.plot()
+		self.root.plot()
 
 	def test(self, data):
 		return None
@@ -70,7 +59,7 @@ class Node:
 	def plot(self):
 		print('---- Function ' + self.func.name() + ' < ' + str(self.pivot) + ' ----')
 		self.left.plot()
-		print('\n')		
+		print('\n')
 		print('---- Function ' + self.func.name() + ' >= ' + str(self.pivot) + ' ----')
 		self.right.plot()
 
@@ -84,11 +73,11 @@ class Leaf:
 	def __init__(self, partition):
 		self.partition = partition
 
-	
+
 	def train(self, levels): # Take the actual partition and a new function indicator, calculate the entropic pivot and split into 2 leaves
 		func = copy.deepcopy(indivector[random.randint(0,9)])
 		(criteria, pivot) = self.select_pivot(func.getValues())
-		if isinstance(criteria, int): # Fail recieved, pivot to split not found, return the leaf (except first leave)	
+		if isinstance(criteria, int): # Fail recieved, pivot to split not found, return the leaf (except first leave)
 				if deepness == levels:    # If first leave, restart the search of func and pivot
 					ret_node = self.train(levels)
 				else:
@@ -96,12 +85,12 @@ class Leaf:
 		else:		# Pivot found, return the Node with two son leaves
 			right = Leaf(criteria & self.partition)
 			left = Leaf(~criteria & self.partition)
-			
+
 			if levels>1 :
 				right = right.train(levels-1)
 				left = left.train(levels-1)
-			ret_node = Node(func, pivot, right, left)	
-		return ret_node 
+			ret_node = Node(func, pivot, right, left)
+		return ret_node
 
 	def select_pivot(self, values):
 		max_val = values['values'].min()
@@ -115,8 +104,8 @@ class Leaf:
 		for x in grill:								# For each point on grill
 			n_left  = sum(values['values'][self.partition] < x)		# Calculate left and right data
 			n_right = sum(values['values'][self.partition] >= x)	# Calculate the first class frecuency on both
-			
-			# Calculate the total entropy and save to take the best 
+
+			# Calculate the total entropy and save to take the best
 			if n_left < 3: # To few data to split, dont waste time calculating entropy
 				l_entropy = 1
 				r_entropy = 1
@@ -124,8 +113,8 @@ class Leaf:
 				if n_right < 3:  # To few data to split, dont waste time calculating entropy
 					l_entropy = 1
 					r_entropy = 1
-				else:			
-					r_entropy = n_right* total_inverse * entropy( sum( (values['values'][self.partition]>=x) & (values['tag'][self.partition]<0)) / n_right ) 
+				else:
+					r_entropy = n_right* total_inverse * entropy( sum( (values['values'][self.partition]>=x) & (values['tag'][self.partition]<0)) / n_right )
 					l_entropy  = n_left*total_inverse * entropy( sum( (values['values'][self.partition]<x)  & (values['tag'][self.partition]<0)) / n_left )
 
 			grill_entropy.append(l_entropy + r_entropy)
@@ -141,7 +130,7 @@ class Leaf:
 
 	def setLeaveActions(self):
 		global data
-		df = data[self.partition] 
+		df = data[self.partition]
 		sell_df = sum(df['tag'] > 0)
 		buy_df = sum(df['tag'] < 0)
 		double_sell_df = sum(df['tag'] > 1)
@@ -167,4 +156,3 @@ class Leaf:
 		global data
 		print(self.tag)
 		return None
-

@@ -1,5 +1,5 @@
 import pandas as pd
-import talib 
+import talib
 import time
 
 df = pd.read_csv('tagged_data/SAN.csv')
@@ -22,8 +22,8 @@ def setData(data):
 	global df
 	df = data
 
-def getValueByIndex(index, func)
-	return func.getValues()[df['Date']=index]
+def getValueByIndex(index, func):
+	return func.getValues()[df['Date']==index]
 
 class _indicator:
 	def getValues(self):
@@ -47,15 +47,15 @@ class _MACD(_indicator):
 
 	def __init__(self, lowday=5, highday=10):
 		self.lowday = lowday
-		self.highday = highday	
+		self.highday = highday
 
 	def name(self):
-		return 'MACD_' + str(self.lowday) + '_' + str(self.highday) 
+		return 'MACD_' + str(self.lowday) + '_' + str(self.highday)
 
 	def calculate(self):
 		data = pd.DataFrame()
-		data['values'] = talib.MACD(df['Close'], 
-				self.lowday, 
+		data['values'] = talib.MACD(df['Close'],
+				self.lowday,
 				self.highday)[0]
 		df[self.name()] = data['values']
 		data['tag'] = df['tag']
@@ -72,8 +72,8 @@ class _ATR(_indicator):
 	def calculate(self):
 		data = pd.DataFrame()
 		data['values'] = talib.ATR(df['High'],
-							df['Low'], 
-							df['Close'], 
+							df['Low'],
+							df['Close'],
 							self.period)
 		df[self.name()] = data['values']
 		data['tag'] = df['tag']
@@ -134,7 +134,7 @@ class _SMA(_indicator):
 class _OBV(_indicator):
 
 	def __init__(self):
-		a = None		
+		a = None
 
 	def name(self):
 		return 'OBV'
@@ -151,7 +151,7 @@ class _OBV(_indicator):
 class _AD(_indicator):
 
 	def __init__(self):
-		a = None		
+		a = None
 
 	def name(self):
 		return 'AD'
@@ -231,7 +231,7 @@ class _BBANDS_lambda_low(_indicator):
 		return data
 
 def indivector():
-	return [_MACD(), 
+	return [_MACD(),
 			_ATR(),
 			_ROC(),
 			_EMA(),
