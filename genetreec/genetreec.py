@@ -7,13 +7,12 @@ import yfinance as yf
 import time
 
 
-
-
-#tagger.acumtag()   #Just needed one time, data tagged is saved between executions
+#tagger.acumtag()   # Solo se ejecuta la primera vez, el etiquetado es lento
+					# y mejor hacerlo solo una vez
 data = pd.read_csv('tagged_data/SAN.csv')
 population = []
 
-for i in range(3):   # Train the first population
+for i in range(3):   # Calentamiento de la población 1
 	tree = gentree(i)
 	tree.train()
 	population.append(tree)
@@ -64,8 +63,8 @@ class TreeStrategy(bt.Strategy):
 
 
 class EndStats(bt.Analyzer):
-    # An analyzer to take in mind the results while using
-	# multiple strategies (optstrategy)
+    # Analizador para poder tener en cuenta varias
+	# estrategias de una sola ejecución (optstrategy)
 
     def __init__(self):
         self.start_val = self.strategy.broker.get_value()
@@ -84,24 +83,23 @@ class EndStats(bt.Analyzer):
 
 
 df = yf.download("SAN", start="2017-01-01", end="2017-04-30")  # Set data
-df = bt.feeds.PandasData(dataname = df) ############################### ACEPTARÁ LOS DATOS TAGGEADOS ?????
+df = bt.feeds.PandasData(dataname = df) ############################### ACEPTARA LOS DATOS TAGGEADOS ?????
 indicator.setData(df)
 treeScore = []
 
 ts = time.time()
 
-print(population[0].index)
 cerebro = bt.Cerebro(maxcpus=None)
-cerebro.optstrategy(TreeStrategy,tree=list(population))   # Set strategy
-cerebro.addanalyzer(EndStats)						      # Set analyzer
-cerebro.adddata(df)										  # Set data
-cerebro.broker.setcash(100000.0)	# Set money
-ret = cerebro.run()   # EXECUTE BACKTESTING
+cerebro.optstrategy(TreeStrategy,tree=list(population))   # Seleccionar estrategia
+cerebro.addanalyzer(EndStats)						      # Seleccionar analizador
+cerebro.adddata(df)										  # Seleccionar datos
+cerebro.broker.setcash(100000.0)	# Seleccionar dinero
+ret = cerebro.run()   # EJECUTAR BACKTESTING
 
 te = time.time()
-print((te - ts))
+print("El tiempo de simulación es: ",(te - ts))
 
 
 scores = pd.DataFrame({r[0].params.tree.index: r[0].analyzers.endstats.get_analysis() for r in ret}
                       ).T.loc[:, ['end', 'growth', 'return']]
-print(scores)  #PRINT SCORES
+print(scores)  #Ver puntuaciones de la poblacion

@@ -16,17 +16,17 @@ def acumtag():
 	max_positive_acum = 0
 
 	positive = True
-	
-	# Taking the max positive and negative diference consecutive 
+
+	# Taking the max positive and negative diference consecutive
 	for dif in data['dif']:
 		if positive: # Crescent Trend
 			if dif > 0: # If still crescent sum acumulation
-				positive_acum += dif 
+				positive_acum += dif
 			else:   # If started decrescent save the acumulation
 				max_positive_acum = max(positive_acum, max_positive_acum)
 				negative_acum = dif
 				positive = False
-					
+
 		else:      # Descendent Trend
 			if dif < 0: # If still decrescent sum acumulation
 				negative_acum += dif
@@ -44,7 +44,7 @@ def acumtag():
 	max_positive_acum = (max_positive_acum)/6		# is greater than 1/6 of the max trend
 
 
-	for dif,i in zip(data['dif'],list(range(0,data.shape[0]))): 
+	for dif,i in zip(data['dif'],list(range(0,data.shape[0]))):
 		if positive:
 			data_tag[i] = 1 #Tag 1 if crescent
 			if dif < 0:
@@ -53,7 +53,7 @@ def acumtag():
 				negative_acum += dif
 				if negative_acum < max_negative_acum:  # Limit of rectification trespassed - TAG 2 for the last max
 					data_tag[ichange:i+1] = [-1]*(i-ichange+1) # Retag all the rectification days - TAG -1 for decrescent
-					data_tag[ichange] = 2 
+					data_tag[ichange] = 2
 					positive = False
 					positive_acum = 0
 					ichange = i+1
@@ -81,9 +81,7 @@ def acumtag():
 					positive_acum = 0
 				if positive_acum == 0:
 					ichange = i
-					
+
 	data['tag'] = data_tag
 	#print('max_neg_acum:' + str(max_negative_acum) + ' max_pos_acum:' + str(max_positive_acum))
 	data.to_csv("tagged_data/SAN.csv")
-
-acumtag()

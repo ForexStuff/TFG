@@ -10,8 +10,8 @@ deepness = 5
 data = pd.read_csv('tagged_data/SAN.csv')
 indivector = indicator.indivector()
 
-def entropy(v):           # v is the class proportion (frec/total)
-	if v==0 or v==1:      #    Just works with 2-classes problem
+def entropy(v):           # v es la proporcion de la clase (frec/total)
+	if v==0 or v==1:      #    Solo es valido para problemas binarios
 		return 0
 	return -(v*math.log(v,2)+(1-v)*math.log(1-v,2))
 
@@ -19,9 +19,9 @@ def entropy(v):           # v is the class proportion (frec/total)
 
 
 class Genetreec:
-	root = None #first Node
-	data = None #reference to data
-	index = 0 #tree index in the population
+	root = None # Primer Node
+	data = None # Referencia a los datos
+	index = 0   # Indice del árbol dentro de la población
 
 	def __init__(self, ind):
 		self.root = Leaf([True] * data.shape[0])
@@ -39,11 +39,11 @@ class Genetreec:
 		return self.root.evaluate()
 
 class Node:
-	func = None  #func to evaluate to split the data
-	pivot = None    #value to split the data
+	func = None     # Indice que separa los datos
+	pivot = None    # pivote que separa los datos
 
-	right = None   #node or leaf positive
-	left = None    #node or leaf negative
+	right = None   # Node o Leaf positivo
+	left = None    # Node o Leaf negativo
 
 	def __init__(self, func, pivot, right, left):
 		self.func = func
@@ -68,23 +68,22 @@ class Node:
 
 
 class Leaf:
-	tag = None 			#the final tag the data on the leaf will be classificated as (Used just when the tree is tagged)
-	partition = None	#the boolean vector that represent data (data at branch) over df (data at root)
-	action = None		#the action to do if an instance arrives
+	tag = None 			# La acción a tomar
+	partition = None	# El vector booleano que representa a los datos (en la hoja) sobre df (datos en la raiz)
 
 	def __init__(self, partition):
 		self.partition = partition
 
-
-	def train(self, levels): # Take the actual partition and a new function indicator, calculate the entropic pivot and split into 2 leaves
+ # Parte los datos de una hoja para hacer dos nuevas hojas. Se hace la partición con mejor partición
+	def train(self, levels):
 		func = copy.deepcopy(indivector[random.randint(0,9)])
 		(criteria, pivot) = self.select_pivot(func.getValues())
-		if isinstance(criteria, int): # Fail recieved, pivot to split not found, return the leaf (except first leave)
-				if deepness == levels:    # If first leave, restart the search of func and pivot
+		if isinstance(criteria, int): # El indicador no parte bien los datos
+				if deepness == levels:    # Si es la primera hoja, toma otro indicador
 					ret_node = self.train(levels)
 				else:
 					ret_node = self
-		else:		# Pivot found, return the Node with two son leaves
+		else:		# Pivote correcto, devuelve el nuevo nodo
 			right = Leaf(criteria & self.partition)
 			left = Leaf(~criteria & self.partition)
 
@@ -94,25 +93,29 @@ class Leaf:
 			ret_node = Node(func, pivot, right, left)
 		return ret_node
 
+
+
+# Dado un vector de datos, busca el pivote que mejor lo separa
+# Tiene en cuenta la entropía
 	def select_pivot(self, values):
 		max_val = values['values'].min()
 		min_val = values['values'].max()
-		grill = [(max_val - min_val)*(x/10)+min_val for x in range(1,10)]   # Make a grill to test pivots
+		grill = [(max_val - min_val)*(x/10)+min_val for x in range(1,10)]   # Fabrica un parrilla
 		grill_entropy = []
 
 		total = sum(self.partition)
 
 		total_inverse = 1 / total
-		for x in grill:								# For each point on grill
-			n_left  = sum(values['values'][self.partition] < x)		# Calculate left and right data
-			n_right = sum(values['values'][self.partition] >= x)	# Calculate the first class frecuency on both
+		for x in grill:								# Para cada punto de la parrilla
+			n_left  = sum(values['values'][self.partition] < x)		# Cuenta los datos de la partición
+			n_right = sum(values['values'][self.partition] >= x)	# izquierda y derecha
 
-			# Calculate the total entropy and save to take the best
-			if n_left < 3: # To few data to split, dont waste time calculating entropy
+			# Calcula la entropía de cada partición y la guarda
+			if n_left < 3: # Pocos datos, no gastes tiempo calculando
 				l_entropy = 1
 				r_entropy = 1
 			else:
-				if n_right < 3:  # To few data to split, dont waste time calculating entropy
+				if n_right < 3:  # Pocos datos, no gastes tiempo calculando
 					l_entropy = 1
 					r_entropy = 1
 				else:
@@ -122,14 +125,21 @@ class Leaf:
 			grill_entropy.append(l_entropy + r_entropy)
 
 		min_index = grill_entropy.index(min( grill_entropy ))
-		pivot = grill[min_index]
-		criteria = values['values'] < pivot			# Take the best pivot and make the boolean vector of the left leaf
+		pivot = grill[min_index]					# Coge el mejor pivote
+		criteria = values['values'] < pivot			# hace el vector booleano
 		data_count = sum(criteria & self.partition)
-		if data_count < 3 or sum(self.partition)-data_count < 3: # To few data to split
+		if data_count < 3 or sum(self.partition)-data_count < 3: # Pocos datos para separar
 			return (0,0)
 
-		return (criteria, pivot)					# Return the pivot and vector.
+		return (criteria, pivot)					# Devuelve el pivote y el vector.
 
+
+# Selecciona una acción para la hoja (Solo se usa en el calentamiento)
+#	Suma los datos de la hoja (-2, -1, 1 o 2)
+#	Si la suma es
+#		-2 <= x <= 2 entonces no se hace nada
+#		x < -2       entonces se compra
+#		2 < x		 entonces se vende
 	def setLeaveActions(self):
 		global data
 		df = data[self.partition]
@@ -151,10 +161,12 @@ class Leaf:
 				self.tag = 'Buy'
 		self.partition = None
 
+# Devuelve la acción de la hoja
 	def evaluate(self):
 		return self.tag
 
-	def plot(self):   # Future graphical plot. By now, print the tag
+# Gráfico del arbol, por ahora es en terminal
+	def plot(self):
 		global data
 		print(self.tag)
 		return None

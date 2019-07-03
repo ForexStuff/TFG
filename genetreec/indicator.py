@@ -1,30 +1,26 @@
 import pandas as pd
 import talib
-import time
 
+# Datos iniciales
 df = pd.read_csv('tagged_data/SAN.csv')
 
-def timeit(method):
-	def timed(*args, **kw):
-		ts = time.time()
-		result = method(*args, **kw)
-		te = time.time()
-		if 'log_time' in kw:
-			name = kw.get('log_name', method.__name__.upper())
-			kw['log_time'][name] = int((te - ts) * 1000)
-		else:
-			print (method.__name__, (te - ts) * 1000)
-		return result
-	return timed
-
-
+# Instanciar datos sobres los que calcular los indicadores
 def setData(data):
 	global df
 	df = data
 
+# Seleccionar valor de un indicador en una fecha concreta
 def getValueByIndex(index, func):
 	return func.getValues()[df['Date']==index]
 
+
+# Interfaz sobre la que se van a construir los indicadores
+#   getValues(): devuelve el valor del indicador en los datos seleccionados
+#					Si los valores ya fueron calculados, no los calcula de nuevo,
+#					los coge de df
+#   name():      devuelve el nombre del indicador
+#	calculate(): devuelve el valor del indicador en los datos seleccionados
+# 					Añade los valores a los df
 class _indicator:
 	def getValues(self):
 		if self.name() in df.columns.values:
@@ -41,6 +37,9 @@ class _indicator:
 
 	def calculate(self):
 		raise NotImplementedError
+
+
+
 
 
 class _MACD(_indicator):
@@ -230,6 +229,8 @@ class _BBANDS_lambda_low(_indicator):
 		data['tag'] = df['tag']
 		return data
 
+
+# Función que devuelve una lista con todos los indicadores
 def indivector():
 	return [_MACD(),
 			_ATR(),
