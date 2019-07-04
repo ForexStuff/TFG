@@ -35,8 +35,8 @@ class Genetreec:
 	def test(self, data):
 		return None
 
-	def evaluate(self):
-		return self.root.evaluate()
+	def evaluate(self, date):
+		return self.root.evaluate(date)
 
 class Node:
 	func = None     # Indice que separa los datos
@@ -55,8 +55,10 @@ class Node:
 		self.right.setLeaveActions()
 		self.left.setLeaveActions()
 
-	def evaluate(self):
-		return None
+	def evaluate(self, date):
+		if indicator.getValueByIndex(date, self.func)['values'][0] <= self.pivot:
+			return self.left.evaluate(date)
+		return self.right.evaluate(date)
 
 	def plot(self):
 		print('---- Function ' + self.func.name() + ' < ' + str(self.pivot) + ' ----')
@@ -162,7 +164,7 @@ class Leaf:
 		self.partition = None
 
 # Devuelve la acción de la hoja
-	def evaluate(self):
+	def evaluate(self, date):
 		return self.tag
 
 # Gráfico del arbol, por ahora es en terminal

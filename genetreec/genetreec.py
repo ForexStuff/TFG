@@ -4,6 +4,7 @@ import indicator
 import pandas as pd
 import backtrader as bt
 import yfinance as yf
+from pandas_datareader import data as pdr
 import time
 
 
@@ -27,7 +28,7 @@ class TreeStrategy(bt.Strategy):
 
 	def log(self, txt, dt=None):
 		dt = dt or self.datas[0].datetime.date(0)
-		print('%s, %s' % (dt.isoformat(), txt))
+		print('%s - %s, %s' % (tree.index ,dt.isoformat(), txt))
 
 	def __init__(self):
 		self.dataclose = self.datas[0].close
@@ -56,7 +57,18 @@ class TreeStrategy(bt.Strategy):
 	# Si hay una compraventa pendiente no puedo hacer otra
 		if self.order:
 			return
-		return
+
+		action = tree.evaluate(date=self.datas[0].datetime.date(0))
+		if action == 'Buy':
+			if not self.position:
+				self.order = self.buy(size = self.broker.get_cash()/self.datas[0].open - 5 )
+				return
+		if action == 'Sell':
+			if self.position:
+				self.order = self.sell(size=self.position.size)
+				return
+		if action == 'Stop':
+			return
 
 
 
@@ -81,9 +93,9 @@ class EndStats(bt.Analyzer):
 
 
 
-
-df = yf.download("SAN", start="2017-01-01", end="2017-04-30")  # Set data
-df = bt.feeds.PandasData(dataname = df) ############################### ACEPTARA LOS DATOS TAGGEADOS ?????
+df = pdr.get_data_yahoo("SAN", start="2017-01-01", end="2017-04-30")
+# df = yf.download("SAN", start="2017-01-01", end="2017-04-30")  # Otra forma de coger los datos
+df_cerebro = bt.feeds.PandasData(dataname = df)
 indicator.setData(df)
 treeScore = []
 
@@ -92,8 +104,8 @@ ts = time.time()
 cerebro = bt.Cerebro(maxcpus=None)
 cerebro.optstrategy(TreeStrategy,tree=list(population))   # Seleccionar estrategia
 cerebro.addanalyzer(EndStats)						      # Seleccionar analizador
-cerebro.adddata(df)										  # Seleccionar datos
-cerebro.broker.setcash(100000.0)	# Seleccionar dinero
+cerebro.adddata(df_cerebro)										  # Seleccionar datos
+cerebro.broker.setcash(10000.0)	# Seleccionar dinero
 ret = cerebro.run()   # EJECUTAR BACKTESTING
 
 te = time.time()
