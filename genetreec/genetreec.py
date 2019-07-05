@@ -8,31 +8,16 @@ from pandas_datareader import data as pdr
 import time
 
 
-#tagger.acumtag()   # Solo se ejecuta la primera vez, el etiquetado es lento
-					# y mejor hacerlo solo una vez
-data = pd.read_csv('tagged_data/SAN.csv')
-population = []
-
-for i in range(3):   # Calentamiento de la población 1
-	tree = gentree(i)
-	tree.train()
-	population.append(tree)
-	print('Tree ' + str(i) + ' trained.')
-
-
-
-
 class TreeStrategy(bt.Strategy):
 	params=(('tree', None),)
 	end_val = 0
 
 	def log(self, txt, dt=None):
 		dt = dt or self.datas[0].datetime.date(0)
-		print('%s - %s, %s' % (tree.index ,dt.isoformat(), txt))
+		print('%s - %s, %s' % (self.params.tree.index ,dt.isoformat(), txt))
 
 	def __init__(self):
 		self.dataclose = self.datas[0].close
-		self.tree = tree
 		# Para mantener las ordenes no ejecutadas
 		self.order = None
 
@@ -58,7 +43,7 @@ class TreeStrategy(bt.Strategy):
 		if self.order:
 			return
 
-		action = tree.evaluate(date=self.datas[0].datetime.date(0))
+		action = self.params.tree.evaluate(date=self.datas[0].datetime.date(0))
 		if action == 'Buy':
 			if not self.position:
 				self.order = self.buy(size = self.broker.get_cash()/self.datas[0].open - 5 )
@@ -69,7 +54,6 @@ class TreeStrategy(bt.Strategy):
 				return
 		if action == 'Stop':
 			return
-
 
 
 
@@ -90,6 +74,17 @@ class EndStats(bt.Analyzer):
                 "growth": self.end_val - self.start_val, "return": self.end_val / self.start_val}
 
 
+
+#tagger.acumtag()   # Solo se ejecuta la primera vez, el etiquetado es lento
+					# y mejor hacerlo solo una vez
+data = pd.read_csv('tagged_data/SAN.csv')
+population = []
+
+for i in range(3):   # Calentamiento de la población 1
+	tre = gentree(i)
+	tre.train()
+	population.append(tre)
+	print('Tree ' + str(i) + ' trained.')
 
 
 
