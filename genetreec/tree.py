@@ -27,8 +27,8 @@ class Genetreec:
 		self.root = Leaf([True] * data.shape[0])
 		self.index = ind
 
-	def train(self):
-		self.root = self.root.train(deepness)
+	def warm(self):
+		self.root = self.root.warm(deepness)
 		self.root.setLeaveActions()
 		#self.root.plot()
 
@@ -77,12 +77,12 @@ class Leaf:
 		self.partition = partition
 
  # Parte los datos de una hoja para hacer dos nuevas hojas. Se hace la partición con mejor partición
-	def train(self, levels):
+	def warm(self, levels):
 		func = copy.deepcopy(indivector[random.randint(0,9)])
 		(criteria, pivot) = self.select_pivot(func.getValues())
 		if isinstance(criteria, int): # El indicador no parte bien los datos
 				if deepness == levels:    # Si es la primera hoja, toma otro indicador
-					ret_node = self.train(levels)
+					ret_node = self.warm(levels)
 				else:
 					ret_node = self
 		else:		# Pivote correcto, devuelve el nuevo nodo
@@ -90,8 +90,8 @@ class Leaf:
 			left = Leaf(~criteria & self.partition)
 
 			if levels>1 :
-				right = right.train(levels-1)
-				left = left.train(levels-1)
+				right = right.warm(levels-1)
+				left = left.warm(levels-1)
 			ret_node = Node(func, pivot, right, left)
 		return ret_node
 

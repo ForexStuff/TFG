@@ -5,7 +5,7 @@ import math
 from pandas_datareader import data as pdr
 
 def acumtag():
-	data = pdr.get_data_yahoo("SAN", start="2017-01-01", end="2019-03-30")
+	data = pdr.get_data_yahoo("SAN", start="2016-07-01", end="2017-01-01")
 	data['dif'] = talib.MOM(data['Close'],1)  # Calculate the difference with last day
 	data['dif'][0] = -0.01
 	data_tag = [0] * data.shape[0]
