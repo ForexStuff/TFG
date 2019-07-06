@@ -21,11 +21,11 @@ def entropy(v):           # v es la proporcion de la clase (frec/total)
 class Genetreec:
 	root = None # Primer Node
 	data = None # Referencia a los datos
-	index = 0   # Indice del árbol dentro de la población
+	ind = 0   # Indice del árbol dentro de la población
 
 	def __init__(self, ind):
 		self.root = Leaf([True] * data.shape[0])
-		self.index = ind
+		self.ind = ind
 
 	def warm(self):
 		self.root = self.root.warm(deepness)
