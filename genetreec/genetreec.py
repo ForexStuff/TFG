@@ -80,7 +80,8 @@ def Reproductivity(population, score):
 
 	# Escalado Min-max para sacar probabilidades (score al intervalo [0,1])
 	pop_score['score'] -= pop_score['score'].min()
-	pop_score['score'] /= pop_score['score'].sum()
+	aux = 1/pop_score['score'].sum()
+	pop_score['score'] *= aux
 	pop_score['score'] = pop_score['score'].cumsum()
 
 	return pop_score
@@ -95,19 +96,15 @@ def NextPopulation(population, score):
 	saveLen = int(len(population)/2-1)
 	nextpopulation = []
 	popu_reprod = Reproductivity(population,score)
-	print(popu_reprod)
 
 	# El mejor lo guardo siempre
 	nextpopulation.append(popu_reprod['tree'][0])
 	nextpopulation.append(popu_reprod['tree'][1])
-	auni = np.random.uniform(0,1,saveLen)
-	buni = np.random.uniform(0,1,saveLen)
-	print(auni)
-	print(buni)
+	auni = np.random.uniform(0,1,2*saveLen)
 
 	for i in range(saveLen):
 		atree = (popu_reprod['tree'][popu_reprod['score'] >= auni[i]]).iloc[0]
-		btree = (popu_reprod['tree'][popu_reprod['score'] >= buni[i]]).iloc[0]
+		btree = (popu_reprod['tree'][popu_reprod['score'] >= auni[i+saveLen]]).iloc[0]
 		atree, btree = Crossover(atree, btree)
 		nextpopulation.append(atree)
 		nextpopulation.append(btree)
@@ -124,7 +121,7 @@ tagger.acumtag()   # Solo se ejecuta la primera vez, el etiquetado es lento
 data = pd.read_csv('tagged_data/SAN.csv')
 population = []
 
-for i in range(6):   # Calentamiento de la población 1
+for i in range(20):   # Calentamiento de la población 1
 	tree = gentree(i)
 	tree.warm()
 	population.append(tree)
@@ -149,11 +146,10 @@ cerebro.broker.setcash(10000.0)	# Seleccionar dinero
 cerebro.broker.setcommission(commission=0.01)
 ret = cerebro.run()   # EJECUTAR BACKTESTING
 
-te = time.time()
-print("El tiempo de simulación es: ",(te - ts))
-
-
 scores = pd.DataFrame({r[0].params.tree.ind: r[0].analyzers.endstats.get_analysis() for r in ret}
                       ).T.loc[:, ['end', 'growth', 'return']]
 
-print(NextPopulation(population, scores['end']))
+nextpopulation = NextPopulation(population, scores['end'])
+
+te = time.time()
+print("El tiempo de simulación es: ",(te - ts))
