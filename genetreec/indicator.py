@@ -13,7 +13,8 @@ def setData(data):
 
 # Seleccionar valor de un indicador en una fecha concreta
 def getValueByIndex(index, func):
-	return func.getValues(False)[df['Date']==index]
+
+	return func.getValues(False).loc[index]
 
 
 # Interfaz sobre la que se van a construir los indicadores
@@ -34,6 +35,7 @@ class _indicator:
 			return data
 
 		else:
+
 			return self.calculate(tagged)
 
 	def name(self):

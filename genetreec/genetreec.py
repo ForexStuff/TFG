@@ -1,4 +1,5 @@
 from tree import Genetreec as gentree
+from copy import deepcopy
 import tagger
 import indicator
 import pandas as pd
@@ -8,7 +9,11 @@ import math
 import numpy as np
 from pandas_datareader import data as pdr
 import time
+import warnings
+#warnings.simplefilter(action='ignore', category=FutureWarning)
 
+
+from profilehooks import profile
 
 class TreeStrategy(bt.Strategy):
 	params=(('tree', None),)
@@ -18,6 +23,7 @@ class TreeStrategy(bt.Strategy):
 		self.dataclose = self.datas[0].close
 		# Para mantener las ordenes no ejecutadas
 		self.order = None
+
 
 	def next(self):
 	# Si hay una compraventa pendiente no puedo hacer otra
@@ -64,6 +70,27 @@ class EndStats(bt.Analyzer):
 # Dados dos árboles, intercambia 'aleatoriamente' dos de sus ramas.
 def Crossover(atree, btree):
 	print("Crossover entre " + str(atree.ind) + " y " + str(btree.ind))
+	aside, abranch = atree.selectRandomBranch()
+	bside, bbranch = btree.selectRandomBranch()
+
+	auxbranch = None
+	if aside == "left":
+		auxbranch = abranch.left
+		if bside == "left":
+			abranch.left = bbranch.left
+			bbranch.left = auxbranch
+		else:
+			abranch.left = bbranch.right
+			bbranch.right = auxbranch
+	else:
+		auxbranch = abranch.right
+		if bside == "left":
+			abranch.right = bbranch.left
+			bbranch.left = auxbranch
+		else:
+			abranch.right = bbranch.right
+			bbranch.right = auxbranch
+
 	return atree, btree
 
 
@@ -97,17 +124,22 @@ def NextPopulation(population, score):
 	nextpopulation = []
 	popu_reprod = Reproductivity(population,score)
 
-	# El mejor lo guardo siempre
-	nextpopulation.append(popu_reprod['tree'][0])
-	nextpopulation.append(popu_reprod['tree'][1])
+	# Los 2 mejores los guardo siempre
+	print("Pasan - " + str(popu_reprod.iloc[1]['tree'].ind) + " y " + str(popu_reprod.iloc[2]['tree'].ind))
+	nextpopulation.append(popu_reprod.iloc[1]['tree'])
+	nextpopulation.append(popu_reprod.iloc[2]['tree'])
 	auni = np.random.uniform(0,1,2*saveLen)
 
 	for i in range(saveLen):
 		atree = (popu_reprod['tree'][popu_reprod['score'] >= auni[i]]).iloc[0]
 		btree = (popu_reprod['tree'][popu_reprod['score'] >= auni[i+saveLen]]).iloc[0]
-		atree, btree = Crossover(atree, btree)
+		atree, btree = Crossover(deepcopy(atree), deepcopy(btree))
 		nextpopulation.append(atree)
 		nextpopulation.append(btree)
+	i=0
+	for tree in nextpopulation:
+		tree.ind = i
+		i += 1
 	return nextpopulation
 
 
@@ -129,27 +161,39 @@ for i in range(20):   # Calentamiento de la población 1
 
 
 
-df = pdr.get_data_yahoo("SAN", start="2018-01-02", end="2018-05-31")
+simudatos = pdr.get_data_yahoo("SAN", start="2018-01-02", end="2019-05-31")
 # df = yf.download("SAN", start="2017-01-01", end="2017-04-30")  # Otra forma de coger los datos
-df_cerebro = bt.feeds.PandasData(dataname = df)
-indicator.setData(df)
+df_cerebro = bt.feeds.PandasData(dataname = simudatos)
+indicator.setData(simudatos)
 treeScore = []
 
-ts = time.time()
 
-cerebro = bt.Cerebro(maxcpus=None)
+
+cerebro = bt.Cerebro(maxcpus=1)
 cerebro.optstrategy(TreeStrategy,tree=list(population))   # Seleccionar estrategia
 cerebro.addanalyzer(EndStats)						      # Seleccionar analizador
 cerebro.adddata(df_cerebro)										  # Seleccionar datos
 cerebro.broker.set_coc(True)
 cerebro.broker.setcash(10000.0)	# Seleccionar dinero
 cerebro.broker.setcommission(commission=0.01)
-ret = cerebro.run()   # EJECUTAR BACKTESTING
 
-scores = pd.DataFrame({r[0].params.tree.ind: r[0].analyzers.endstats.get_analysis() for r in ret}
-                      ).T.loc[:, ['end', 'growth', 'return']]
+for i in range(10):
+	ts = time.time()
+	ret = cerebro.run()   # EJECUTAR BACKTESTING
 
-nextpopulation = NextPopulation(population, scores['end'])
+	scores = pd.DataFrame({r[0].params.tree.ind: r[0].analyzers.endstats.get_analysis() for r in ret}
+	                      ).T.loc[:, ['end', 'growth', 'return']]
 
-te = time.time()
-print("El tiempo de simulación es: ",(te - ts))
+	print(scores)
+	population = NextPopulation(population, scores['end'])
+
+	te = time.time()
+	print("El tiempo de simulación es: ",(te - ts))
+	del cerebro
+	cerebro = bt.Cerebro(maxcpus=1)
+	cerebro.optstrategy(TreeStrategy,tree=list(population))   # Seleccionar estrategia
+	cerebro.addanalyzer(EndStats)						      # Seleccionar analizador
+	cerebro.adddata(df_cerebro)										  # Seleccionar datos
+	cerebro.broker.set_coc(True)
+	cerebro.broker.setcash(10000.0)	# Seleccionar dinero
+	cerebro.broker.setcommission(commission=0.01)									  # Seleccionar datos

@@ -1,5 +1,5 @@
 import indicator
-import random
+from random import randrange
 import pandas as pd
 import math
 import tagger
@@ -23,6 +23,7 @@ class Genetreec:
 	data = None # Referencia a los datos
 	ind = 0   # Indice del árbol dentro de la población
 
+
 	def __init__(self, ind):
 		self.root = Leaf([True] * data.shape[0])
 		self.ind = ind
@@ -37,6 +38,24 @@ class Genetreec:
 
 	def evaluate(self, date):
 		return self.root.evaluate(date)
+
+	def selectRandomBranch(self):
+		r = randrange(2)
+		lastBranch_side = None
+		lastBranch_father = None
+		if r == 0:
+			lastBranch_side, lastBranch_father = self.root.left.selectRandomBranch()
+			if isinstance(lastBranch_father, bool): # Si el elegido es el hijo
+					lastBranch_side = "left"
+					lastBranch_father = self.root
+		else:
+			lastBranch_side, lastBranch_father = self.root.right.selectRandomBranch()
+			if isinstance(lastBranch_father, bool): # Si el elegido es el hijo
+					lastBranch_side = "right"
+					lastBranch_father = self.root
+
+		return lastBranch_side, lastBranch_father
+
 
 class Node:
 	func = None     # Indice que separa los datos
@@ -56,7 +75,7 @@ class Node:
 		self.left.setLeaveActions()
 
 	def evaluate(self, date):
-		if indicator.getValueByIndex(date, self.func)['values'][0] <= self.pivot:
+		if indicator.getValueByIndex(date, self.func)['values'] <= self.pivot:
 			return self.left.evaluate(date)
 		return self.right.evaluate(date)
 
@@ -67,6 +86,27 @@ class Node:
 		print('---- Function ' + self.func.name() + ' >= ' + str(self.pivot) + ' ----')
 		self.right.plot()
 
+	def selectRandomBranch(self):
+		r = randrange(3)
+		father = None
+		if r == 0: # Elegida rama izq
+			side, father = self.left.selectRandomBranch()
+			if isinstance(father, bool):
+				if father == True: 		# Si el elegido es el hijo
+					return "left", self
+				else:					# Si el hijo es una hoja
+					return None, True
+			return side, father				# Si el elegido es más profundo
+		if r == 2: # Elegida rama der
+			side, father = self.right.selectRandomBranch()
+			if isinstance(father, bool):
+				if father == True: 		# Si el elegido es el hijo
+					return "right", self
+				else:					# Si el hijo es una hoja
+					return None, True
+			return side, father				# Si el elegido es más profundo
+		if r == 1:
+			return None, True
 
 
 class Leaf:
@@ -78,7 +118,7 @@ class Leaf:
 
  # Parte los datos de una hoja para hacer dos nuevas hojas. Se hace la partición con mejor partición
 	def warm(self, levels):
-		func = copy.deepcopy(indivector[random.randint(0,9)])
+		func = copy.deepcopy(indivector[randrange(10)])
 		(criteria, pivot) = self.select_pivot(func.getValues())
 		if isinstance(criteria, int): # El indicador no parte bien los datos
 				if deepness == levels:    # Si es la primera hoja, toma otro indicador
@@ -172,3 +212,7 @@ class Leaf:
 		global data
 		print(self.tag)
 		return None
+
+# La selección de rama ha entrado hasta una hoja, notifica el error
+	def selectRandomBranch(self):
+		return None, False
