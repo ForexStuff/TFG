@@ -189,11 +189,16 @@ for i in range(10):
 
 	te = time.time()
 	print("El tiempo de simulación es: ",(te - ts))
-	del cerebro
+
 	cerebro = bt.Cerebro(maxcpus=1)
 	cerebro.optstrategy(TreeStrategy,tree=list(population))   # Seleccionar estrategia
 	cerebro.addanalyzer(EndStats)						      # Seleccionar analizador
 	cerebro.adddata(df_cerebro)										  # Seleccionar datos
 	cerebro.broker.set_coc(True)
 	cerebro.broker.setcash(10000.0)	# Seleccionar dinero
-	cerebro.broker.setcommission(commission=0.01)									  # Seleccionar datos
+	cerebro.broker.setcommission(commission=0.01)
+
+	tot = 0
+	for tree in population:
+		tot+=tree.getNumNodes()
+	print(tot/len(population))

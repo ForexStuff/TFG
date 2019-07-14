@@ -56,6 +56,8 @@ class Genetreec:
 
 		return lastBranch_side, lastBranch_father
 
+	def getNumNodes(self):
+		return self.root.getNumNodes()
 
 class Node:
 	func = None     # Indice que separa los datos
@@ -75,7 +77,7 @@ class Node:
 		self.left.setLeaveActions()
 
 	def evaluate(self, date):
-		if indicator.getValueByIndex(date, self.func)['values'] <= self.pivot:
+		if indicator.getValueByIndex(date, self.func) <= self.pivot:
 			return self.left.evaluate(date)
 		return self.right.evaluate(date)
 
@@ -107,7 +109,8 @@ class Node:
 			return side, father				# Si el elegido es más profundo
 		if r == 1:
 			return None, True
-
+	def getNumNodes(self):
+		return self.left.getNumNodes() + self.right.getNumNodes() + 1
 
 class Leaf:
 	tag = None 			# La acción a tomar
@@ -216,3 +219,7 @@ class Leaf:
 # La selección de rama ha entrado hasta una hoja, notifica el error
 	def selectRandomBranch(self):
 		return None, False
+
+
+	def getNumNodes(self):
+		return 0

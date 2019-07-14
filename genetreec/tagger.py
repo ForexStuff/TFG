@@ -85,4 +85,3 @@ def acumtag():
 	data['tag'] = data_tag
 	#print('max_neg_acum:' + str(max_negative_acum) + ' max_pos_acum:' + str(max_positive_acum))
 	data.to_csv("tagged_data/SAN.csv")
-acumtag()

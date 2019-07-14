@@ -3,18 +3,29 @@ import talib
 
 # Datos iniciales
 df = pd.read_csv('tagged_data/SAN.csv')
+thisday = df.head(1)
 
 # Instanciar datos sobres los que calcular los indicadores
 def setData(data):
 	global df
 	df = data
 	df['Date'] = df.index
+	global thisday
+	thisday = df.head(1)
 
+
+# Guarda los valores de un día (Intento de evitar muchas llamadas)
 
 # Seleccionar valor de un indicador en una fecha concreta
 def getValueByIndex(index, func):
-
-	return func.getValues(False).loc[index]
+	global thisday
+	if func.name() in thisday.columns.values:
+		if thisday.index != index:
+			thisday = df.loc[[index]]
+		return thisday[func.name()][0]
+	ret = func.getValues(False).loc[index]
+	thisday = df.loc[[index]]
+	return thisday[func.name()][0]
 
 
 # Interfaz sobre la que se van a construir los indicadores
@@ -33,9 +44,7 @@ class _indicator:
 			if tagged:
 				data['tag'] = df['tag']   # Selecciona, o no, datos taggeados
 			return data
-
 		else:
-
 			return self.calculate(tagged)
 
 	def name(self):
