@@ -107,10 +107,16 @@ def Reproductivity(population, score):
 
 	# Escalado Min-max para sacar probabilidades (score al intervalo [0,1])
 	pop_score['score'] -= pop_score['score'].min()
-	aux = 1/pop_score['score'].sum()
-	pop_score['score'] *= aux
-	pop_score['score'] = pop_score['score'].cumsum()
+	aux = pop_score['score'].sum()
+	if aux == 0:
+		aux = 1/pop_score.shape[0]
+		pop_score['score'] = [num*aux for num in range(1,pop_score.shape[0]+1)]
+	else:
+		aux = 1/aux
+		pop_score['score'] *= aux
+		pop_score['score'] = pop_score['score'].cumsum()
 
+	print(pop_score)
 	return pop_score
 
 
@@ -153,7 +159,7 @@ tagger.acumtag()   # Solo se ejecuta la primera vez, el etiquetado es lento
 data = pd.read_csv('tagged_data/SAN.csv')
 population = []
 
-for i in range(20):   # Calentamiento de la población 1
+for i in range(6):   # Calentamiento de la población 1
 	tree = gentree(i)
 	tree.warm()
 	population.append(tree)
@@ -190,7 +196,8 @@ for i in range(10):
 	te = time.time()
 	print("El tiempo de simulación es: ",(te - ts))
 
-	cerebro = bt.Cerebro(maxcpus=1)
+	indicator.setData(simudatos)
+	cerebro = bt.Cerebro(maxcpus=None)
 	cerebro.optstrategy(TreeStrategy,tree=list(population))   # Seleccionar estrategia
 	cerebro.addanalyzer(EndStats)						      # Seleccionar analizador
 	cerebro.adddata(df_cerebro)										  # Seleccionar datos
