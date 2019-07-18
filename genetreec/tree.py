@@ -1,6 +1,7 @@
 import indicator
 from random import randrange
 import pandas as pd
+from numpy import random
 import math
 import tagger
 import copy
@@ -59,6 +60,12 @@ class Genetreec:
 	def getNumNodes(self):
 		return self.root.getNumNodes()
 
+	def mutate(self):
+		self.root.mutate()
+		return
+	def getBuySell(self):
+		return self.root.getBuySell()
+
 class Node:
 	func = None     # Indice que separa los datos
 	pivot = None    # pivote que separa los datos
@@ -111,6 +118,21 @@ class Node:
 			return None, True
 	def getNumNodes(self):
 		return self.left.getNumNodes() + self.right.getNumNodes() + 1
+
+	def mutate(self):
+		r = randrange(4)
+		if r == 0:
+			self.pivot = random.normal(self.pivot, abs(self.pivot/8))
+		if r == 1:
+			self.func.mutate()
+		self.left.mutate()
+		self.right.mutate()
+		return
+
+	def getBuySell(self):
+		buy, sell = self.left.getBuySell()
+		buy2, sell2 = self.right.getBuySell()
+		return buy+buy2, sell+sell2
 
 class Leaf:
 	tag = None 			# La acción a tomar
@@ -205,6 +227,7 @@ class Leaf:
 			else:
 				self.tag = 'Buy'
 		self.partition = None
+		return
 
 # Devuelve la acción de la hoja
 	def evaluate(self, date):
@@ -223,3 +246,20 @@ class Leaf:
 
 	def getNumNodes(self):
 		return 0
+
+	def mutate(self):
+		r = randrange(4)
+		if r == 0:
+			self.tag = 'Buy'
+		elif r == 1:
+			self.tag = 'Stop'
+		elif r == 2:
+			self.tag = 'Sell'
+		return
+
+	def getBuySell(self):
+		if self.tag == 'Buy':
+			return 1,0
+		if self.tag == 'Sell':
+			return 0,1
+		return 0,0

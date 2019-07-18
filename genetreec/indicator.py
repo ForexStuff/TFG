@@ -1,5 +1,7 @@
 import pandas as pd
 import talib
+from random import randrange
+from numpy import random
 
 # Datos iniciales
 df = pd.read_csv('tagged_data/SAN.csv')
@@ -53,7 +55,8 @@ class _indicator:
 	def calculate(self):
 		raise NotImplementedError
 
-
+	def mutate(self):
+		raise NotImplementedError
 
 
 
@@ -77,6 +80,19 @@ class _MACD(_indicator):
 			data['tag'] = df['tag']
 		return data
 
+	def mutate(self):
+		l = randrange(3) - 1
+		h = randrange(3) - 1
+		self.lowday += l
+		self.highday += h
+		if self.lowday == 0:
+			self.lowday = 1
+		if self.highday == 1:
+			self.highday = 2
+		while self.highday <= self.lowday:
+			self.highday += 1
+
+			
 class _ATR(_indicator):
 
 	def __init__(self, period=7):
@@ -97,10 +113,16 @@ class _ATR(_indicator):
 			data['tag'] = df['tag']
 		return data
 
+	def mutate(self):
+		p = randrange(3) - 1
+		self.period += p
+		if self.period == 0:
+			self.period = 1
+
 
 class _ROC(_indicator):
 
-	def __init__(self, period=7):
+	def __init__(self, period=20):
 		self.period = period
 
 	def name(self):
@@ -116,6 +138,12 @@ class _ROC(_indicator):
 			data['tag'] = df['tag']
 		return data
 
+	def mutate(self):
+		p = randrange(3) - 1
+		self.period += p
+		if self.period == 0:
+			self.period = 1
+
 
 class _EMA(_indicator):
 
@@ -129,11 +157,17 @@ class _EMA(_indicator):
 		data = pd.DataFrame()
 		#data['Date'] = df['Date']
 		data['values'] = talib.EMA(df['Close'],
-							self.period)
+							self.period) - df['Close']
 		df[self.name()] = data['values']
 		if tagged:
 			data['tag'] = df['tag']
 		return data
+
+	def mutate(self):
+		p = randrange(3) - 1
+		self.period += p
+		if self.period == 1:
+			self.period = 2
 
 
 class _SMA(_indicator):
@@ -148,11 +182,17 @@ class _SMA(_indicator):
 		data = pd.DataFrame()
 		#data['Date'] = df['Date']
 		data['values'] = talib.SMA(df['Close'],
-							self.period)
+							self.period) - df['Close']
 		df[self.name()] = data['values']
 		if tagged:
 			data['tag'] = df['tag']
 		return data
+
+	def mutate(self):
+		p = randrange(3) - 1
+		self.period += p
+		if self.period == 1:
+			self.period = 2
 
 
 class _OBV(_indicator):
@@ -172,6 +212,9 @@ class _OBV(_indicator):
 		if tagged:
 			data['tag'] = df['tag']
 		return data
+
+	def mutate(self):
+		return
 
 
 class _AD(_indicator):
@@ -194,6 +237,9 @@ class _AD(_indicator):
 			data['tag'] = df['tag']
 		return data
 
+	def mutate(self):
+		return
+
 
 class _TRANGE(_indicator):
 
@@ -213,6 +259,9 @@ class _TRANGE(_indicator):
 		if tagged:
 			data['tag'] = df['tag']
 		return data
+
+	def mutate(self):
+		return
 
 
 class _BBANDS_lambda_high(_indicator):
@@ -239,6 +288,14 @@ class _BBANDS_lambda_high(_indicator):
 			data['tag'] = df['tag']
 		return data
 
+	def mutate(self):
+		r = randrange(3) - 1
+		self.period += r
+		nuevo = random.normal(self.nbdevup, self.nbdevup/8)
+		self.nbdevup = nuevo
+		self.nbdevdn = nuevo
+
+
 
 class _BBANDS_lambda_low(_indicator):
 
@@ -263,6 +320,14 @@ class _BBANDS_lambda_low(_indicator):
 		if tagged:
 			data['tag'] = df['tag']
 		return data
+
+	def mutate(self):
+		r = randrange(3) - 1
+		self.period += r
+		nuevo = random.normal(self.nbdevup, self.nbdevup/8)
+		self.nbdevup = nuevo
+		self.nbdevdn = nuevo
+
 
 
 # Función que devuelve una lista con todos los indicadores
