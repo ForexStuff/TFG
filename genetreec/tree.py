@@ -120,7 +120,7 @@ class Node:
 		return self.left.getNumNodes() + self.right.getNumNodes() + 1
 
 	def mutate(self):
-		r = randrange(4)
+		r = randrange(6)
 		if r == 0:
 			self.pivot = random.normal(self.pivot, abs(self.pivot/8))
 		if r == 1:
@@ -248,7 +248,7 @@ class Leaf:
 		return 0
 
 	def mutate(self):
-		r = randrange(4)
+		r = randrange(8)
 		if r == 0:
 			self.tag = 'Buy'
 		elif r == 1:

@@ -25,6 +25,7 @@ class TreeStrategy(bt.Strategy):
 		self.order = None
 
 
+
 	def notify_order(self, order):
 		if order.status in [order.Submitted, order.Accepted]:
 			return
@@ -159,16 +160,16 @@ def NextPopulation(population, score):
 
 
 
-start_date_train = "2018-06-02"
-end_date_train   = "2019-01-01"
-start_date_test  = "2018-12-20"
-end_date_test    = "2019-06-30"
+start_date_train = "2013-08-01"
+end_date_train   = "2014-02-26"
+start_date_test  = "2014-02-26"
+end_date_test    = "2014-08-01"
 tagger.acumtag(start_date_train, end_date_train)   # Solo se ejecuta la primera vez, el etiquetado es lento
 					# y mejor hacerlo solo una vez
 data = pd.read_csv('tagged_data/SAN.csv')
 population = []
 
-for i in range(20):   # Calentamiento de la población 1
+for i in range(30):   # Calentamiento de la población 1
 	tree = gentree(i)
 	tree.warm()
 	population.append(tree)
@@ -190,7 +191,7 @@ cerebro.addanalyzer(EndStats)						      # Seleccionar analizador
 cerebro.adddata(df_cerebro)										  # Seleccionar datos
 cerebro.broker.set_coc(True)
 cerebro.broker.setcash(10000.0)	# Seleccionar dinero
-cerebro.broker.setcommission(commission=0.01)
+cerebro.broker.setcommission(commission=0.00)
 
 for i in range(20):
 	ts = time.time()
@@ -214,7 +215,7 @@ for i in range(20):
 	cerebro.adddata(df_cerebro)										  # Seleccionar datos
 	cerebro.broker.set_coc(True)
 	cerebro.broker.setcash(10000.0)	# Seleccionar dinero
-	cerebro.broker.setcommission(commission=0.01)
+	cerebro.broker.setcommission(commission=0.0)
 
 	tot = 0
 	for tree in population:
@@ -241,7 +242,7 @@ cerebro.addanalyzer(EndStats)						      # Seleccionar analizador
 cerebro.adddata(df_cerebro)										  # Seleccionar datos
 cerebro.broker.set_coc(True)
 cerebro.broker.setcash(10000.0)	# Seleccionar dinero
-cerebro.broker.setcommission(commission=0.01)
+cerebro.broker.setcommission(commission=0.0)
 ret = cerebro.run()
 score = pd.DataFrame({r[0].params.tree.ind: r[0].analyzers.endstats.get_analysis() for r in ret}
                       ).T.loc[:, ['end', 'growth', 'return']]

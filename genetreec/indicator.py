@@ -70,11 +70,16 @@ class _MACD(_indicator):
 		return 'MACD_' + str(self.lowday) + '_' + str(self.highday)
 
 	def calculate(self, tagged):
+
 		data = pd.DataFrame()
 		#data['Date'] = df['Date']
-		data['values'] = talib.MACD(df['Close'],
+		try:
+			data['values'] = talib.MACD(df['Close'],
 				self.lowday,
 				self.highday)[0]
+		except:
+			print(self.name())
+			return
 		df[self.name()] = data['values']
 		if tagged:
 			data['tag'] = df['tag']
@@ -85,14 +90,14 @@ class _MACD(_indicator):
 		h = randrange(3) - 1
 		self.lowday += l
 		self.highday += h
-		if self.lowday == 0:
-			self.lowday = 1
-		if self.highday == 1:
-			self.highday = 2
+		if self.lowday == 1:
+			self.lowday = 2
+		if self.highday == 2:
+			self.highday = 3
 		while self.highday <= self.lowday:
 			self.highday += 1
 
-			
+
 class _ATR(_indicator):
 
 	def __init__(self, period=7):
@@ -291,7 +296,9 @@ class _BBANDS_lambda_high(_indicator):
 	def mutate(self):
 		r = randrange(3) - 1
 		self.period += r
-		nuevo = random.normal(self.nbdevup, self.nbdevup/8)
+		if self.period == 1:
+			self.period = 2
+		nuevo = abs(random.normal(self.nbdevup, self.nbdevup/8))
 		self.nbdevup = nuevo
 		self.nbdevdn = nuevo
 
@@ -324,7 +331,9 @@ class _BBANDS_lambda_low(_indicator):
 	def mutate(self):
 		r = randrange(3) - 1
 		self.period += r
-		nuevo = random.normal(self.nbdevup, self.nbdevup/8)
+		if self.period == 1:
+			self.period = 2
+		nuevo = abs(random.normal(self.nbdevup, self.nbdevup/8))
 		self.nbdevup = nuevo
 		self.nbdevdn = nuevo
 
