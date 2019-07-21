@@ -14,7 +14,7 @@ indivector = indicator.indivector()
 def entropy(v):           # v es la proporcion de la clase (frec/total)
 	if v==0 or v==1:      #    Solo es valido para problemas binarios
 		return 0
-	return -(v*math.log(v,2)+(1-v)*math.log(1-v,2))
+	return v*math.log(v,2)+(1-v)*math.log(1-v,2)
 
 
 
@@ -165,8 +165,8 @@ class Leaf:
 # Dado un vector de datos, busca el pivote que mejor lo separa
 # Tiene en cuenta la entropía
 	def select_pivot(self, values):
-		max_val = values['values'].min()
-		min_val = values['values'].max()
+		max_val = values['values'][self.partition].min()
+		min_val = values['values'][self.partition].max()
 		grill = [(max_val - min_val)*(x/10)+min_val for x in range(1,10)]   # Fabrica un parrilla
 		grill_entropy = []
 
