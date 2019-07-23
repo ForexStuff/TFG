@@ -52,7 +52,7 @@ class _indicator:
 	def name(self):
 		raise NotImplementedError
 
-	def calculate(self):
+	def calculate(self, tagged):
 		raise NotImplementedError
 
 	def mutate(self):

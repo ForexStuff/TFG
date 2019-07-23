@@ -13,8 +13,6 @@ import warnings
 #warnings.simplefilter(action='ignore', category=FutureWarning)
 
 
-from profilehooks import profile
-
 class TreeStrategy(bt.Strategy):
 	params=(('tree', None),)
 	end_val = 0

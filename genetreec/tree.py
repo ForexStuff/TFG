@@ -21,7 +21,6 @@ def entropy(v):           # v es la proporcion de la clase (frec/total)
 
 class Genetreec:
 	root = None # Primer Node
-	data = None # Referencia a los datos
 	ind = 0   # Indice del árbol dentro de la población
 
 
@@ -32,10 +31,6 @@ class Genetreec:
 	def warm(self):
 		self.root = self.root.warm(deepness)
 		self.root.setLeaveActions()
-		#self.root.plot()
-
-	def test(self, data):
-		return None
 
 	def evaluate(self, date):
 		return self.root.evaluate(date)
@@ -63,6 +58,7 @@ class Genetreec:
 	def mutate(self):
 		self.root.mutate()
 		return
+		
 	def getBuySell(self):
 		return self.root.getBuySell()
 
