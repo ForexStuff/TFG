@@ -212,8 +212,8 @@ class Leaf:
 		df = data[self.partition]
 		sell_df = sum(df['tag'] > 0)
 		buy_df = sum(df['tag'] < 0)
-		double_sell_df = sum(df['tag'] > 1)
-		double_buy_df = sum(df['tag'] < -1)
+		double_sell_df = sum(df['tag'] == 2)
+		double_buy_df = sum(df['tag'] == -2)
 		action_sum = sell_df - buy_df + double_sell_df - double_buy_df / (sell_df + buy_df)
 
 		if action_sum > 0:

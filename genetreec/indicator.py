@@ -119,7 +119,7 @@ class _ATR(_indicator):
 		return data
 
 	def mutate(self):
-		p = randrange(3) - 1
+		p = 2*randrange(2) - 1
 		self.period += p
 		if self.period == 0:
 			self.period = 1
@@ -144,7 +144,7 @@ class _ROC(_indicator):
 		return data
 
 	def mutate(self):
-		p = randrange(3) - 1
+		p = 2*randrange(2) - 1
 		self.period += p
 		if self.period == 0:
 			self.period = 1
@@ -169,7 +169,7 @@ class _EMA(_indicator):
 		return data
 
 	def mutate(self):
-		p = randrange(3) - 1
+		p = 2*randrange(2) - 1
 		self.period += p
 		if self.period == 1:
 			self.period = 2
@@ -194,7 +194,7 @@ class _SMA(_indicator):
 		return data
 
 	def mutate(self):
-		p = randrange(3) - 1
+		p = 2*randrange(2) - 1
 		self.period += p
 		if self.period == 1:
 			self.period = 2
