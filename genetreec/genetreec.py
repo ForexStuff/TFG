@@ -16,6 +16,7 @@ import warnings
 class TreeStrategy(bt.Strategy):
 	params=(('tree', None),)
 	end_val = 0
+	sellcount = 0
 
 	def __init__(self):
 		self.dataclose = self.datas[0].close
@@ -46,8 +47,12 @@ class TreeStrategy(bt.Strategy):
 		if action == 'Sell':
 			if self.position.size > 0:
 				self.order = self.sell(size=self.position.size)
+				self.sellcount += 1
 
-
+	def stop(self):
+		self.params.tree.sellcount = self.sellcount
+		print(str(self.params.tree.ind) + ' has ' + str(self.params.tree.sellcount) )
+		return
 
 
 class EndStats(bt.Analyzer):
@@ -109,10 +114,6 @@ def Crossover(atree, btree):
 			abranch.root = bbranch.root
 			bbranch.root = auxbranch
 
-
-	else:
-		auxbranch = abranch.root
-
 	return atree, btree
 
 
@@ -125,6 +126,7 @@ def Reproductivity(population, score):
 	pop_score = pd.DataFrame()
 	pop_score['tree'] = [tree for tree in population]
 	pop_score['score'] = score
+	pop_score['score'] += [tree.sellcount * 10 for tree in population]
 	pop_score = pop_score.sort_values(by=['score'], ascending=False)
 
 	# Escalado Min-max para sacar probabilidades (score al intervalo [0,1])
@@ -155,19 +157,27 @@ def NextPopulation(population, score):
 	# Los 2 mejores los guardo siempre
 	buy, sell = popu_reprod.iloc[0]['tree'].getBuySell()
 	print('buy=' + str(buy) + ', sell=' + str(sell))
-	popu_reprod.iloc[1]['tree'].mutate()
+	popu_reprod.iloc[2]['tree'].mutate()
+	popu_reprod.iloc[3]['tree'].mutate()
 	nextpopulation.append(popu_reprod.iloc[0]['tree'])
 	nextpopulation.append(popu_reprod.iloc[1]['tree'])
-	auni = np.random.uniform(0,1,2*saveLen)
+	nextpopulation.append(popu_reprod.iloc[2]['tree'])
+	nextpopulation.append(popu_reprod.iloc[3]['tree'])
 
-	for i in range(saveLen):
-		atree = (popu_reprod['tree'][popu_reprod['score'] >= auni[i]]).iloc[0]
-		btree = (popu_reprod['tree'][popu_reprod['score'] >= auni[i+saveLen]]).iloc[0]
+	while numbertree > len(nextpopulation):
+		auni = np.random.uniform(0,1,2)
+		atree = (popu_reprod['tree'][popu_reprod['score'] >= auni[0]]).iloc[0]
+		btree = (popu_reprod['tree'][popu_reprod['score'] >= auni[1]]).iloc[0]
 		atree, btree = Crossover(deepcopy(atree), deepcopy(btree))
-		atree.mutate() #Mutación
-		btree.mutate() #Mutación
-		nextpopulation.append(atree)
-		nextpopulation.append(btree)
+		aux = atree.getNumNodes()
+		if aux < 35 and aux > 5:
+			atree.mutate() #Mutación
+			nextpopulation.append(atree)
+		aux = btree.getNumNodes()
+		if aux < 35 and aux > 5:
+			btree.mutate() #Mutación
+			nextpopulation.append(btree)
+
 	i=0
 	for tree in nextpopulation:
 		tree.ind = i
@@ -178,7 +188,8 @@ def NextPopulation(population, score):
 
 
 
-
+numbertree = 20
+numberiter = 20
 start_date_train = "2013-08-01"
 end_date_train   = "2014-02-26"
 start_date_test  = "2014-02-26"
@@ -188,7 +199,7 @@ tagger.acumtag(start_date_train, end_date_train)   # Solo se ejecuta la primera 
 data = pd.read_csv('tagged_data/SAN.csv')
 population = []
 
-for i in range(30):   # Calentamiento de la población 1
+for i in range(numbertree):   # Calentamiento de la población 1
 	tree = gentree(i)
 	tree.warm()
 	population.append(tree)
@@ -210,9 +221,9 @@ cerebro.addanalyzer(EndStats)						      # Seleccionar analizador
 cerebro.adddata(df_cerebro)										  # Seleccionar datos
 cerebro.broker.set_coc(True)
 cerebro.broker.setcash(10000.0)	# Seleccionar dinero
-cerebro.broker.setcommission(commission=0.00)
+cerebro.broker.setcommission(commission=0.01)
 
-for i in range(20):
+for i in range(numberiter):
 	ts = time.time()
 	ret = cerebro.run()   # EJECUTAR BACKTESTING
 
@@ -234,7 +245,7 @@ for i in range(20):
 	cerebro.adddata(df_cerebro)										  # Seleccionar datos
 	cerebro.broker.set_coc(True)
 	cerebro.broker.setcash(10000.0)	# Seleccionar dinero
-	cerebro.broker.setcommission(commission=0.0)
+	cerebro.broker.setcommission(commission=0.01)
 
 	tot = 0
 	for tree in population:
