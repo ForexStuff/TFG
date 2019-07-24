@@ -80,17 +80,38 @@ def Crossover(atree, btree):
 		if bside == "left":
 			abranch.left = bbranch.left
 			bbranch.left = auxbranch
-		else:
+		elif bside == "right":
 			abranch.left = bbranch.right
 			bbranch.right = auxbranch
-	else:
+		else:
+			abranch.left = bbranch.root
+			bbranch.root = auxbranch
+	elif aside == "right":
 		auxbranch = abranch.right
 		if bside == "left":
 			abranch.right = bbranch.left
 			bbranch.left = auxbranch
-		else:
+		elif bside == "right":
 			abranch.right = bbranch.right
 			bbranch.right = auxbranch
+		else:
+			abranch.right = bbranch.root
+			bbranch.root = auxbranch
+	else:
+		auxbranch = abranch.root
+		if bside == "left":
+			abranch.root = bbranch.left
+			bbranch.left = auxbranch
+		elif bside == "right":
+			abranch.root = bbranch.right
+			bbranch.right = auxbranch
+		else:
+			abranch.root = bbranch.root
+			bbranch.root = auxbranch
+
+
+	else:
+		auxbranch = abranch.root
 
 	return atree, btree
 

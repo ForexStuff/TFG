@@ -36,19 +36,22 @@ class Genetreec:
 		return self.root.evaluate(date)
 
 	def selectRandomBranch(self):
-		r = randrange(2)
+		r = randrange(5)
 		lastBranch_side = None
 		lastBranch_father = None
-		if r == 0:
+		if r == 0 OR r == 2:
 			lastBranch_side, lastBranch_father = self.root.left.selectRandomBranch()
 			if isinstance(lastBranch_father, bool): # Si el elegido es el hijo
 					lastBranch_side = "left"
 					lastBranch_father = self.root
-		else:
+		elif r == 1 OR r == 3:
 			lastBranch_side, lastBranch_father = self.root.right.selectRandomBranch()
 			if isinstance(lastBranch_father, bool): # Si el elegido es el hijo
 					lastBranch_side = "right"
 					lastBranch_father = self.root
+		else:
+			lastBranch_side = "root"
+			lastBranch_father = self
 
 		return lastBranch_side, lastBranch_father
 
@@ -58,7 +61,7 @@ class Genetreec:
 	def mutate(self):
 		self.root.mutate()
 		return
-		
+
 	def getBuySell(self):
 		return self.root.getBuySell()
 
