@@ -119,11 +119,13 @@ class Node:
 		return self.left.getNumNodes() + self.right.getNumNodes() + 1
 
 	def mutate(self):
-		r = randrange(6)
+		r = randrange(8)
 		if r == 0:
 			self.pivot = random.normal(self.pivot, abs(self.pivot/8))
 		if r == 1:
 			self.func.mutate()
+		if r == 2:
+			self.func = copy.deepcopy(indivector[randrange(10)])
 		self.left.mutate()
 		self.right.mutate()
 		return

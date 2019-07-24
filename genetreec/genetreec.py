@@ -51,7 +51,6 @@ class TreeStrategy(bt.Strategy):
 
 	def stop(self):
 		self.params.tree.sellcount = self.sellcount
-		print(str(self.params.tree.ind) + ' has ' + str(self.params.tree.sellcount) )
 		return
 
 
@@ -132,7 +131,7 @@ class Simulate:
 		pop_score = pd.DataFrame()
 		pop_score['tree'] = [tree for tree in self.population]
 		pop_score['score'] = score
-		pop_score['score'] += [tree.sellcount * 10 for tree in self.population]
+		pop_score['score'] += [tree.sellcount * 30 for tree in self.population]
 		pop_score = pop_score.sort_values(by=['score'], ascending=False)
 
 		# Escalado Min-max para sacar probabilidades (score al intervalo [0,1])
