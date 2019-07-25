@@ -15,7 +15,6 @@ import warnings
 
 class TreeStrategy(bt.Strategy):
 	params=(('tree', None),)
-	end_val = 0
 	sellcount = 0
 
 	def __init__(self):
@@ -23,15 +22,12 @@ class TreeStrategy(bt.Strategy):
 		# Para mantener las ordenes no ejecutadas
 		self.order = None
 
-
-
 	def notify_order(self, order):
 		if order.status in [order.Submitted, order.Accepted]:
 			return
 
 		self.order = None
 		return
-
 
 	def next(self):
 	# Si hay una compraventa pendiente no puedo hacer otra
@@ -207,7 +203,7 @@ class Simulate:
 
 
 
-		cerebro = bt.Cerebro(maxcpus=1)
+		cerebro = bt.Cerebro(maxcpus=None)
 		cerebro.optstrategy(TreeStrategy,tree=list(self.population))   # Seleccionar estrategia
 		cerebro.addanalyzer(EndStats)						      # Seleccionar analizador
 		cerebro.adddata(df_cerebro)										  # Seleccionar datos

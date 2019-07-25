@@ -41,7 +41,6 @@ class _indicator:
 	def getValues(self, tagged = True):
 		if self.name() in df.columns.values:
 			data = pd.DataFrame()
-			#data['Date'] = df['Date']
 			data['values'] = df[self.name()]
 			if tagged:
 				data['tag'] = df['tag']   # Selecciona, o no, datos taggeados
