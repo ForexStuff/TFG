@@ -169,10 +169,10 @@ class Simulate:
 	numbertree = 40
 	numberiter = 60
 	halfiter = numberiter/2
-	start_date_train = "2018-01-01"
-	end_date_train   = "2018-04-22"
-	start_date_test  = "2018-04-22"
-	end_date_test    = "2018-08-12"
+	start_date_train = "2016-07-01"
+	end_date_train   = "2016-10-22"
+	start_date_test  = "2016-10-22"
+	end_date_test    = "2017-02-01"
 
 
 	# Dados dos árboles, intercambia 'aleatoriamente' dos de sus ramas.
@@ -271,13 +271,13 @@ class Simulate:
 			btree = (popu_reprod['tree'][popu_reprod['score'] >= auni[1]]).iloc[0]
 			atree, btree = self.Crossover(deepcopy(atree), deepcopy(btree))
 			aux = atree.getNumNodes()
-			if aux < 55 and aux > 10:
+			if aux < 65 and aux > 18:
 				if i == 2:
 					atree.mutate() #Mutación
 					i = 0
 				self.nextpopulation.append(atree)
 			aux = btree.getNumNodes()
-			if aux < 55 and aux > 10:
+			if aux < 65 and aux > 18:
 				if i == 2:
 					btree.mutate() #Mutación
 					i = 0
