@@ -1,0 +1,5 @@
+Large:         100 arboles 400 iteraciones 
+Large-Medium:  100 arboles 100 iteraciones
+Medium:         60 arboles 200 iteraciones
+Medium-Short:   60 arboles  80 iteraciones
+Short:          40 arboles  60 iteraciones

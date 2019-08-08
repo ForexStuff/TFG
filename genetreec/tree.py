@@ -14,7 +14,7 @@ indivector = indicator.indivector()
 def entropy(v):           # v es la proporcion de la clase (frec/total)
 	if v==0 or v==1:      #    Solo es valido para problemas binarios
 		return 0
-	return v*math.log(v,2)+(1-v)*math.log(1-v,2)
+	return  (v*math.log(v,2)+(1-v)*math.log(1-v,2))
 
 
 
@@ -119,13 +119,16 @@ class Node:
 		return self.left.getNumNodes() + self.right.getNumNodes() + 1
 
 	def mutate(self):
-		r = randrange(8)
+		r = randrange(5)
 		if r == 0:
 			self.pivot = random.normal(self.pivot, abs(self.pivot/8))
 		if r == 1:
 			self.func.mutate()
 		if r == 2:
-			self.func = copy.deepcopy(indivector[randrange(10)])
+			self.func = copy.deepcopy(indivector[randrange(13)])
+			val = self.func.getValues(False)
+			self.pivot = val['values'].mean()
+			
 		self.left.mutate()
 		self.right.mutate()
 		return
@@ -144,7 +147,7 @@ class Leaf:
 
  # Parte los datos de una hoja para hacer dos nuevas hojas. Se hace la partición con mejor partición
 	def warm(self, levels):
-		func = copy.deepcopy(indivector[randrange(10)])
+		func = copy.deepcopy(indivector[randrange(13)])
 		(criteria, pivot) = self.select_pivot(func.getValues())
 		if isinstance(criteria, int): # El indicador no parte bien los datos
 				if deepness == levels:    # Si es la primera hoja, toma otro indicador
@@ -249,7 +252,7 @@ class Leaf:
 		return 0
 
 	def mutate(self):
-		r = randrange(8)
+		r = randrange(6)
 		if r == 0:
 			self.tag = 'Buy'
 		elif r == 1:

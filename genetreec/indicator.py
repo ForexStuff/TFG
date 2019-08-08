@@ -15,6 +15,9 @@ def setData(data):
 	global thisday
 	thisday = df.head(1)
 
+def printa():
+	print(df)
+	return
 
 # Guarda los valores de un día (Intento de evitar muchas llamadas)
 
@@ -62,8 +65,10 @@ class _indicator:
 class _MACD(_indicator):
 
 	def __init__(self, lowday=5, highday=10):
-		self.lowday = lowday
-		self.highday = highday
+		l = randrange(5) - 2
+		h = randrange(5) - 2
+		self.lowday = lowday + l
+		self.highday = highday + h
 
 	def name(self):
 		return 'MACD_' + str(self.lowday) + '_' + str(self.highday)
@@ -72,13 +77,9 @@ class _MACD(_indicator):
 
 		data = pd.DataFrame()
 		#data['Date'] = df['Date']
-		try:
-			data['values'] = talib.MACD(df['Close'],
+		data['values'] = talib.MACD(df['Close'],
 				self.lowday,
 				self.highday)[0]
-		except:
-			print(self.name())
-			return
 		df[self.name()] = data['values']
 		if tagged:
 			data['tag'] = df['tag']
@@ -100,7 +101,8 @@ class _MACD(_indicator):
 class _ATR(_indicator):
 
 	def __init__(self, period=7):
-		self.period = period
+		p = randrange(5) - 2
+		self.period = period + p
 
 	def name(self):
 		return 'ATR_' + str(self.period)
@@ -127,6 +129,7 @@ class _ATR(_indicator):
 class _ROC(_indicator):
 
 	def __init__(self, period=20):
+		p = randrange(5) - 2
 		self.period = period
 
 	def name(self):
@@ -152,7 +155,8 @@ class _ROC(_indicator):
 class _EMA(_indicator):
 
 	def __init__(self, period=10):
-		self.period = period
+		p = randrange(5) - 2
+		self.period = period + p
 
 	def name(self):
 		return 'EMA_' + str(self.period)
@@ -160,8 +164,8 @@ class _EMA(_indicator):
 	def calculate(self, tagged):
 		data = pd.DataFrame()
 		#data['Date'] = df['Date']
-		data['values'] = talib.EMA(df['Close'],
-							self.period) - df['Close']
+		data['values'] = 2 * talib.EMA(df['Close'],
+							self.period) / df['Close']
 		df[self.name()] = data['values']
 		if tagged:
 			data['tag'] = df['tag']
@@ -177,7 +181,8 @@ class _EMA(_indicator):
 class _SMA(_indicator):
 
 	def __init__(self, period=10):
-		self.period = period
+		p = randrange(5) - 2
+		self.period = period + p
 
 	def name(self):
 		return 'SMA_' + str(self.period)
@@ -185,8 +190,8 @@ class _SMA(_indicator):
 	def calculate(self, tagged):
 		data = pd.DataFrame()
 		#data['Date'] = df['Date']
-		data['values'] = talib.SMA(df['Close'],
-							self.period) - df['Close']
+		data['values'] = 2 * talib.SMA(df['Close'],
+							self.period) / df['Close']
 		df[self.name()] = data['values']
 		if tagged:
 			data['tag'] = df['tag']
@@ -197,6 +202,81 @@ class _SMA(_indicator):
 		self.period += p
 		if self.period == 1:
 			self.period = 2
+
+
+class _RSI(_indicator):
+
+	def __init__(self, period=12):
+		p = randrange(5) - 2
+		self.period = period + p
+
+	def name(self):
+		return 'RSI_' + str(self.period)
+
+	def calculate(self, tagged):
+		data = pd.DataFrame()
+		#data['Date'] = df['Date']
+		data['values'] = talib.RSI(df['Close'], self.period)
+		df[self.name()] = data['values']
+		if tagged:
+			data['tag'] = df['tag']
+		return data
+
+	def mutate(self):
+		p = randrange(5) - 2
+		self.period += p
+		if self.period == 1:
+			self.period = 2
+
+
+class _MOM(_indicator):
+
+	def __init__(self, period=10):
+		p = randrange(5) - 2
+		self.period = period + p
+
+	def name(self):
+		return 'MOM_' + str(self.period)
+
+	def calculate(self, tagged):
+		data = pd.DataFrame()
+		#data['Date'] = df['Date']
+		data['values'] = talib.MOM(df['Close'], self.period) / df['Close']
+		df[self.name()] = data['values']
+		if tagged:
+			data['tag'] = df['tag']
+		return data
+
+	def mutate(self):
+		p = randrange(5) - 2
+		self.period += p
+		if self.period == 1:
+			self.period = 2
+
+class _HILL(_indicator):
+
+	def __init__(self, period=12):
+		p = randrange(5) - 2
+		self.period = period + p
+
+	def name(self):
+		return 'HILL_' + str(self.period)
+
+	def calculate(self, tagged):
+		data = pd.DataFrame()
+		#data['Date'] = df['Date']
+		data['values'] = talib.MOM(df['Close'], self.period) / self.period
+		df[self.name()] = data['values']
+		if tagged:
+			data['tag'] = df['tag']
+		return data
+
+	def mutate(self):
+		p = randrange(5) - 2
+		self.period += p
+		if self.period == 1:
+			self.period = 2
+
 
 
 class _OBV(_indicator):
@@ -271,9 +351,10 @@ class _TRANGE(_indicator):
 class _BBANDS_lambda_high(_indicator):
 
 	def __init__(self, period=5, nbdevup=2, nbdevdn=2):
-		self.period = period
-		self.nbdevup = nbdevup
-		self.nbdevdn = nbdevdn
+		p = randrange(5) - 2
+		self.period = period + p
+		self.nbdevup = nbdevup + abs(random.normal(nbdevup, nbdevup/8))
+		self.nbdevdn = nbdevdn + abs(random.normal(nbdevdn, nbdevdn/8))
 
 	def name(self):
 		return 'BBANDS_lambda_high_' + str(self.period) + '_' + str(self.nbdevup) + '_' + str(self.nbdevdn)
@@ -293,9 +374,9 @@ class _BBANDS_lambda_high(_indicator):
 		return data
 
 	def mutate(self):
-		r = randrange(3) - 1
+		r = randrange(5) - 2
 		self.period += r
-		if self.period == 1:
+		if self.period < 2:
 			self.period = 2
 		nuevo = abs(random.normal(self.nbdevup, self.nbdevup/8))
 		self.nbdevup = nuevo
@@ -306,9 +387,10 @@ class _BBANDS_lambda_high(_indicator):
 class _BBANDS_lambda_low(_indicator):
 
 	def __init__(self, period=5, nbdevup=2, nbdevdn=2):
-		self.period = period
-		self.nbdevup = nbdevup
-		self.nbdevdn = nbdevdn
+		p = randrange(5) - 2
+		self.period = period + p
+		self.nbdevup = nbdevup + abs(random.normal(nbdevup, nbdevup/8))
+		self.nbdevdn = nbdevdn + abs(random.normal(nbdevdn, nbdevdn/8))
 
 	def name(self):
 		return 'BBANDS_lambda_low_' + str(self.period) + '_' + str(self.nbdevup) + '_' + str(self.nbdevdn)
@@ -328,9 +410,9 @@ class _BBANDS_lambda_low(_indicator):
 		return data
 
 	def mutate(self):
-		r = randrange(3) - 1
+		r = randrange(5) - 2
 		self.period += r
-		if self.period == 1:
+		if self.period < 2:
 			self.period = 2
 		nuevo = abs(random.normal(self.nbdevup, self.nbdevup/8))
 		self.nbdevup = nuevo
@@ -345,6 +427,9 @@ def indivector():
 			_ROC(),
 			_EMA(),
 			_SMA(),
+			_RSI(),  ##
+			_MOM(),  ##
+			_HILL(), ##
 			_OBV(),
 			_AD(),
 			_TRANGE(),

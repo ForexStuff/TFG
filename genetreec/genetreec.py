@@ -22,6 +22,7 @@ class TreeStrategy(bt.Strategy):
 		# Para mantener las ordenes no ejecutadas
 		self.order = None
 
+
 	def notify_order(self, order):
 		if order.status in [order.Submitted, order.Accepted]:
 			return
@@ -45,37 +46,133 @@ class TreeStrategy(bt.Strategy):
 				self.order = self.sell(size=self.position.size)
 				self.sellcount += 1
 
+
 	def stop(self):
 		self.params.tree.sellcount = self.sellcount
 		return
 
 
+
+#############################################
+#### COPY OF TreeStrategy   --- Made for plot
+#############################################
+class plotTreeStrategy(bt.Strategy):
+	params=(('tree', None),)
+
+	def __init__(self):
+		self.dataclose = self.datas[0].close
+		# Para mantener las ordenes no ejecutadas
+		self.order = None
+		self.tree = self.params.tree
+
+	def notify_order(self, order):
+		if order.status in [order.Submitted, order.Accepted]:
+			return
+
+		self.order = None
+		return
+
+	def next(self):
+	# Si hay una compraventa pendiente no puedo hacer otra
+		if self.order:
+			return
+		action = self.params.tree.evaluate(date=self.datas[0].datetime.date(0))
+		if action == 'Buy':
+			if self.position.size == 0:
+				self.order = self.buy(size = math.floor(self.broker.get_cash()/(self.datas[0].close*1.01)) )
+					## Como estamos usando una comisión del 1% las acciones son un 1% más caras.
+					## La cantidad de acciones que podemos comprar es la parte entera de nuestro
+					## dinero entre el valor de una acción mas su comisión.
+		if action == 'Sell':
+			if self.position.size > 0:
+				self.order = self.sell(size=self.position.size)
+
+
+
+#############################################
+#### COPY OF TreeStrategy   --- Made for forest
+#############################################
+class forestStrategy(bt.Strategy):
+	params=(('forest', None),)
+
+	def __init__(self):
+		self.dataclose = self.datas[0].close
+		# Para mantener las ordenes no ejecutadas
+		self.order = None
+		self.forest = self.params.forest
+
+	def notify_order(self, order):
+		if order.status in [order.Submitted, order.Accepted]:
+			return
+
+		self.order = None
+		return
+
+	def next(self):
+	# Si hay una compraventa pendiente no puedo hacer otra
+		if self.order:
+			return
+		buy = 0
+		sell = 0
+		stop = 0
+		for tree in self.forest:
+			action = tree.evaluate(date=self.datas[0].datetime.date(0))
+			if action == 'Buy':
+				buy += 1
+			elif action == 'Sell':
+				sell += 1
+			else:
+				stop += 1
+
+		print(str(buy) + '-' + str(sell) + '-' + str(stop))
+		if buy > sell:
+			if buy > stop * 0.75:
+				if self.position.size == 0:
+					self.order = self.buy(size = math.floor(self.broker.get_cash()/(self.datas[0].close*1.01)) )
+					## Como estamos usando una comisión del 1% las acciones son un 1% más caras.
+					## La cantidad de acciones que podemos comprar es la parte entera de nuestro
+					## dinero entre el valor de una acción mas su comisión.
+		elif sell > stop * 0.75:
+			if self.position.size > 0:
+				self.order = self.sell(size=self.position.size)
+
+
+
+
+
+
 class EndStats(bt.Analyzer):
-    # Analizador para poder tener en cuenta varias
+	# Analizador para poder tener en cuenta varias
 	# estrategias de una sola ejecución (optstrategy)
 
-    def __init__(self):
-        self.start_val = self.strategy.broker.get_value()
-        self.end_val = None
+	def __init__(self):
+		self.start_val = self.strategy.broker.get_value()
+		self.end_val = None
+		self.sells=0
 
-    def stop(self):
-        self.end_val = self.strategy.broker.get_value()
+	def stop(self):
+		self.end_val = self.strategy.broker.get_value()
+		self.sells = self.strategy.params.tree.sellcount
 
-    def get_analysis(self):
-        return {"start": self.start_val, "end": self.end_val,
-                "growth": self.end_val - self.start_val, "return": self.end_val / self.start_val}
+	def get_analysis(self):
+		return {"start": self.start_val, "end": self.end_val,
+				"growth": self.end_val - self.start_val, "return": self.end_val / self.start_val}
+
 
 
 
 class Simulate:
 	data = None
+	population = None
 	nextpopulation = None
-	numbertree = 20
-	numberiter = 10
-	start_date_train = "2013-08-01"
-	end_date_train   = "2014-02-26"
-	start_date_test  = "2014-02-26"
-	end_date_test    = "2014-08-01"
+	forest = []
+	numbertree = 100
+	numberiter = 400
+	halfiter = numberiter/2
+	start_date_train = "2002-09-29"
+	end_date_train   = "2003-09-29"
+	start_date_test  = "2003-09-29"
+	end_date_test    = "2004-09-29"
 
 
 	# Dados dos árboles, intercambia 'aleatoriamente' dos de sus ramas.
@@ -127,11 +224,12 @@ class Simulate:
 		pop_score = pd.DataFrame()
 		pop_score['tree'] = [tree for tree in self.population]
 		pop_score['score'] = score
-		pop_score['score'] += [tree.sellcount * 30 for tree in self.population]
+
 		pop_score = pop_score.sort_values(by=['score'], ascending=False)
 
 		# Escalado Min-max para sacar probabilidades (score al intervalo [0,1])
 		pop_score['score'] -= pop_score['score'].min()
+		print(pop_score)
 		aux = pop_score['score'].sum()
 		if aux == 0:
 			aux = 1/pop_score.shape[0]
@@ -141,7 +239,6 @@ class Simulate:
 			pop_score['score'] *= aux
 			pop_score['score'] = pop_score['score'].cumsum()
 
-		print(pop_score)
 		return pop_score
 
 
@@ -154,6 +251,11 @@ class Simulate:
 		# Los 2 mejores los guardo siempre
 		buy, sell = popu_reprod.iloc[0]['tree'].getBuySell()
 		print('buy=' + str(buy) + ', sell=' + str(sell))
+
+		self.nextpopulation.append(deepcopy(popu_reprod.iloc[0]['tree']))
+		self.nextpopulation.append(deepcopy(popu_reprod.iloc[1]['tree']))
+		popu_reprod.iloc[0]['tree'].mutate()
+		popu_reprod.iloc[1]['tree'].mutate()
 		popu_reprod.iloc[2]['tree'].mutate()
 		popu_reprod.iloc[3]['tree'].mutate()
 		self.nextpopulation.append(popu_reprod.iloc[0]['tree'])
@@ -161,19 +263,26 @@ class Simulate:
 		self.nextpopulation.append(popu_reprod.iloc[2]['tree'])
 		self.nextpopulation.append(popu_reprod.iloc[3]['tree'])
 
+
+		i=0
 		while self.numbertree > len(self.nextpopulation):
 			auni = np.random.uniform(0,1,2)
 			atree = (popu_reprod['tree'][popu_reprod['score'] >= auni[0]]).iloc[0]
 			btree = (popu_reprod['tree'][popu_reprod['score'] >= auni[1]]).iloc[0]
 			atree, btree = self.Crossover(deepcopy(atree), deepcopy(btree))
 			aux = atree.getNumNodes()
-			if aux < 35 and aux > 5:
-				atree.mutate() #Mutación
+			if aux < 55 and aux > 10:
+				if i == 2:
+					atree.mutate() #Mutación
+					i = 0
 				self.nextpopulation.append(atree)
 			aux = btree.getNumNodes()
-			if aux < 35 and aux > 5:
-				btree.mutate() #Mutación
+			if aux < 55 and aux > 10:
+				if i == 2:
+					btree.mutate() #Mutación
+					i = 0
 				self.nextpopulation.append(btree)
+			i += 1
 
 		i=0
 		for tree in self.nextpopulation:
@@ -218,13 +327,12 @@ class Simulate:
 			scores = pd.DataFrame({r[0].params.tree.ind: r[0].analyzers.endstats.get_analysis() for r in ret}
 			                      ).T.loc[:, ['end', 'growth', 'return']]
 
-			print(scores)
-			self.NextPopulation(scores['end'])
-			# Aquí debería ir la mutación
-			# Por motivos de eficiencia se hace dentro de NextPopulation
-
+			#print(scores)
+			self.NextPopulation(scores['growth'])
 			te = time.time()
 			print("El tiempo de simulación es: ",(te - ts))
+			#if i > self.halfiter:
+			#	self.forest.append(deepcopy(self.population[6]))
 
 			indicator.setData(simudatos)
 			cerebro = bt.Cerebro(maxcpus=None)
@@ -233,7 +341,7 @@ class Simulate:
 			cerebro.adddata(df_cerebro)										  # Seleccionar datos
 			cerebro.broker.set_coc(True)
 			cerebro.broker.setcash(10000.0)	# Seleccionar dinero
-			cerebro.broker.setcommission(commission=0.01)
+			cerebro.broker.setcommission(commission=0.005)
 
 			tot = 0
 			for tree in self.population:
@@ -247,26 +355,49 @@ class Simulate:
 
 		pop_score = pd.DataFrame()
 		pop_score['tree'] = [tree for tree in self.population]
-		pop_score['score'] = scores['end']
+		pop_score['score'] = scores['growth']
 		pop_score = pop_score.sort_values(by=['score'], ascending=False)
-		modelTree = pop_score.iloc[0]['tree']
+		print(pop_score)
+		print('-----------------')
+		print(pop_score.iloc[0])
+		model = pop_score.iloc[0]['tree']
+
+		indicator.setData(simudatos)
+		cerebro = bt.Cerebro(maxcpus=1)
+		cerebro.addstrategy(plotTreeStrategy, tree=model)   # Seleccionar estrategia
+		cerebro.adddata(df_cerebro)										  # Seleccionar datos
+		cerebro.broker.set_coc(True)
+		cerebro.broker.setcash(10000.0)	# Seleccionar dinero
+		cerebro.broker.setcommission(commission=0.01)
+		cerebro.run()
+		cerebro.plot()
+
+
 
 		simudatos = pdr.get_data_yahoo("SAN", start=self.start_date_test, end=self.end_date_test)
 		df_cerebro = bt.feeds.PandasData(dataname = simudatos)
 		indicator.setData(simudatos)
 		cerebro = bt.Cerebro(maxcpus=1)
-		cerebro.optstrategy(TreeStrategy,tree=modelTree)   # Seleccionar estrategia
-		cerebro.addanalyzer(EndStats)						      # Seleccionar analizador
+		cerebro.addstrategy(plotTreeStrategy, tree=model)   # Seleccionar estrategia
 		cerebro.adddata(df_cerebro)										  # Seleccionar datos
 		cerebro.broker.set_coc(True)
 		cerebro.broker.setcash(10000.0)	# Seleccionar dinero
-		cerebro.broker.setcommission(commission=0.0)
-		ret = cerebro.run()
-		score = pd.DataFrame({r[0].params.tree.ind: r[0].analyzers.endstats.get_analysis() for r in ret}
-		                      ).T.loc[:, ['end', 'growth', 'return']]
+		cerebro.broker.setcommission(commission=0.01)
+		cerebro.run()
+		model.root.plot()
+		indicator.printa()
+		cerebro.plot()
 
-		print('Score on test:')
-		print(score)
+
+		# indicator.setData(simudatos)
+		# cerebro = bt.Cerebro(maxcpus=1)
+		# cerebro.addstrategy(forestStrategy, forest=self.forest)   # Seleccionar estrategia
+		# cerebro.adddata(df_cerebro)										  # Seleccionar datos
+		# cerebro.broker.set_coc(True)
+		# cerebro.broker.setcash(10000.0)	# Seleccionar dinero
+		# cerebro.broker.setcommission(commission=0.01)
+		# cerebro.run()
+		# cerebro.plot()
 
 
 sim = Simulate()
