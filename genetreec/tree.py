@@ -121,14 +121,14 @@ class Node:
 	def mutate(self):
 		r = randrange(5)
 		if r == 0:
-			self.pivot = random.normal(self.pivot, abs(self.pivot/8))
+			self.pivot = random.normal(self.pivot, abs(self.pivot/4))
 		if r == 1:
 			self.func.mutate()
 		if r == 2:
 			self.func = copy.deepcopy(indivector[randrange(13)])
 			val = self.func.getValues(False)
 			self.pivot = val['values'].mean()
-			
+
 		self.left.mutate()
 		self.right.mutate()
 		return
@@ -252,7 +252,7 @@ class Leaf:
 		return 0
 
 	def mutate(self):
-		r = randrange(6)
+		r = randrange(7)
 		if r == 0:
 			self.tag = 'Buy'
 		elif r == 1:

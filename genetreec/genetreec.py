@@ -166,13 +166,13 @@ class Simulate:
 	population = None
 	nextpopulation = None
 	forest = []
-	numbertree = 100
-	numberiter = 400
+	numbertree = 40
+	numberiter = 60
 	halfiter = numberiter/2
-	start_date_train = "2002-09-29"
-	end_date_train   = "2003-09-29"
-	start_date_test  = "2003-09-29"
-	end_date_test    = "2004-09-29"
+	start_date_train = "2018-01-01"
+	end_date_train   = "2018-04-22"
+	start_date_test  = "2018-04-22"
+	end_date_test    = "2018-08-12"
 
 
 	# Dados dos árboles, intercambia 'aleatoriamente' dos de sus ramas.
@@ -341,7 +341,7 @@ class Simulate:
 			cerebro.adddata(df_cerebro)										  # Seleccionar datos
 			cerebro.broker.set_coc(True)
 			cerebro.broker.setcash(10000.0)	# Seleccionar dinero
-			cerebro.broker.setcommission(commission=0.005)
+			cerebro.broker.setcommission(commission=0.01)
 
 			tot = 0
 			for tree in self.population:
