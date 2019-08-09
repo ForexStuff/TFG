@@ -1,0 +1,75 @@
+\documentclass[12pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[center,font=footnotesize,labelfont=bf]{caption}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage[english, spanish]{babel}
+\usepackage{url}
+\usepackage{amsfonts}
+\usepackage{listings}
+\usepackage{float}
+\usepackage{afterpage}
+\usepackage[babel]{csquotes}
+\usepackage[backend=biber,style=apa]{biblatex}
+\DeclareLanguageMapping{spanish}{spanish-apa}
+\addbibresource{main.bib}
+\bibliography{main}
+\setlength\bibitemsep{1.5\itemsep}
+
+
+% ADD BLANKPAGE
+\newcommand\blankpage{
+    \null
+    \thispagestyle{empty}
+    \addtocounter{page}{-1}
+    \newpage
+}
+%%%%%%%%%%%%%%%%%%%%
+
+% ADD A NEW DEPTH SECTION (PARAGRAPH)
+\usepackage{titlesec}
+\usepackage{amsmath}
+\setcounter{secnumdepth}{4}
+%\titleformat{\paragraph}{\normalfont\normalsize\bfseries}{\theparagraph}{1em}{}
+%\titlespacing*{\paragraph}{0pt}{3.25ex plus 1ex minus .2ex}{1.5ex plus .2ex}
+\titleformat{\section}[block]{\Large\bfseries}%
+{\thesection}
+{5mm}
+{}
+\titleformat{\subsection}[block]{\large\bfseries}%
+{\thesubsection}
+{5mm}
+{}
+\titleformat{\subsubsection}[block]{\bfseries}%
+{\thesubsubsection}
+{5mm}
+{}
+\titleformat{\paragraph}[block]{\bfseries}%
+{\theparagraph}
+{5mm}
+{}
+
+% END OF ADDING
+\setcounter{tocdepth}{4}
+\setcounter{secnumdepth}{4}
+
+
+\begin{document}
+\nocite{*}
+\input{portada.tex}
+
+\input{resumen.tex}
+\newpage
+\input{introduccion.tex}
+\newpage
+\input{algoritmo.tex}
+\newpage
+\input{implementacion.tex}
+\newpage
+\input{resultados.tex}
+\newpage
+
+\printbibliography[title=Bibliografía, heading=bibintoc]
+
+
+\end{document}

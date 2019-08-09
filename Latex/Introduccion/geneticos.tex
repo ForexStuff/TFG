@@ -1,0 +1,217 @@
+\section{Algoritmos gen\'eticos}\label{sec:genetico}
+		La evoluci\'on es un proceso de optimizaci\'on cuyo objetivo es la mejora continua de una habilidad o caracter\'istica. Este proceso se observa en la mayor\'ia de los seres vivos que, en un intento de adaptarse al medio y fortalecerse, cambian progresivamente.\\
+		
+		Los algoritmos gen\'eticos tienen como inspiraci\'on este comportamiento. Para hallar la soluci\'on \'optima de un problema, se genera una poblaci\'on de soluciones, no necesariamente buenas. A continuaci\'on, se simula una descendencia de estas, es decir, nuevas soluciones del problema que se parecen a las anteriores y, mediante selecci\'on natural, se favorece la evoluci\'on de las soluciones hacia una mejora. En el caso de los algoritmos gen\'eticos, esta selecci\'on natural requiere de una forma de medir la bondad de una soluci\'on. Si se reitera este proceso la poblaci\'on de soluciones ir\'a potenciando la caracter\'istica que consigue mejor puntuaci\'on en la manera de medir.\\ 
+		
+		A continuaci\'on se ofrece una aproximaci\'on a los algortimos gen\'eticos. Un desarrollo m\'as profundo puede encontrarse en otras obras\footnote{Engelbrecht, A. P. (2007). \textit{Computational intelligence: an introduction}. John Wiley \& Sons.  }.
+		
+		\subsection{Definici\'on}
+		Un algoritmo gen\'etico es un conjunto de procedimientos ordenados que, efectuados de forma iterativa y aplicados sobre un conjunto de posibles soluciones, hacen mejorar a la agrupaci\'on hacia unas soluciones mejores. Se identifican cinco elementos b\'asicos en un algoritmo gen\'etico:
+		
+		\begin{itemize}
+			\item \textbf{Poblaci\'on.} Es un conjunto de soluciones del problema que queremos resolver, cuya representaci\'on computacional definir\'a al resto de los elementos.
+			\item \textbf{Funci\'on \textit{fitness} o funci\'on de evaluaci\'on.} Es la funci\'on cuyo dominio es la poblaci\'on del problema y que tiene por imagen alg\'un subconjunto de ${\rm I\!R}$. Esta funci\'on, hablando en t\'erminos matem\'aticos, es una norma que eval\'ua c\'omo de buena es una soluci\'on.
+			\item \textbf{Cruce.} Es un proceso mediante el cual varias soluciones producen una o varias soluciones combinadas nuevas. 
+			\item \textbf{Mutaci\'on} Se define como el proceso que act\'ua sobre un individuo de la poblaci\'on y le produce una transformaci\'on signficativa. Este procedimiento no es imprescindible, pero ayuda a que las soluciones sigan variando tras muchas generaciones.
+			\item \textbf{Selecci\'on.} Es el criterio de eliminaci\'on que permite eliminar individuos de la poblaci\'on.
+		\end{itemize}
+		
+		En los siguientes ep\'igrafes se va a profundizar en cada elemento de un algoritmo gen\'etico, mostrando especial inter\'es en ver los valores m\'as usuales de estos.
+		
+			\subsubsection{Poblaci\'on}
+			En la naturaleza, cada organismo tiene unas caracter\'isticas concretas que influyen en su habilidad para sobrevivir y reproducirse. Estas caracter\'isticas, en  \'ultima instancia, son definidas por los cromosomas de dicho individuo. En un algoritmo gen\'etico, se usa tradicionalemente la notaci\'on de cromosoma para referirse a la codificaci\'on de un individuo.\\
+			
+			La representaci\'on cl\'asica de un cromosoma es un vector de \textit{bits} de dimensi\'on fija. 
+			
+			En el caso de que el espacio de b\'usqueda sea discreto, cada individuo de la poblaci\'on se puede representar con un vector de longitud $n$ donde $2^n$ es el n\'umero de valores posibles del espacio.
+			
+			En el caso continuo, tomaremos ${\mathbb{R}^n}$ como espacio de b\'usqueda y ser\'a necesario acotarlo, es decir, el dominio adopta la forma \\
+			\[[x_{min_1}, x_{max_1}]\times\dots\times[x_{min_i},x_{max_i}]\times\dots\times[x_{min_n},x_{max_n}]\]
+			
+			Entonces, mediante una representaci\'on binaria, por ejemplo la de coma flotante de longitud $l$, podemos transformar cada $x=(x_1,\dots,x_i,\dots,x_n) \in \mathbb{R}^n$ del dominio en $b=(b_1,\dots,b_i,\dots,b_n)$ donde $\forall  0<i\leq n$ $b_i \in \{0,1\}^l$. Es decir, se traslada el espacio continuo a una aproximaci\'on en coma flotante. N\'otese que la precisi\'on num\'erica de un computador siempre es finita y, por tanto, ninguna representaci\'on puede cubrir el espacio de b\'usqueda continuo al completo. No obstante, Esta aproximaci\'on nos permite trabajar con el caso continuo igual que con el caso discreto con buenos resultados.\\
+			
+			Por supuesto, lo anterior es solo una propuesta cl\'asica que se aplica a un caso gen\'erico. Seg\'un el problema a tratar, un individuo puede ser representado de otras formas m\'as convenientes.\\
+			
+			Una vez que tenemos definida la estructura de un individuo, la poblaci\'on ser\'a un conjunto de estos. La cantidad de individuos de la poblaci\'on se puede variar a lo largo de la ejecuci\'on del algoritmo, aunque, cuanto mayor sea el n\'umero de individuos, mayor ser\'a el espacio de b\'usqueda inspeccionado y mejores ser\'an los resultados. Eso si, cuanto m\'as exaustiva sea la b\'usqueda, mayor ser\'a el tiempo de ejecuci\'on.\\
+			
+			Otro factor importante a tratar es la calidad de la poblaci\'on en la primera generaci\'on, ya que esta determinar\'a, en gran medida, la calidad de las generaciones posteriores. En el caso de que no se tenga informaci\'on previa sobre el problema se puede optar por tomar una poblaci\'on inicial aleatoria. No obstante, contruir una poblaci\'on inicial cercana a la soluci\'on acelera el proceso de convergencia. 
+				
+			\subsubsection{Funci\'on \textit{fitness}}
+			En un modelo evolutivo, el individuo con mejores caracter\'isticas tiene mayores posibilidades de sobrevivir. Para valorar cu\'an bueno es un individuo de la poblaci\'on, se necesita una funci\'on matem\'atica que cuantifique la bondad de este. Definimos la funci\'on \textit{fitness} o funci\'on de evaluaci\'on como 
+			\[f:\Gamma\rightarrow\mathbb{R}\]
+			donde $\Gamma$ es el espacio en el que se definen los individuos de la poblaci\'on.\\
+			
+			Esta funci\'on debe evaluar cada individuo de cada generaci\'on. Luego, al tratarse de un algoritmo iterativo, conviene que la funci\'on no sea computacionalmente pesada. A menudo se usan aproximaciones de la funci\'on de evaluaci\'on real con el fin de ahorrar tiempo.
+		
+			\subsubsection{Selecci\'on}
+			La selecci\'on es el operador b\'asico de la evoluci\'on. Su objetivo es dar importancia a los individuos fuertes y aumentar su presencia. Se pueden aplicar operadores de selecci\'on en dos momentos a lo largo del algoritmo:
+			\begin{itemize}
+				\item En la selecci\'on de la nueva generaci\'on, con el objetivo de filtrar los individuos m\'as fuertes (los mejor valorados hablando en t\'erminos de la funci\'on \textit{fitness}).
+				\item En el cruce de los individuos, con el fin de producir una nueva generaci\'on. Es razonable que los individuos con mejores caracter\'isticas tengan m\'as posibilidades de tener descendientes en la pr\'oxima generaci\'on.
+			\end{itemize}
+			
+			\hspace{0.25cm}Existen multitud de formas de aplicar la selecci\'on, las m\'as comunes son las siguientes:\\
+			
+			\textbf{Selecci\'on aleatoria}
+			
+			Cada individuo de la poblaci\'on tiene la misma probabilidad de salir elegido, $\frac{1}{s}$, donde $s$ es el n\'umero de individuos. Siguiendo una distribuci\'on uniforme en $[0,1]$ se pueden extraer los individuos.\\
+			
+			\textbf{Selecci\'on proporcional}
+			
+			La probabilidad de que un individuo sea seleccionado viene dado por la funci\'on $\varphi:\Gamma\rightarrow [0,1]$, definida como
+			\[\varphi(x_i)=\frac{f(x_i)}{\sum\limits_{j=1}^{s}f(x_j)}\]
+			
+			Esto es, cada individuo tiene una probabilidad de ser seleccionado proporcional a la valoraci\'on de la funci\'on \textit{fitness}.
+			
+			Al igual que en la selecci\'on anterior, una distribuci\'on uniforme se puede usar para extraer individuos.
+			
+			\textbf{Selecci\'on por torneo}
+			
+			Se extrae una muestra, con o sin devoluci\'on, de la poblaci\'on de tama\~no $k$ con $k<s$. De entre estos, se selecciona el individuo con mayor puntuaci\'on en la funci\'on \textit{fitness}.
+			
+			El proceso se repite hasta que se hayan extraido todos los individuos requeridos.
+			
+			\textbf{Selecci\'on basada en posición}
+			
+			En lugar de usar directamente la puntuaci\'on de la funci\'on \textit{fitness}, se usa la posici\'on respecto al resto de individuos de la poblaci\'on.
+			
+			Por tanto, se selecciona el elemento $x_i$ donde $i=Entera(Z)$ y $Z\sim U(0,U(0,s))$, siendo U la distribuci\'on uniforme.\\
+			
+			\textbf{Selecci\'on con elitismo}
+			
+			En ciertos casos conviene mantener a los mejores individuos de una poblaci\'on, lo que permitir\'a asegurar que la nueva poblaci\'on tendr\'a alg\'un individuo, al menos, tan bueno como el mejor de la generaci\'on anterior.
+			
+			Seleccionar varios individuos para que permanezcan en la poblaci\'on suele ser una buena pr\'actica.
+			
+			\subsubsection{Cruce}
+			
+			La reproducci\'on es el proceso mediante el cual los individuos de una poblaci\'on dan lugar a la siguiente poblaci\'on. As\'i pues, un cruce es una operaci\'on que, dados uno o varios individuos padres, genera uno o varios individuos hijos que ser\'an parte de la pr\'oxima generaci\'on.\\
+			
+			La forma t\'ecnica de hacer un cruce depende directamente de la representaci\'on de los individuos. Por tanto, dado que fue el caso descrito anteriormente, vamos a presentar algunas formas de hacer cruces cuando tenemos representaci\'on binaria.\\
+			
+			\textbf{Cruce de un punto}
+			
+			Dados dos padres a cruzar, se toma un valor $i$ donde $i=Entera(Z)$ y $Z\sim U(1,l-1)$ con $l$ la longitud del vector de \textit{bits} que representa a un individuo. 
+			
+			En consecuencia se crean dos nuevos individuos. El primero tendr\'a los $i$ primeros \textit{bits} del primer padre y los $l-i$ \'ultimos del segundo progenitor. El segundo individuo, por su parte, se genera con los bits que no se han tomado en el primero.\\
+			
+			\textbf{Cruce de dos puntos}
+
+			Este cruce es similar al anterior, con la diferencia de que la parte que se toma del primer padre para el primer hijo viene dada por una subcadena, de los \textit{bits} del padre, que comienza y acaba en dos \'indices generados con una distribuci\'on uniforme, tal y como venimos haciendo.
+			
+			N\'otese que aleatorizar el final de la subcadena es equivalente a aleatorizar la dimensi\'on de la misma. En ocasiones se puede optar por una subcadena de tama\~no fijo. \\
+			
+			\textbf{Cruce uniforme}
+			
+			Es un procedimiento similar a los anteriores, solo que el reparto se hace \textit{bit} a \textit{bit}. Se inicializa una m\'ascara de tama\~no $l$ con los \textit{bits} a 0. Por cada elemento de la m\'ascara, se toma un valor de $X \sim U(0,1)$; si $x > p$, entonces el valor de la m\'ascara se actualiza a 1. El primer hijo tendr\'a los bits del primer padre que tengan 0 en la m\'ascara y el resto del segundo padre. Por su parte, el segundo hijo se construye de forma contraria. 
+			
+			
+			\subsubsection{Mutaci\'on}
+
+			El objetivo de las mutaciones es la introducci\'on de nuevo material gen\'etico en la poblaci\'on, m\'as all\'a de las combinaciones entre los individuos. Una mutaci\'on demasiado frecuente o demasiado agresiva producir\'a que se pierda el factor evolutivo, no obstante, en aplicado en determinadas dosis puede llegar a ser efectivo si se desea explorar m\'as en el espacio de b\'usqueda.\\
+			
+			Del mismo modo que en la secci\'on de cruce, tenemos distintas variantes de esta operaci\'on basadas en la forma de escoger los bits a mutar.
+			
+			Una vez m\'as, las distintas variantes est\'an basadas en la representaci\'on binaria. Otras representaciones de los individuos necesitan de otras mutaciones adaptadas al caso correspondiente.\\
+			
+			\textbf{Mutaci\'on uniforme}
+
+			En este caso, dado un individuo, se seleccionan, a partir de una distribuci\'on uniforme, los \textit{bits} que se van a mutar. La mutaci\'on consiste, pues, en alterar cada posici\'on con el valor contrario al original (0 si era 1 y 1 si era 0).\\			
+		
+		
+			\textbf{Mutaci\'on \textit{inorder}}
+		
+			Es un caso similar al anterior, pero los \textit{bits} mutables son solo un subconjunto de los totales. Dicho subconjunto inmutable puede ser producto de una aleatorizaci\'on o, simplemente, ser seleccionado manualmente si se quiere proteger una zona de la representaci\'on de este operador.\\
+			
+
+			\textbf{Mutaci\'on Gaussiana}
+
+			Esta es una mutaci\'on basada en el m\'etodo de ruido Gaussiano. Si se ha usado la codificaci\'on binaria de los individuos, es necesario volver al valor decimal que este representa, por lo que solo es v\'alida en espacios de b\'usqueda continuos.
+			
+			Una vez se tiene el valor decimal, se usa el m\'etodo de ruido Gaussiano sobre el valor, esto es, $x_j = x_j + N(0,\sigma_j)$, con $N$ la distribuci\'on normal y $\sigma_j = x_j * 0.1$
+			
+			Finalmente, para concluir se devuelve la variable a la codificaci\'on binaria.\\
+			
+			Con este \'ultimo m\'etodo se pueden proteger los cambios dr\'asticos en los valores, ya que la distribuci\'on normal controla que no se cambien los \textit{bits} m\'as significativos en la codificaci\'on binaria.\\
+			
+			Enti\'endase que en un marco pr\'actico, los valores son decimales pero se guardan en la m\'aquina con representaci\'on binaria. Luego las transformaciones entre binaria y decimal se hacen de forma sistem\'atica. Adem\'as, al generar un valor con la distribuci\'on normal, \'este ya est\'a en representaci\'on binaria.  
+							
+		\subsection{Ejemplo de algoritmo gen\'etico con \textit{Pyvolution}}
+		
+		\textit{Pyvolution} es un paquete de \textit{Python} que facilita el uso de algoritmos gen\'eticos. Aunque la \'ultima versi\'on fue lanzada en 2012, es un paquete completo, con una sintaxis simple y sencillo de utilizar. En apenas 30 lineas y sin necesidad de dar muchas especificaciones, se pueden realizar algoritmos completos. Una ejecuci\'on normal consta de varios par\'ametros, a trav\'es de los cuales se pueden controlar las caracter\'isticas de las generaciones, los individuos por generaci\'on, probabilidad y severidad de las mutaciones, cantidad de individuos elitistas e, incluso, el tiempo m\'aximo de ejecuci\'on.\\
+		
+		Para ilustrar brevemente su uso, se adjunta uno de los ejemplos que vienen en la p\'agina de \textit{Github} del paquete.\footnote{\url{https://github.com/littley/pyvolution} [\'Ultima consulta 10 de Julio de 2019]}
+		
+		\begin{lstlisting}[basicstyle=\tiny]
+	import math
+	from pyvolution.EvolutionManager import *
+	from pyvolution.GeneLibrary import *
+	
+	"""
+	Queremos calcular una solucion del siguiente sistema:
+	a + b + c - 17 = 0
+	a^2 + b^2 - 5 = 0
+	"""
+		
+	def fitnessFunction(chromosome):
+		"""
+		Dado un "cromosoma", esta es la funcion que calcula su puntuacion
+		La puntuacion es una float mayor que 0.
+		"""
+		
+		#Accedemos a los cromosomas o valores a ajustar
+		a = chromosome["a"]
+		b = chromosome["b"]
+		c = chromosome["c"]
+		d = chromosome["d"]
+		
+		#Calculamos los valores que nos gustaria que fueran 0
+		val1 = math.fabs(a + b + c - 17)
+		val2 = math.fabs(math.pow(a, 2) + math.pow(b, 2) - 5)
+		
+		#La funcion distancia agrupa los valores para una mejor puntuacion
+		dist = math.sqrt(math.pow(val1, 2) + math.pow(val2, 2)
+		
+		if dist != 0:
+		return 1 / dist # Cuanto menor sea la distancia mayor sera la puntuacion
+		else:
+		return None     #Devolver None indica que los cromosomas han sido ajustados
+		
+		
+	#Configuramos el algoritmo genetico
+	em = EvolutionManager(
+		fitnessFunction,
+		individualsPerGeneration=100,
+		mutationRate=0.2,	#Probabilidad de mutacion
+		maxGenerations=1000,
+		stopAfterTime=10,   #Para simulacion tras 10 segundos
+		elitism=2,          #Mantener los 2 mejores de cada generacion
+	)
+		
+	#Creamos una funcion de mutacion inversamente proporcional a la bondad del ajuste
+	mutator = FloatInverseFit("mut", maxVal=0.01, startVal=1)
+		
+	#Indicamos que los puntos iniciales se toman siguiendo una distribucion normal
+	#de media 0 y desviacion 100. Ademas marcamos la mutacion como la definida antes.
+	atype = FloatGeneType("a", generatorAverage=0, generatorSTDEV=100, mutatorGene="mut")
+	btype = FloatGeneType("b", generatorAverage=0, generatorSTDEV=100, mutatorGene="mut")
+	ctype = FloatGeneType("c", generatorAverage=0, generatorSTDEV=100, mutatorGene="mut")
+		
+	#Registramos los parametos y la mutacion
+	em.addGeneType(mutator)
+	em.addGeneType(atype)
+	em.addGeneType(btype)
+	em.addGeneType(ctype)
+	
+	#Ejecutamos	
+	result = em.run()
+		\end{lstlisting}
+
+    A pesar de la sencillez, no es pr\'actico usar este paquete de \textit{Python} para nuestro prop\'osito. Los \'arboles que van a componer nuestra poblaci\'on tienen muchas variables que deben ser introducidas en la herramienta gen\'etica. Adem\'as, algunas de las variables son continuas, como los par\'ametros de algunos indicadores, y otras variables son discretas, como el indicador de cada nodo.
+    
+    As\'i mismo, \textit{backtrader} tiene posibilidad de paralelizaci\'on en la ejecuci\'on. Esto permite que la funci\'on \textit{fitness}, el factor que m\'as incapacita computacionalmente, se pueda ejecutar mucho m\'as r\'apido.
+    
+    No obstante, el problema que descarta definitivamente este paquete es la imposibilidad de hacer cruces entre \'arboles. Solo est\'a preparado para trabajar con representaciones num\'ericas.\\
+    
+    
+    En lugar de usar \textit{Pyvolution}, realizaremos una estructura de algoritmo gen\'etico propio. Esto llevar\'a m\'as trabajo, pero se obtendr\'a un algoritmo m\'as r\'apido.
