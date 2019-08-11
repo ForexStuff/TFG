@@ -1,8 +1,8 @@
-\documentclass[12pt,a4paper]{article}
+\documentclass[a4paper,11pt]{book}
 \usepackage[utf8]{inputenc}
 \usepackage[center,font=footnotesize,labelfont=bf]{caption}
 \usepackage{graphicx}
-\usepackage{hyperref}
+\usepackage[hidelinks]{hyperref}
 \usepackage[english, spanish]{babel}
 \usepackage{url}
 \usepackage{amsfonts}
@@ -15,6 +15,63 @@
 \addbibresource{main.bib}
 \bibliography{main}
 \setlength\bibitemsep{1.5\itemsep}
+\usepackage{chngcntr}
+\counterwithout{section}{chapter}
+
+
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[LO]{\rightmark}
+\fancyhead[RE]{\rightmark}
+\fancyhead[RO,LE]{\textbf{\thepage}}
+
+\renewcommand{\sectionmark}[1]{\markright{\textbf{\thesection. #1}}}
+
+\usepackage{colortbl,longtable}
+\definecolor{gray97}{gray}{.97}
+\definecolor{gray75}{gray}{.75}
+\definecolor{gray45}{gray}{.45}
+\definecolor{gray30}{gray}{.94}
+
+
+\lstset{ frame=Ltb,
+	framerule=0.5pt,
+	aboveskip=0.5cm,
+	framextopmargin=3pt,
+	framexbottommargin=3pt,
+	framexleftmargin=0.1cm,
+	framesep=0pt,
+	rulesep=.4pt,
+	backgroundcolor=\color{gray97},
+	rulesepcolor=\color{black},
+	%
+	stringstyle=\ttfamily,
+	showstringspaces = false,
+	basicstyle=\scriptsize\ttfamily,
+	commentstyle=\color{gray45},
+	keywordstyle=\bfseries,
+	%
+	numbers=left,
+	numbersep=6pt,
+	numberstyle=\tiny,
+	numberfirstline = false,
+	breaklines=true,
+}
+
+
+%   Generate the environment for the abstract:
+\newcommand\summaryname{Abstract}
+\newenvironment{abstract}%
+{\small\begin{center}%
+		\bfseries{\summaryname} \end{center}}
+
+
+%   Generate the environment for the abstract:
+\newenvironment{resumen}%
+{\small\begin{center}%
+		\bfseries{Resumen} \end{center}}
+
 
 
 % ADD BLANKPAGE

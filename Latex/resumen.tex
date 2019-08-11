@@ -2,7 +2,7 @@
 
 \textbf{Agradecimientos}\\
 
-En este proyecto se intenta predecir el mutable\\
+\noindent En este proyecto se intenta predecir el mutable\\
 valor de las acciones de bolsa.\\
 A pesar de esto, doy mi agradecimiento\\
 a la única acci\'on que no necesita ninguna predicci\'on:\\
@@ -11,35 +11,38 @@ bien por afecto, bien por profesionalidad.
 
 \newpage
 
-\begin{abstract}
+\begin{resumen}
+	\noindent\textbf{Palabras clave:} predicci\'on de bolsa, miner\'ia de datos, algoritmo evolutivo, \'arbol de decisi\'on, indicadores burs\'atiles
+	\vspace{1cm}	
+		
 	El mercado de valores ha sido durante muchos años el lugar donde se invierte más dinero. Poseer informaci\'on privilegiada sobre los activos burs\'atiles es cada vez m\'as importante, pues dan a empresas e inversores la capacidad de tomar mejores decisiones econ\'omicas. Con el objetivo de conseguir estos conocimientos, se ha dise\~nado e implementado un algoritmo evolutivo basado en \'arboles de decisi\'on. Estos \'arboles, construidos a partir de la herramienta gen\'etica, se componen de indicadores burs\'atiles cl\'asicos que conforman las reglas del modelo de inversi\'on.\\
 	
-	Esta t\'ecnica, a pesar de tener un componente aleatorio, puede reporta unos resultados exitosos, especialmente en el caso de las inversiones a largo plazo. No obstante, en inversiones a corto plazo o tendencias demasiado inestables los beneficios son m\'as modestos e, incluso, se producen p\'erdidas.
+	Esta t\'ecnica, a pesar de tener un componente aleatorio, puede reporta unos resultados exitosos, especialmente en el caso de las inversiones a largo plazo. No obstante, en inversiones a corto plazo o tendencias demasiado inestables los beneficios son m\'as modestos e, incluso, se producen p\'erdidas.\\
 	
 	A partir de este proyecto, se propone el uso de m\'ultiples herramientos y modelos de la bolsa de valores para adquirir una mejora de los conocimientos del mercado que, si bien est\'a repercutido por factores ajenos a los indicadores, puede ser perfilado mediante estos.
-	
-	\vspace{2cm}
-    \noindent\textbf{Palabras clave:} predicci\'on de bolsa, miner\'ia de datos, algoritmo evolutivo, \'arbol de decisi\'on, indicadores burs\'atiles
-\end{abstract}
+\end{resumen}
 
 \newpage
 \selectlanguage{english}
 \begin{abstract}
-    The stock market has been for many years the place where most money is invested on. To own insider information about the stock asset is becoming increasingly important cause of the better decisions that investors and business are able to take. In order to achive that knowledge, an evolutionary algorithm based on decision trees has been designed and developed.
+	\noindent\textbf{Keywords:} stock prediction, data mining, evolutionary algorithm, decision tree, stock indicator
+	\vspace{1cm}
+	
+    The stock market has been for many years the place where most money is invested on. To own insider information about the stock asset is becoming increasingly important cause of the better decisions that investors and business are able to take. In order to achive that knowledge, an evolutionary algorithm based on decision trees has been designed and developed.\\
     
     We find researches where the focus is to know the exact price that the asset will reach in some time. Other ones try to classificate the trend where the stock is involved or even the one where it will be. At this end-of-grade project, we work with a different point of view. We are not interested anymore on the stock value. Instead of that, a buy and sell signal model is going to be built. That means that the knowledge we aqcuire is not the stock value but the time where we should buy or sell.\\
     
-    To obtain the decision tree who will send us the signal we need some trading tools. 
+    To obtain the decision tree who will send us the signal we need some trading tools. \\
     
-    As Python is the language selected, \textit{backtrader}, a backtesting framework, is going to be used. This framework let us to dislinkage the backtesting process from the main evolutionary algorithm developed. Besides, \textit{backtrader} gives us some plotting amenities, to get a better analysis, and a strong parallel processing, that will be necessary due to time limitations. 
+    As Python is the language selected, \textit{backtrader}, a backtesting framework, is going to be used. This framework let us to dislinkage the backtesting process from the main evolutionary algorithm developed. Besides, \textit{backtrader} gives us some plotting amenities, to get a better analysis, and a strong parallel processing, that will be necessary due to time limitations. \\
     
-    After that, we need to get the stock market data we are going to work with. We check multiple ways to take them to \textit{backtrader} but, the best solution seems to be \textit{pandas\_datareader}.
+    After that, we need to get the stock market data we are going to work with. We check multiple ways to take them to \textit{backtrader} but, the best solution seems to be \textit{pandas\_datareader}.\\
     
     Finally, as we need to calculate numerous times the indicator values at different days, we work with an analysis package for that porpouse, \textit{TA-Lib}. The package allows to work out many classic indicators from a period at once, instead of calculate them day per day.\\
     
-    Once we have introduced the tools, we are prepared to build the algorithm. Because the aim is to develop a tree decision model we must first explain the tags or classes. 
+    Once we have introduced the tools, we are prepared to build the algorithm. Because the aim is to develop a decision tree model we must first explain the tags or classes. \\
     
-    The model must send two different signals: buy and sell. However, a three tag tree is proposed due to some undeterminated moments at the stock market. So, the three tags are: Buy, if we should send a buy signal, sell, if we should send a sell signal, and stop, if the model can not take any previous tag.
+    The model must send two different signals: buy and sell. However, a three tag tree is proposed due to some undeterminated moments at the stock market. So, the three tags are: Buy, if we should send a buy signal, sell, if we should send a sell signal, and stop, if the model can not take any previous tag.\\
     
     Next, we need to design how conditions on tree nodes are built. The tree is formed with rules that look like 
     \[indicator(params) <= pivot\]
@@ -54,17 +57,18 @@ bien por afecto, bien por profesionalidad.
     
     At this point, we define the evolutionary algorithm. Our first approach was building the first population with random procedures. Further experiment with heuristic methods gave better results for the first generation. Despite of the time wasted on it, we choose to warm up the population by building them with randomness for indicators but entropy functions for pivots.\\
     
-    After that, each tree is evaluated with the fitness function, that is, the simulation of a training period where \textit{backtrader} works out the return from invest with each tree based strategy.
+    After that, each tree is evaluated with the fitness function, that is, the simulation of a training period where \textit{backtrader} works out the return from invest with each tree based strategy.\\
     
     The money returned by each tree is used to set the crossover probability, that is, the probability of being selected to generate a new tree. That probability is proportional to the score achieved on the simulation.\\
     
-    In order to get the new population, the crossover is managed as next:
+    In order to get the new population, the crossover is managed as next.\\
     
-    First select a random node from each tree. Note that selected nodes could be roots, the top nodes, but could not be a leaf as this will produce a nonsense decision tree.
+    First select a random node from each tree. Note that selected nodes could be roots, the top nodes, but could not be a leaf as this will produce a nonsense decision tree.\\
     
-    Then, the subtrees under the choosen nodes are swapped. That way, we have two new trees with some different conditions.
+    Then, the subtrees under the choosen nodes are swapped. That way, we have two new trees with some different conditions.\\
     
-    Note that params and pivots in the condition are not changed with that crossover. So thats the point to introduce the mutation. After each new tree generation, the mutation factor is mandatory. Four mutation methods are devoloped. 
+    Note that params and pivots in the condition are not changed with that crossover. So thats the point to introduce the mutation. After each new tree generation, the mutation factor is mandatory. Four mutation methods are devoloped.\\
+     
     \begin{itemize}
     	\item Indicator mutation. Selects a new indicator from the above list. That triggers to change parameters and pivot.
     	\item Pivot mutation. Following a normal distribution, introduce a random noise on pivot.
@@ -78,20 +82,15 @@ bien por afecto, bien por profesionalidad.
     
     Once the algorithm is ready for executions, a window of parameters is proposed to check the best ones. \\
     
-    The algorithm seems to learn, reasonably well, the pattern to invest with benefits in the trainning period. Furthermore, buy signals are sent close-fitting to minimums.
+    The algorithm seems to learn, reasonably well, the pattern to invest with benefits in the trainning period. Furthermore, buy signals are sent close-fitting to minimums.\\
     
-    However, while investing on test periods, results are not that good. At small periods, minimums are well found, but the model sends sell signals even when commissions are bigger than benefits. 
+    However, while investing on test periods, results are not that good. At small periods, minimums are well found, but the model sends sell signals even when commissions are bigger than benefits.\\
     
-    At long investing periods, signals are not sent frecuently. That produce \textit{Buy\&Hold} strategies at uptrends and no buys at downtrends.
+    At long investing periods, signals are not sent frecuently. That produce \textit{Buy\&Hold} strategies at uptrends and no buys at downtrends.\\
     
-    Despite of the results, the algorithm builds models that learn well the patterns on the training period. To improve results we suggest to use the evolutionary algorithm with a complementary algorithm that could help the first by testing the trend.
+    Despite of the results, the algorithm builds models that learn well the patterns on the training period. To improve results we suggest to use the evolutionary algorithm with a complementary algorithm that could help the first by testing the trend.\\
     
-    Through this project, stock indicator rules are prove to be given useful knowledge to understand the market situation. Nevertheless, a prediction algorithm with them seems not worth at unsettled trend markets.  
-    
-      
-    
-    \vspace{2cm}
-    \noindent\textbf{Keywords:} stock prediction, data mining, evolutionary algorithm, decision tree, stock indicator
+    Through this project, stock indicator rules are prove to be given useful knowledge to understand the market situation. Nevertheless, a prediction algorithm with them seems not worth at unsettled trend markets.
 \end{abstract}
 \selectlanguage{spanish}
 \newpage

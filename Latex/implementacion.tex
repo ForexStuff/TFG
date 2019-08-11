@@ -2,12 +2,12 @@
 
 En esta secci\'on se va a tratar de aclarar algunos puntos de la implementaci\'on del software, como el diagrama de clases y las optimizaciones de c\'odigo para reducir el tiempo de ejecuci\'on.\\
 
-El c\'odigo completo realizado para este proyecto no se puede mostrar aqu\'i por motivos de espacio. Se aporta como anexo. Para ejecutar el programa basta con invocar el script \textit{genetreec.py} con python. El script dar\'a error si no se han instalado los paquetes necesarios (véase secci\'on \ref{sec:install}).
+El c\'odigo completo realizado para este proyecto no se puede mostrar aqu\'i por motivos de espacio. Se aporta como anexo. Para ejecutar el programa basta con invocar el script \textit{genetreec.py} con python. El script dar\'a error si no se han instalado los paquetes necesarios (véase secci\'on \ref{sec:install}).\\
 
 Todo el c\'odigo se encuentra comentado con las aclaraciones que se han cre\'ido necesarias.\\
 
 
-El software se divide en cuatro archivos:
+El software se divide en cuatro archivos:\\
 
 \begin{itemize}
     \item \textbf{genetreec.py}. Es el n\'ucleo del programa. Contiene las clases \textit{Simulate}, \textit{TreeStrategy} y \textit{EndStats}, necesarias para simular el \textit{backtesting}. Tiene una fuerte dependencia con el paquete \textit{backtrader}.
@@ -22,26 +22,26 @@ El software se divide en cuatro archivos:
 \subsection{Diagrama de clases}
 
      	\begin{figure}[H]
-    		\centering\leftskip=-80px
+    		\centering\leftskip=-100px
     		\includegraphics[scale=0.60]{imagenes/diagramaClases.png}
     	    \caption[Diagrama de clases del software desarrollado.]{Diagrama de clases del software desarrollado.\\ Fuente: elaboraci\'on propia}
     		\label{fig:diagclases}
 	   \end{figure}
 
-\subsection{Optimizaciones}
+\subsection{Optimizaciones}\label{sec:timeimprove}
 
-Los algoritmos evolutivos suelen tener unos buenos resultados, no solo por su caracter natural, si no por su amplia capacidad para inspeccionar el espacio de b\'usqueda cercano a las buenas soluciones.
+Los algoritmos evolutivos suelen tener unos buenos resultados, no solo por su caracter natural, si no por su amplia capacidad para inspeccionar el espacio de b\'usqueda cercano a las buenas soluciones.\\
 
 En espacios de b\'usqueda amplios, como es el caso, las combinaciones son muy grandes y las b\'usquedas se alargan mucho. A esto hay que a\~nadirle el peso de la funci\'on \textit{fitness} que, en este caso, conlleva simular un periodo de bolsa y evaluar muchas veces los indicadores en distintas fechas. Ade\'as, se dispone de una m\'aquina bastante modesta para su ejecuci\'on.\\
 
-Todos estos inconvenientes hacen necesario poner especial cuidado a la hora de realizar el software e intentar reducir el gasto de tanto tiempo como espacio. Si bien este \'ultimo, en principio, no nos producir\'a problema.
+Todos estos inconvenientes hacen necesario poner especial cuidado a la hora de realizar el software e intentar reducir el gasto de tanto tiempo como espacio. Si bien este \'ultimo, en principio, no nos producir\'a problema.\\
 
 \subsubsection{Paralelizaci\'on}
 Al utilizar \textit{backtrader} en la introducci\'on (v\'ease \ref{sec:backtrader}) se mostraron varios ejemplos sencillos de uso. Pero el paquete dispone de otras opciones que permiten adaptarlo a nuestras necesidades. Se comentar\'a, a continuaci\'on, la posibilidad de ejecutar en paralelo.\\
 
-Lo primero que se debe reformular para poder ejecutar en paralelo es la estrategia. Como se concret\'o, la clase \textit{cerebro} recibe una estrategia como par\'ametro, que es quien d\'a las se\~nales de compra y venta. De esta forma, si se simulase cada uno de los \'arboles de la poblaci\'on, digamos 50, se tendr\'ian que crear 50 cerebros, a\~nadir 50 veces los datos y simular 50 veces las mismas fechas (cada vez con un individuo distinto).
+Lo primero que se debe reformular para poder ejecutar en paralelo es la estrategia. Como se concret\'o, la clase \textit{cerebro} recibe una estrategia como par\'ametro, que es quien d\'a las se\~nales de compra y venta. De esta forma, si se simulase cada uno de los \'arboles de la poblaci\'on, digamos 50, se tendr\'ian que crear 50 cerebros, a\~nadir 50 veces los datos y simular 50 veces las mismas fechas (cada vez con un individuo distinto).\\
 
-Para corregir este comportamiento, se sugiere usar la funci\'on \textit{optstrategy} de la clase \textit{cerebro} de la siguiente forma:
+Para corregir este comportamiento, se sugiere usar la funci\'on \textit{optstrategy} de la clase \textit{cerebro} de la siguiente forma:\\
 
 \begin{lstlisting}
 cerebro.optstrategy(TreeStrategy,tree=list(population))
@@ -51,18 +51,18 @@ En realidad, esta funci\'on est\'a pensada para a\~nadir una rejilla de par\'ame
 
 Una vez realizado este cambio, Backtrader ejecutar\'a la estrategia con los distintos \'arboles de forma iterativa. No es necesario cargar los datos m\'ultiples veces, basta con una sola copia de estos.\\
 
-Ahora vamos a eliminar la linealida de ejecuci\'on. Backtrader permite ejecutar de forma paralela una estrategia a la que se ha aportado una rejilla de par\'ametros. Con la directiva \textit{cerebro = bt.Cerebro(maxcpus=None)} indicamos que no hay l\'imite de n\'ucleos para la ejecuci\'on. 
+Ahora vamos a eliminar la linealida de ejecuci\'on. Backtrader permite ejecutar de forma paralela una estrategia a la que se ha aportado una rejilla de par\'ametros. Con la directiva \textit{cerebro = bt.Cerebro(maxcpus=None)} indicamos que no hay l\'imite de n\'ucleos para la ejecuci\'on. \\
 
-La m\'aquina usada dispone de 4 n\'ucleos. Esto nos da una mejora signficativa de tiempo, ya que nos permite evaluar 4 individuos a la vez. Cuantos m\'as n\'ucleos tenga la m\'aquina, m\'as acentuada ser\'a la mejora.
+La m\'aquina usada dispone de 4 n\'ucleos. Esto nos da una mejora signficativa de tiempo, ya que nos permite evaluar 4 individuos a la vez. Cuantos m\'as n\'ucleos tenga la m\'aquina, m\'as acentuada ser\'a la mejora.\\
 
 
 \subsubsection{Cach\'e para indicadores de primer orden}
-La parte computacional m\'as costosa es la evaluaci\'on de los indicadores. El c\'alculo de algunos de ellos depende de los valores de la acci\'on de varios d\'as atr\'as. Cargar esos datos y hacer las operaciones repetidas veces es un gasto innecesario de tiempo.
+La parte computacional m\'as costosa es la evaluaci\'on de los indicadores. El c\'alculo de algunos de ellos depende de los valores de la acci\'on de varios d\'as atr\'as. Cargar esos datos y hacer las operaciones repetidas veces es un gasto innecesario de tiempo.\\
 
 Adem\'as los \'arboles tienen varios niveles de profundidad. Para cada d\'ia que se simule la inversi\'on se calculan la misma cantidad de indicadores que de niveles.\\
 
 En un intento de reducir esto, se va usar el paquete de python TA-Lib\footnote{\url{https://mrjbq7.github.io/ta-lib/doc_index.html}. \'Ultima consulta 25 de Julio de 2019}.
-TA-Lib es un paquete de c\'alculo para indicadores t\'ecnicos de bolsa. Este software est\'a pensado para calcular un gran n\'umero de indicadores de bolsa a lo largo de un periodo, es decir, aportados los valores de un periodo de tiempo, te devuelve el indicador en el mismo periodo.
+TA-Lib es un paquete de c\'alculo para indicadores t\'ecnicos de bolsa. Este software est\'a pensado para calcular un gran n\'umero de indicadores de bolsa a lo largo de un periodo, es decir, aportados los valores de un periodo de tiempo, te devuelve el indicador en el mismo periodo.\\
 
 Un caso de uso ser\'ia el siguiente, en el que se calcula el indicador EMA:\\
 
@@ -74,7 +74,7 @@ La fuerza de este paquete reside en la capacidad de calcular indicadores en espa
 
 Se realiza entonces un \textit{DataFrame} en el que se van almacenando todos los indicadore calculados. Cada vez que se quiere acceder a un indicador en una fecha, primero se comprueba si est\'a ya calculado y, en caso negativo, se calcula y se guarda. Este almac\'en puede perdurar incluso entre distintas generaciones, ya que los \'arboles deber\'ian tener indicadores con par\'ametros iguales o similares.\\ 
 
-De forma sistem\'atica, cuando se requiera un indicador, se acceder\'a la funci\'on \textit{getValues} de cada indicador, que mantiene esta estructura de guardado de datos:
+De forma sistem\'atica, cuando se requiera un indicador, se acceder\'a la funci\'on \textit{getValues} de cada indicador, que mantiene esta estructura de guardado de datos:\\
 
 \begin{lstlisting}
 def getValues(self):
@@ -84,17 +84,17 @@ def getValues(self):
 		return self.calculate()
 \end{lstlisting}
 
-Para guardar los datos, cada columna se ha nombrado de forma \'unica para cada indicador. El nombre se conforma por el nombre del indicador y los par\'ametros que hubiere.
+Para guardar los datos, cada columna se ha nombrado de forma \'unica para cada indicador. El nombre se conforma por el nombre del indicador y los par\'ametros que hubiere.\\
 
 \subsubsection{Cach\'e para indicadores de segundo orden}
 
-La primera cach\'e elimina coste computacional calculando los indicadores en todas las fechas de una sola vez. Ahora surge un problema provocado por este hecho, cada d\'ia hay que acceder a los indicadores de ese d\'ia en unas 4 o 5 ocasiones (una por nivel de profundidad).
+La primera cach\'e elimina coste computacional calculando los indicadores en todas las fechas de una sola vez. Ahora surge un problema provocado por este hecho, cada d\'ia hay que acceder a los indicadores de ese d\'ia en unas 4 o 5 ocasiones (una por nivel de profundidad).\\
 
 Por consiguiente, se van a producir en la simulaci\'on del mismo d\'ia varias b\'usquedas en un \textit{DataFrame} cuyo \'indice son fechas. A priori, se podr\'ia pensar que buscar por fechas es igual que buscar por un entero, pero no es as\'i. Python tiene un tipo especial para tratar con fechas que hace que las b\'usquedas se realenticen mucho.\\
 
-Para evitar esta coste adicional de b\'usqueda, se propone realizar un segundo nivel de cach\'e. En esta ocasi\'on, este almac\'en va a guardar los indicadores del \'ultimo d\'ia del que se pidi\'o un indicador. 
+Para evitar esta coste adicional de b\'usqueda, se propone realizar un segundo nivel de cach\'e. En esta ocasi\'on, este almac\'en va a guardar los indicadores del \'ultimo d\'ia del que se pidi\'o un indicador. \\
 
-Como en el mismo d\'ia se va a requerir el uso de varios indicadores, estamos ahorrando b\'usquedas en el \textit{DataFrame} que conforma la primera cach\'e.
+Como en el mismo d\'ia se va a requerir el uso de varios indicadores, estamos ahorrando b\'usquedas en el \textit{DataFrame} que conforma la primera cach\'e.\\
 
      	\begin{figure}[H]
     		\centering\leftskip=-30px
