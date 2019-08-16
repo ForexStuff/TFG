@@ -128,7 +128,7 @@ class forestStrategy(bt.Strategy):
 		if buy > sell:
 			if buy > stop * 0.75:
 				if self.position.size == 0:
-					self.order = self.buy(size = math.floor(self.broker.get_cash()/(self.datas[0].close*1.01)) )
+					self.order = self.buy(size = math.floor(self.broker.get_cash()/(self.datas[0].close*1.00)) )
 					## Como estamos usando una comisión del 1% las acciones son un 1% más caras.
 					## La cantidad de acciones que podemos comprar es la parte entera de nuestro
 					## dinero entre el valor de una acción mas su comisión.
@@ -166,13 +166,13 @@ class Simulate:
 	population = None
 	nextpopulation = None
 	forest = []
-	numbertree = 40
-	numberiter = 60
-	halfiter = numberiter/2
-	start_date_train = "2016-07-01"
-	end_date_train   = "2016-10-22"
-	start_date_test  = "2016-10-22"
-	end_date_test    = "2017-02-01"
+	numbertree = 60
+	numberiter = 200
+	start_date_train = "2009-03-20"  ## "20XX-03-20" "20XX-09-21"
+	end_date_train   = "2009-09-21"  ## "20XX-09-22" "20XX-03-19"
+	start_date_test  = "2009-09-22"
+	end_date_test    = "2010-03-19"
+	symbol = "CNI"
 
 
 	# Dados dos árboles, intercambia 'aleatoriamente' dos de sus ramas.
@@ -293,9 +293,9 @@ class Simulate:
 
 
 	def prepare(self):
-		tagger.acumtag(self.start_date_train, self.end_date_train)   # Solo se ejecuta la primera vez, el etiquetado es lento
+		tagger.acumtag(self.start_date_train, self.end_date_train, self.symbol)   # Solo se ejecuta la primera vez, el etiquetado es lento
 							# y mejor hacerlo solo una vez
-		self.data = pd.read_csv('tagged_data/SAN.csv')
+		self.data = pd.read_csv('tagged_data/' + self.symbol + '.csv')
 		self.population = []
 
 		for i in range(self.numbertree):   # Calentamiento de la población 1
@@ -305,8 +305,8 @@ class Simulate:
 			print('Tree ' + str(i) + ' warmed.')
 
 	def execute(self):
-		simudatos = pdr.get_data_yahoo("SAN", start=self.start_date_train, end=self.end_date_train)
-		# df = yf.download("SAN", start="2017-01-01", end="2017-04-30")  # Otra forma de coger los datos
+		simudatos = pdr.get_data_yahoo(self.symbol, start=self.start_date_train, end=self.end_date_train)
+		# df = yf.download(self.symbol, start="2017-01-01", end="2017-04-30")  # Otra forma de coger los datos
 		df_cerebro = bt.feeds.PandasData(dataname = simudatos)
 		indicator.setData(simudatos)
 
@@ -318,7 +318,7 @@ class Simulate:
 		cerebro.adddata(df_cerebro)										  # Seleccionar datos
 		cerebro.broker.set_coc(True)
 		cerebro.broker.setcash(10000.0)	# Seleccionar dinero
-		cerebro.broker.setcommission(commission=0.01)
+		cerebro.broker.setcommission(commission=0.00)
 
 		for i in range(self.numberiter):
 			ts = time.time()
@@ -341,7 +341,7 @@ class Simulate:
 			cerebro.adddata(df_cerebro)										  # Seleccionar datos
 			cerebro.broker.set_coc(True)
 			cerebro.broker.setcash(10000.0)	# Seleccionar dinero
-			cerebro.broker.setcommission(commission=0.01)
+			cerebro.broker.setcommission(commission=0.005)
 
 			tot = 0
 			for tree in self.population:
@@ -368,13 +368,13 @@ class Simulate:
 		cerebro.adddata(df_cerebro)										  # Seleccionar datos
 		cerebro.broker.set_coc(True)
 		cerebro.broker.setcash(10000.0)	# Seleccionar dinero
-		cerebro.broker.setcommission(commission=0.01)
+		cerebro.broker.setcommission(commission=0.00)
 		cerebro.run()
 		cerebro.plot()
 
 
 
-		simudatos = pdr.get_data_yahoo("SAN", start=self.start_date_test, end=self.end_date_test)
+		simudatos = pdr.get_data_yahoo(self.symbol, start=self.start_date_test, end=self.end_date_test)
 		df_cerebro = bt.feeds.PandasData(dataname = simudatos)
 		indicator.setData(simudatos)
 		cerebro = bt.Cerebro(maxcpus=1)
@@ -382,22 +382,12 @@ class Simulate:
 		cerebro.adddata(df_cerebro)										  # Seleccionar datos
 		cerebro.broker.set_coc(True)
 		cerebro.broker.setcash(10000.0)	# Seleccionar dinero
-		cerebro.broker.setcommission(commission=0.01)
+		cerebro.broker.setcommission(commission=0.00)
 		cerebro.run()
 		model.root.plot()
 		indicator.printa()
 		cerebro.plot()
 
-
-		# indicator.setData(simudatos)
-		# cerebro = bt.Cerebro(maxcpus=1)
-		# cerebro.addstrategy(forestStrategy, forest=self.forest)   # Seleccionar estrategia
-		# cerebro.adddata(df_cerebro)										  # Seleccionar datos
-		# cerebro.broker.set_coc(True)
-		# cerebro.broker.setcash(10000.0)	# Seleccionar dinero
-		# cerebro.broker.setcommission(commission=0.01)
-		# cerebro.run()
-		# cerebro.plot()
 
 
 sim = Simulate()
