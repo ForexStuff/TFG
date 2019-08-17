@@ -22,7 +22,7 @@
 		
 		\paragraph{Instalaci\'on}\label{sec:install}
 		
-		Pasamos pues, a ilustrar la instalaci\'on de \textit{backtrader}. La instalaci\'on puede hacerse en cualquier sistema operativo que soporte \textit{Python} pero, en lo que sigue, se supondr\'a que el sistema es \textit{Ubuntu}. \\
+		Pasamos, pues, a ilustrar la instalaci\'on de \textit{backtrader}. La instalaci\'on puede hacerse en cualquier sistema operativo que soporte \textit{Python} pero, en lo que sigue, se supondr\'a que el sistema es \textit{Ubuntu}. \\
 		
 		En primer lugar, es preciso tener la versi\'on 2.7 de \textit{Python}, como se indica en la documentaci\'on de \textit{backtrader}\footnote{\url{https://www.backtrader.com/docu/index.html} [\'Ultima consulta 10 de Julio de 2019]} que se ubica en su p\'agina web. Para comprobar la versi\'on, se puede usar el comando \textit{python -Version}. En caso de no tener instalado \textit{Python} o no tener la versi\'on indicada, se puede instalar usando \textit{sudo apt-get install python2.7}.\\
 		
@@ -52,11 +52,9 @@
 	valor_instante_anterior = self.sma[-1]
 		\end{lstlisting}
 		
-		\vspace{0.8cm}
+		Por tanto, fijado el d\'ia de simulaci\'on, los datos de otro d\'ia concreto se acceden con un \'indice o con otro, seg\'un la diferencia entre los instantes. De esta forma, suponiendo que se est\'a simulando el lunes y queremos acceder al dato del mi\'ercoles el \'indice es el 2. Si por el contrario se simula el jueves, para acceder al mi\'ercoles se usa el \'indice -1. N\'otese que, por motivos acad\'emicos, no se deben usar los \'indices mayores que 0, ya que esto supondr\'ia tener informaci\'on sobre el futuro y la predicci\'on de la bolsa ser\'ia un fraude.\\
 		
-		Por tanto, seg\'un el d\'ia que se est\'e simulando, los datos de otro d\'ia concreto se acceden con un \'indice o con otro. De esta forma, suponiendo que se est\'a simulando el lunes y queremos acceder al dato del mi\'ercoles el \'indice es el 2. Si por el contrario se simula el jueves, para acceder al mi\'ercoles se usa el \'indice -1. N\'otese que, por motivos acad\'emicos, no se deben usar los \'indices mayores que 0, ya que esto supondr\'ia tener informaci\'on sobre el futuro y la predicci\'on de la bolsa ser\'ia un fraude.\\
-		
-		Antes de ver c\'omo crear una estrategia, es preciso ver como se puede simular una prueba introduciendo unos datos y un presupuesto inicial. Para ello, en un archivo con terminaci\'on \textit{.py}, para poder ejecutar con \textit{Python}, se insertar\'a el siguiente c\'odigo:\\
+		Antes de concretar c\'omo crear una estrategia, es preciso ver como se puede simular un periodo de bolsa introduciendo unos datos y un presupuesto inicial. Para ello, en un archivo con terminaci\'on \textit{.py}, para poder ejecutar con \textit{Python}, se insertar\'a el siguiente c\'odigo:\\
 		
 		\begin{lstlisting}[basicstyle=\tiny]
 from __future__ import (absolute_import, division, print_function, unicode_literals)
@@ -92,9 +90,9 @@ if __name__ == '__main__':
 		
 		N\'otese que se trata de una archivo \textit{Python} en el que solo hemos tenido que importar el paquete \textit{backtrader}. Por tanto, en el caso de necesitar otros paquetes para realizar nuestra estrategia, solo ser\'a necesario incorporarlos de la forma habitual en este lenguaje de programaci\'on.\\
 		
-		El c\'odigo es ejecutable y funcional, pero hay un problema, no se le ha especificado a la clase \textit{cerebro} cu\'al va a ser la estrategia a seguir. Por este motivo, si se haciera la simulaci\'on, el presupuesto inicial y final no variar\'ian. \\
+		El c\'odigo es ejecutable y funcional, pero hay un problema, no se le ha especificado a la clase \textit{cerebro} cu\'al va a ser la estrategia a seguir. Por este motivo, si se hiciera la simulaci\'on, el presupuesto inicial y final no variar\'ian. \\
 		
-		Para ejecutar el \textit{backtesting} simplemente se ejecuta el \textit{script} de \textit{Python} con el comando \textit{python rutadelscript.py} en la terminal. Seguramente dar\'a un fallo porque la ruta donde deber\'ia estar el fichero con los datos a simular est\'a vac\'ia. Esto era de esperar pues no hemos descargado ning\'un archivo de datos. El desarrollo de este tema se abordar\'a en la secci\'on \ref{sec:get_data}.\\
+		Para ejecutar el \textit{backtesting} simplemente se ejecuta el \textit{script} de \textit{Python} con el comando \textit{python rutadelscript.py} en la terminal. Seguramente dar\'a un fallo porque la ruta donde deber\'ia estar el fichero con los datos a simular est\'a vac\'ia. Esto era de esperar, pues no hemos descargado ning\'un archivo de datos. El desarrollo de este tema se abordar\'a en la secci\'on \ref{sec:get_data}.\\
 		
 		
 		\paragraph{La primera estrategia}
@@ -192,7 +190,7 @@ class DoubleDownStrategy(bt.Strategy):
 		
 		Aqu\'i se introducen varios conceptos nuevos del \textit{framework}. En primer lugar, las acciones \textit{self.buy()} y \textit{self.sell()}, ejecutadas dentro del m\'etodo \textit{next}, indican que queremos lanzar una orden de compra o de venta, respectivamente. Cuando no se especifica ning\'un par\'ametro, \textit{backtrader} compra o vende al precio de cierre del instante actual una sola acci\'on. Esto no quiere decir que la orden se ejecute en ese instante, sino que, a partir de ese momento y si el precio del producto lo permite, se realizar\'a lo antes posible. N\'otese que una vez lanzada una orden hay que esperar a que se complete o se cancele antes de lanzar otra.\\
 		
-		Seg\'un lo anterior, esta situaci\'on hace necesario incluir el m\'etodo \textit{notify\_order}. Como su propio nombre sugiere, es llamado cuando una orden cambia de estado o, en otras palabras, es el momento a partir del cual se puede lanzar una nueva orden. En este ejemplo, cuando una orden es completada, mostramos por pantalla si es de compra o venta y el precio de la misma. En ciertas ocasiones, las \'ordenes pueden terminar sin compra o venta. En ese caso, puede haber ocurrido una de dos: ser canceladas, si la estrategia cancel\'o la orden con el comando \textit{self.cancel()}, o rechazas, si bien el dinero disponible era insuficiente para ejecutar la orden.\\
+		Seg\'un lo anterior, esta situaci\'on hace necesario incluir el m\'etodo \textit{notify\_order}. Como su propio nombre sugiere, es llamado cuando una orden cambia de estado o, en otras palabras, es el momento a partir del cual se puede lanzar una nueva orden. En este ejemplo, cuando una orden es completada, mostramos por pantalla si es de compra o venta y el precio de la misma. En ciertas ocasiones, las \'ordenes pueden terminar sin compra o venta. En ese caso, puede ocurrir una cancelaci\'on, si la estrategia cancel\'o la orden con el comando \textit{self.cancel()}, o un rechazo, si el dinero disponible resulta insuficiente para ejecutar la orden.\\
 		
 		Por \'ultimo, comentaremos la parte l\'ogica de la estrategia presentada en el c\'odigo anterior. En cada instante, el m\'etodo \textit{next} eval\'ua alguno de los siguientes casos:\\
 		
@@ -220,7 +218,7 @@ class DoubleDownStrategy(bt.Strategy):
 	
 	\subsection{Conseguir datos hist\'oricos para realizar \textit{backtesting}}\label{sec:get_data}
 		
-		Como vamos a usar \textit{backtrader}, una herramienta de simulaci\'on de bolsa en local, vamos a necesitar extraer el hist\'orico de la bolsa. En esta secci\'on veremos c\'omo conseguir los valores hist\'oricos en bolsa de diferentes empresas de forma autom\'atica. A parte de conseguir los datos, veremos la forma de incorporarlos a backtrader para su posterior uso.\\
+		Como vamos a usar \textit{backtrader}, una herramienta de simulaci\'on de bolsa en local, necesitaremos extraer el hist\'orico de la bolsa. En esta secci\'on veremos c\'omo conseguir los valores hist\'oricos en bolsa de diferentes empresas de forma autom\'atica. Aparte de conseguir los datos, se especificar\'a la forma de incorporarlos a backtrader para su posterior uso.\\
 		
 		\subsubsection{Quandl}
 		
@@ -290,7 +288,7 @@ class DoubleDownStrategy(bt.Strategy):
     
     Aunque estuvo un tiempo en desuso y en su documentaci\'on est\'a marcado as\'i\footnote{\url{https://pandas-datareader.readthedocs.io/en/stable/whatsnew.html\#v0-6-0-january-24-2018} [\'Ultima consulta 20 de Julio de 2019]}, ahora vuelve a estar operativo. La \textit{API} de \textit{YAHOO! Finance} cambi\'o y, durante un tiempo, \textit{Pandas-datareader} no la actualiz\'o. No obstante, el tratamiento de los datos por parte de \textit{Pandas-datareader} ya se ha adaptado, aunque no se vea reflejado a\'un en su documentaci\'on.\\
     
-    Por nuestra parte, porcomodidad, usaremos a partir de ahora la siguiente f\'ormula para cargar los datos en \textit{Backtrader}:\\
+    Por nuestra parte, por comodidad, usaremos a partir de ahora la siguiente f\'ormula para cargar los datos en \textit{Backtrader}:\\
     
     \begin{lstlisting}[basicstyle=\tiny]
     start_date = "2013-08-01"
