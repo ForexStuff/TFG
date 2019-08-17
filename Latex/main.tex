@@ -17,7 +17,13 @@
 \setlength\bibitemsep{1.5\itemsep}
 \usepackage{chngcntr}
 \counterwithout{section}{chapter}
+\usepackage[toc,page]{appendix}
 
+\addto\captionsspanish{%
+	\renewcommand\appendixtocname{Anexos}
+	\renewcommand\appendixname{Anexo}
+	\renewcommand\appendixpagename{Anexos}
+}
 
 \usepackage{fancyhdr}
 \pagestyle{fancy}
@@ -126,6 +132,8 @@
 \input{resultados.tex}
 \newpage
 
+\input{apendices.tex}
+\newpage
 \printbibliography[title=Bibliografía, heading=bibintoc]
 
 

@@ -22,9 +22,9 @@ Para obtener una mejor comprensi\'on, se han definido cinco configuraciones de p
 
 N\'otese que estas aproximaciones de tiempo ejecuci\'on se aportan a partir de la m\'aquina disponible, en este caso, de cuatro n\'ucleos y 3.4GHz.\\
 
-En los casos expuestos a continuaci\'on se sigue siempre el mismo procedimiento. En primer lugar, el algoritmom gen\'etico efect\'ua, con los par\'ametros correspondientes, una serie de ejecuciones que terminan con una poblaci\'on evolucionada. De esta poblaci\'on obtenida, se selecciona el mejor de los individuos y se prueba tanto en el periodo de entrenamiento como en el periodo de prueba.\\
+En los casos expuestos a continuaci\'on se sigue siempre el mismo procedimiento. En primer lugar, el algoritmo gen\'etico efect\'ua, con los par\'ametros correspondientes, una serie de ejecuciones que terminan con una poblaci\'on evolucionada. De esta poblaci\'on obtenida, se selecciona el mejor de los individuos y se prueba tanto en el periodo de entrenamiento como en el periodo de prueba.\\
 
-\subsubsection{Perido largo}
+\subsubsection{Periodo largo}
 
 En la primera de las ejecuciones, el periodo de entrenamiento comprende desde el 1 de abril de 2012 hasta el 1 de enero de 2016, por tanto, corresponde con un periodo bastante largo. De forma coherente, el periodo de prueba empieza el 1 de enero de 2016 y finaliza el 1 de mayo de 2019. Al comparar los perfiles de los precios en sendos periodos en las gr\'aficas, que se muestran a continuaci\'on, se puede observar que son parecidos, lo que deber\'ia mejorar los resultados.\\
 
@@ -45,25 +45,25 @@ Cuando analizamos el periodo de prueba, representado en la figura \ref{fig:large
 
      	\begin{figure}[H]
      		\centering\leftskip=30px
-     		\includegraphics[scale=0.72]{imagenes/L_Medium_train.png}
+     		\includegraphics[scale=0.75]{imagenes/L_Medium_train.png}
      		\caption[Calendario de inversi\'on del periodo de entrenamiento largo.]{Calendario de inversi\'on del periodo de entrenamiento largo con par\'ametros de perfil Medio.\\ Fuente: elaboraci\'on propia}
      		\label{fig:large_period_mtrain}
      	\end{figure}
      	
      	\begin{figure}[H]
      		\centering\leftskip=30px
-     		\includegraphics[scale=0.72]{imagenes/L_Medium_test.png}
+     		\includegraphics[scale=0.75]{imagenes/L_Medium_test.png}
      		\caption[Calendario de inversi\'on del periodo de prueba largo]{Calendario de inversi\'on del periodo de prueba largo con par\'ametros de perfil Medio.\\ Fuente: elaboraci\'on propia}
      		\label{fig:large_period_mtest}
      	\end{figure}     	
 
 En resumen, los peridos largos dan muchas posibilidades de compraventa que nuestro algoritmo no sabe aprovechar. La parte positiva es que la mayor\'ia de las veces, cuando invierte, lo hace con beneficio. No obstante, en ocasiones, puede que no invierta y tengamos un modelo f\'util, como es el caso de la ejecuci\'on de par\'ametros de perfil Medio-Corto.\\
 
-\subsubsection{Perido medio}
+\subsubsection{Periodo medio}
 
 En este segundo caso, se han elegido dos periodos distintos. En el primer periodo, claramente alcista, el entrenamiento comprende desde el 29 de septiembre de 2002 hasta el 29 de septiembre de 2003. Por otro lado, el periodo de prueba empieza el 29 de septiembre de 2003 y finaliza el mismo d\'ia de 2004. \\
 
-El segundo periodo, de car\'acter bajista, esta formulado tambi\'en de a\~no en a\~no, el entrenamiento se comienza el 1 de noviembre de 2009 y la prueba empieza el 1 de noviembre de 2010.\\
+El segundo periodo, de car\'acter bajista, est\'a formulado tambi\'en de a\~no en a\~no, el entrenamiento comienza el 1 de noviembre de 2009 y la prueba empieza el 1 de noviembre de 2010.\\
 
 Una vez m\'as, se han tomado fechas en las que los perfiles de los precios se asemejan. \\
 
@@ -85,29 +85,29 @@ En este algoritmo propuesto, los resultados obtenidos  para el periodo de prueba
      	\begin{figure}[H]
      		\centering\leftskip=40px
      		\includegraphics[scale=0.66]{imagenes/M_Large-Medium_train.png}
-     		\caption[Calendario de inversi\'on del periodo de entrenamiento largo.]{Calendario de inversi\'on del periodo de entrenamiento medio con par\'ametros de perfil Medio-Corto.\\ Fuente: elaboraci\'on propia}
+     		\caption[Calendario de inversi\'on del periodo de entrenamiento largo.]{Calendario de inversi\'on del periodo de entrenamiento alcista, longitud media y con par\'ametros de perfil Medio-Corto.\\ Fuente: elaboraci\'on propia}
      		\label{fig:medium_period_mtrain}
      	\end{figure}
      	
      	\begin{figure}[H]
      		\centering\leftskip=40px
      		\includegraphics[scale=0.66]{imagenes/M_Large-Medium_test.png}
-     		\caption[Calendario de inversi\'on del periodo de prueba medio]{Calendario de inversi\'on del periodo de prueba medio con par\'ametros de perfil Medio-Corto.\\ Fuente: elaboraci\'on propia}
+     		\caption[Calendario de inversi\'on del periodo de prueba medio]{Calendario de inversi\'on del periodo de prueba alcista, longitud media y con par\'ametros de perfil Medio-Corto.\\ Fuente: elaboraci\'on propia}
      		\label{fig:medium_period_mtest}
      	\end{figure} 
 
-En las figuras \ref{fig:medium_period_mtrain} y \ref{fig:medium_period_mtest} puede observarse bastante bien esta poca adaptaci\'on. En el periodo de entrenamiento se hacen varias inversiones de unas semanas, e incluso de varios meses, entre las cuales se deja un margen de tiempo hasta que es un buen momento de compra. Por el contrario, en el periodo de prueba apenas si hay unas semanas que el modelo no tiene nada comprado, es decir, siempre que vende intenta comprar inmediatamente.\\
+En las figuras \ref{fig:medium_period_mtrain} y \ref{fig:medium_period_mtest} puede observarse bastante bien esta baja adaptaci\'on. En el periodo de entrenamiento se hacen varias inversiones de unas semanas, e incluso de varios meses, entre las cuales se deja un margen de tiempo hasta que es un buen momento de compra. Por el contrario, en el periodo de prueba apenas si hay unas semanas en las que el modelo no tiene nada comprado, es decir, siempre que vende intenta comprar inmediatamente.\\
 
-Se considera, en consecuencia a este hecho, la hip\'otesis de que el algoritmo tiene un buen aprendizaje pero una mala adaptaci\'on a otros periodos.\\
+Se considera, como consecuencia de este hecho, la hip\'otesis de que el algoritmo tiene un buen aprendizaje pero una mala adaptaci\'on a otros periodos.\\
 
      	
 \subsubsection{Periodo corto}
 
 Para la \'ultima de las ejecuciones de par\'ametros, se han escogido tambi\'en dos periodos pero, esta vez, se ha tomado un periodo alcista y un periodo lateral. Este segundo es algo complicado, pues el periodo de entrenamiento es lateral pero el de prueba tiene tendencia bajista. \\
 
-En primer lugar, el periodo alcista tiene su entrenamiento desde el 1 de julio de 2016 y hasta el 22 de octubre de 2016. Por otro lado, el periodo de preuba empieza a partir de entonces y hasta el 1 de febrero de 2017.\\
+En primer lugar, el periodo alcista tiene su entrenamiento desde el 1 de julio de 2016 y hasta el 22 de octubre de 2016. Por otro lado, el periodo de prueba empieza a partir de entonces y hasta el 1 de febrero de 2017.\\
 
-En segundo lugar, el periodo lateral comprende un poco m\'as de tres meses. El periodo de entrenamiento empieza el 1 de enero de 2018 y, por su parte, el periodo de prueba comienza el 22 de abril de 2018. La simulaci\'on termina, finalmente, el 22 de julio de 2018. Como ya se ha adelantado, no se esperan buenos resultados. Los modelos generados tiene poca capacidad de adaptaci\'on y, como hemos tomado periodos de entrenamiento y prueba con perfiles muy distintos, la adaptaci\'on debe ser bastante peor.\\
+En segundo lugar, el periodo lateral comprende un poco m\'as de tres meses. El periodo de entrenamiento empieza el 1 de enero de 2018 y, por su parte, el periodo de prueba comienza el 22 de abril de 2018. La simulaci\'on termina, finalmente, el 22 de julio de 2018. Como ya se ha adelantado, no se esperan buenos resultados. Los modelos generados tienen poca capacidad de adaptaci\'on y, como hemos tomado periodos de entrenamiento y prueba con perfiles muy distintos, la adaptaci\'on debe ser bastante peor.\\
 
      	\begin{figure}[H]
      		\centering\leftskip=-75px
@@ -121,22 +121,22 @@ Como se observa en la figura \ref{fig:short_period}, en los periodos cortos no s
      	\begin{figure}[H]
      		\centering\leftskip=30px
      		\includegraphics[scale=0.70]{imagenes/S_Short_train.png}
-     		\caption[Calendario de inversi\'on del periodo de entrenamiento corto alcista.]{Calendario de inversi\'on del periodo de entrenamiento corto alcista con perfil de par\'ametros Corto.\\ Fuente: elaboraci\'on propia}
+     		\caption[Calendario de inversi\'on del periodo de entrenamiento corto alcista.]{Calendario de inversi\'on del periodo de entrenamiento corto y alcista con perfil de par\'ametros Corto.\\ Fuente: elaboraci\'on propia}
      		\label{fig:short_period_uptrain}
      	\end{figure}
      	
-En la figura \ref{fig:short_period_uptrain}, correspondiente al periodo alcista de entrenamiento, se encontra un modelo generado con perfil de par\'ametros corto que invierte de una forma muy eficiente, esto es, compra en los m\'inimos y vende en los m\'aximos. \\
+En la figura \ref{fig:short_period_uptrain}, correspondiente al periodo alcista de entrenamiento, se encuentra un modelo generado con perfil de par\'ametros corto que invierte de una forma muy eficiente, esto es, compra en los m\'inimos y vende en los m\'aximos. \\
 
-Teniendo esta regla como referencia, se analiza el mismo modelo ejecutado, esta vez, en el periodo de prueba en la figura \ref{fig:short_period_uptest}. Este periodo tiene un perfil de precio distinto, los m\'inimos y m\'aximos no son tan destacables. No obstante, el algoritmo ha generado un modelo que, tal y como se intuye, esta intentando hacer algo similar a lo realizado en el periodo del que aprendi\'o. Las primeras transacciones son torpes y demasiado abundantes, produciendo p\'erdidas con las comisiones.	Por tanto, a pesar de ser un periodo alcista, no tiene tanto \'exito como la estrategia de \textit{Buy\&Hold}.\\
+Teniendo esta regla como referencia, se analiza el mismo modelo ejecutado, esta vez, en el periodo de prueba en la figura \ref{fig:short_period_uptest}. Este periodo tiene un perfil de precio distinto, los m\'inimos y m\'aximos no son tan destacables. No obstante, el algoritmo ha generado un modelo que, tal y como se intuye, est\'a intentando hacer algo similar a lo realizado en el periodo del que aprendi\'o. Las primeras transacciones son torpes y demasiado abundantes, produciendo p\'erdidas con las comisiones.	Por tanto, a pesar de ser un periodo alcista, no tiene tanto \'exito como la estrategia de \textit{Buy\&Hold}.\\
      	
      	\begin{figure}[H]
      		\centering\leftskip=30px
      		\includegraphics[scale=0.70]{imagenes/S_Short_test.png}
-     		\caption[Calendario de inversi\'on del periodo de prueba corto alcista]{Calendario de inversi\'on del periodo de prueba corto alcista con perfil de par\'ametros Corto.\\ Fuente: elaboraci\'on propia.}
+     		\caption[Calendario de inversi\'on del periodo de prueba corto alcista]{Calendario de inversi\'on del periodo de prueba corto y alcista con perfil de par\'ametros Corto.\\ Fuente: elaboraci\'on propia.}
      		\label{fig:short_period_uptest}
      	\end{figure} 
      	
-Por \'ultimo, se propone hacer una an\'alisis del periodo entrenado con perfil lateral pero probado con un perfil bajista. Las figuras \ref{fig:short_period_uptrain} y \ref{fig:short_period_downtrain} contiene los calendarios de inversi\'on de estas simulaciones realizadas con configuraci\'on de par\'ametros Largo.\\
+Por \'ultimo, se propone hacer una an\'alisis del periodo entrenado con perfil lateral pero probado con un perfil bajista. Las figuras \ref{fig:short_period_downtrain} y \ref{fig:short_period_downtest} contiene los calendarios de inversi\'on de estas simulaciones realizadas con configuraci\'on de par\'ametros Largo.\\
 
 En el entrenamiento se tiene una inversi\'on muy ajustada, pr\'acticamente inmejorable. No obstante, esto podr\'ia ser fruto de un sobreaprendizaje. Por su parte, en el periodo de prueba, se observan los mismos patrones de compra y venta. Pero al ser las oscilaciones del precio m\'as peque\~nas que en el caso anterior, las comisiones se llevan esos escasos beneficios que pudiera tener.\\
 

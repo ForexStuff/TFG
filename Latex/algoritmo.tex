@@ -8,13 +8,13 @@ El primer punto a tratar para dise\~nar el modelo, que se va  utilizar para extr
 En cuanto a la clasificaci\'on de los d\'ias de bolsa, se propone un dise\~no con tres etiquetas:
 \begin{itemize}
     \item Etiqueta \textit{Buy}. Un d\'ia clasificado con esta etiqueta, es un d\'ia bueno para comprar. Implica que el modelo env\'ia una se\~nal de compra y, consecuentemente, se debe colocar una orden de compra de acciones, tantas como nos sea posible con el capital disponible.
-    \item Etiqueta \textit{Sell}. En el caso de que un d\'ia se clasifique con \'esta, signfica que es un buen d\'ia para vender. Implica que el modelo env\'ia una se\~nal de venta y, por tanto, se ha de colocar una orden de venta de todas las acciones que se tengan.
+    \item Etiqueta \textit{Sell}. En el caso de que un d\'ia se clasifique con esta, signfica que es un buen d\'ia para vender. Implica que el modelo env\'ia una se\~nal de venta y, por tanto, se ha de colocar una orden de venta de todas las acciones que se tengan.
     \item Etiqueta \textit{Stop}. Es una etiqueta comod\'in que se usa cuando las condiciones de un camino no son concluyentes para decidir si hay que comprar o vender. En esta situaci\'on el modelo no env\'ia ninguna se\~nal.
 \end{itemize}
 
 Esta elecci\'on est\'a motivada por la necesidad de que el modelo sea capaz de transmitir se\~nales de compra y venta. La forma m\'as sencilla de conseguir estos env\'ios es utilizar dos etiquetas, una de compra y otra de venta. Pero, de ser as\'i, todos los caminos de condiciones llevar\'ian al modelo a una compra o a una venta. En ciertas ocasiones, el estado de la bolsa puede no ser determinante para decidir si es un momento de compra o de venta. Es entonces cuando aparece, de forma l\'ogica, la tercer etiqueta, ni es momento de comprar ni lo es de vender. \\
 
-Una vez conocida la posible clasificaci\'on, se debe desarrollar cu\'ales van a ser las caracter\'isticas que van a definir la clase de un d\'ia. En otras palabras, es necesario conocer las condiciones que van a constituir los nodos. En el \'arbol se van a sit\'uar condiciones que dividen a los nodos en dos ramas, la que cumple la condici\'on y la que no. Por tanto, todos los nodos ser\'an de bifurcaci\'on binaria. Las reglas que se van a evaluar son de la forma: 
+Una vez conocida la posible clasificaci\'on, se debe desarrollar cu\'ales van a ser las caracter\'isticas que van a definir la clase de un d\'ia. En otras palabras, es necesario conocer las condiciones que van a constituir los nodos. En el \'arbol se van a situar condiciones que dividen a los nodos en dos ramas, la que cumple la condici\'on y la que no. Por tanto, todos los nodos ser\'an de bifurcaci\'on binaria. Las reglas que se van a evaluar son de la forma: 
  \[indicador(parametros) <= pivote\].
  
  Donde $pivote$ es una un n\'umero real e $indicador$ es eso, un indicador de bolsa, con par\'ametros o no, seg\'un la naturaleza del indicador. Se ha usado la siguiente lista con indicadores cl\'asicos:
@@ -174,12 +174,12 @@ En cada iteraci\'on del algoritmo se eval\'ua la poblaci\'on con \textit{backtra
 
 De entre las distintas formas que hay para seleccionar los individuos que se van a reproducir, se escoge la selecci\'on proporcional. M\'as tarde, se explicar\'a el cruce natural de dos \'arboles de decisi\'on\footnote{V\'ease la secci\'on \ref{sec:cruce}}.\\
 
-Este cruce natural entre \'arboles tiene una peque\~na desventaja, y es que puede generar peores poblaciones que las progenitoras. Se hace pr\'acticamente indispensable, entonces que activemos los m\'etodos elitistas y eliminatorios. Los mejores \'arboles pasar\'an dos a la siguiente generaci\'on, una vez mutados y otra vez sin modificar. Por su parte, los peores se descartar\'an por completo tanto del cruce como de la mutaci\'on.\\
+Este cruce natural entre \'arboles tiene una peque\~na desventaja, y es que puede generar peores poblaciones que las progenitoras. Se hace pr\'acticamente indispensable, entonces, que activemos los m\'etodos elitistas y eliminatorios. Los mejores \'arboles pasar\'an dos veces a la siguiente generaci\'on, una vez mutados y otra vez sin modificar. Por su parte, los peores se descartar\'an por completo tanto del cruce como de la mutaci\'on.\\
 
 \paragraph{Probabilidades de reproducci\'on}
 En primer lugar, hay que calcular la probabilidad de cruce de cada individuo. Para ello se hace una normalizaci\'on especial de los beneficios.\\
 
-Restando el beneficio del peor \'arbol a las puntuaciones de todos, se consique que estas sean siempre mayores o iguales que 0.\\
+Restando el beneficio del peor \'arbol a las puntuaciones de todos, se consigue que estas sean siempre mayores o iguales que 0.\\
 
 A continuaci\'on, con el fin de potenciar las estrategias de compra y venta m\'ultiple, m\'as ventajosas que la estrategia de \textit{buy\&hold}\footnote{La estrategia \textit{buy\&hold} es una estrategia cl\'asica que se basa en la compra inicial de todas las acciones posibles y la venta final de las mismas. Esta estrategia recibe su nombre por la l\'ogica que sigue: comprar y mantener.}, se van a modificar ligeramente las ganacias. Por cada venta que produzca un \'arbol, se suma una cantidad fija de euros a sus beneficios. No obstante, para ciertos valores demasiado altos de esta cantidad con los que se supere las comisiones, las compras y ventas se realizar\'an de forma compulsiva. Es importante, por consiguiente, ajustar bien este valor para evitar este resultado.\\
 
@@ -243,12 +243,12 @@ Este cruce puede producir varias anomal\'ias al iterar. Una de ellas es la gener
 
 Por lo general, un exceso de nodos, que puede entenderse como un exceso de condiciones, va a producir modelos muy espec\'ificos. Los \'arboles demasiado espec\'ificos suelen aprender muy bien la casu\'istica de los dos datos de prueba. Sin embargo, fallan al intentar extenderse al periodo de prueba. Esto es lo que en el \'ambito de la ciencia de datos se denomina sobreaprendizaje.\\
 
-En contraposici\'on, un \'arbol con pocas condiciones o nodos, va a tender a generalizar demasiado las situaciones y, a menudo no, son capaces si quiera de obtener un bueno modelo para los datos de entrenamiento.\\
+En contraposici\'on, un \'arbol con pocas condiciones o nodos, va a tender a generalizar demasiado las situaciones y, a menudo, no son capaces si quiera de obtener un bueno modelo para los datos de entrenamiento.\\
 
 Para solventar estos dos problemas se actuar\'a de la siguiente forma:\\
 
 \begin{itemize}
-    \item La selecci\'on de nodo a intercambiar en el cruce no se hace de forma uniforme. Empezando desde el nodo ra\'iz y con igual probabilidad, se sortea si el nodo elegido para intercambio es una de tres: el actual, est\'a en la rama izquierda o est\'a en la rama derecha. Por consiguiente, es m\'as probable que se tome un nodo cercano a la ra\'iz para hacer el cambio. N\'otese que no es posible intercambiar una hoja, luego si en este procedimiento se llega a una hoja, el nodo a intercambiar es el inmediatamente superior.\\
+    \item La selecci\'on de nodo a intercambiar en el cruce no se hace de forma uniforme. Empezando desde el nodo ra\'iz y con igual probabilidad, se sortea si el nodo elegido para intercambio presenta una de estas tres posibilidades: el actual, est\'a en la rama izquierda o est\'a en la rama derecha. Por consiguiente, es m\'as probable que se tome un nodo cercano a la ra\'iz para hacer el cambio. N\'otese que no es posible intercambiar una hoja, luego si en este procedimiento se llega a una hoja, el nodo a intercambiar es el inmediatamente superior.\\
     
     En un intento de justificar la anulaci\'on de las hojas como punto de mutaci\'on se pide reflexionar sobre el siguiente caso extremo. Para generar dos nuevos \'arboles, los progenitores han marcado como punto de corte una hoja, el primer progenitor, y la ra\'iz, el segundo. Por tanto, al generar a los nuevos hijos, el primer \'arbol ser\'ia el primer progenitor al completo al que se le ha a\~nadido el segundo en una hoja. El segundo hijo, por su parte, remplazar\'ia todo el segundo \'arbol progenitor por una hoja del primero. Esto es, el segundo hijo no tienes nodos y, se entiende que en este caso especial, clasifica todos los d\'ias con la misma etiqueta, la que aparece en su \'unica hoja. \\
     
@@ -258,36 +258,36 @@ Para solventar estos dos problemas se actuar\'a de la siguiente forma:\\
     
     De forma inicial, hemos acotado los nodos de un \'arbol entre 15 y 45. No obstante estas cifras son orientantivas, tras ver algunos resultados podr\'ia ser conveniente cambiarlas.\\
     
-    Para mantener constante la cantidad de inviduos por poblaci\'on, se tiene que cruzar tantos m\'as \'arboles como la mitad de eliminaciones se hallan producido.\\
+    Para mantener constante la cantidad de inviduos por poblaci\'on, se tienen que cruzar tantos \'arboles como la mitad de eliminaciones se hallan producido.\\
 \end{itemize}
 
 \subsubsection{Mutaciones}
 Tal y como se han presentado el cruce y la primera generaci\'on, hay varios factores de la poblaci\'on que no es posible alterar, estos son:\\
 
 \begin{itemize}
-    \item \textbf{Los par\'ametros de los indicadores.} Algunos indicadores, como el EMA (Exponential Moving Average), depende de uno o varios par\'ametros. En primera instancia se han impuesto unos valores, con cierta variabilidad, para ellos. El cruce permite cambiar los nodos de posici\'on y, a la larga, cambiar las combinaciones de indicadores pero, en ning\'un caso, se produce un cambio en los par\'ametros de los indicadores. Los valores impuestos para estos en un inicio no tiene por qu\'e ser \'optimos. Adem\'as, la idoneidad de un valor depende, en cierta medida, del conjunto de indicadores que precedan a la condici\'on. Se crea, entonces, la necesidad de establecer un mecanismo para cambiarlos.
-    \item \textbf{La combinaci\'on entre el \'ultimo nodo y las etiquetas.} El cruce propuesto no permite mover las hojas, salvo en el caso de que lo que se mueva sea un nodo superior. Esto hace que las se\~nales vayan asociadas a unos indicadores elegidos en la primera iteraci\'on de forma aleatoria lo que, a poco que se mire, parece una dura restricci\'on. Es necesario crear un m\'etodo que cambie las etiquetas. 
+    \item \textbf{Los par\'ametros de los indicadores.} Algunos indicadores, como el EMA (Exponential Moving Average), depende de uno o varios par\'ametros. En primera instancia se han impuesto unos valores, con cierta variabilidad, para ellos. El cruce permite cambiar los nodos de posici\'on y, a la larga, cambiar las combinaciones de indicadores pero, en ning\'un caso, se produce un cambio en los par\'ametros de los indicadores. Los valores impuestos para estos en un inicio no tienen por qu\'e ser \'optimos. Adem\'as, la idoneidad de un valor depende, en cierta medida, del conjunto de indicadores que precedan a la condici\'on. Se crea, entonces, la necesidad de establecer un mecanismo para cambiarlos.
+    \item \textbf{La combinaci\'on entre el \'ultimo nodo y las etiquetas.} El cruce propuesto no permite mover las hojas, salvo en el caso de que lo que se mueva sea un nodo superior. Esto hace que las se\~nales vayan asociadas a unos indicadores elegidos en la primera iteraci\'on de forma aleatoria lo que, a poco que se piense, parece una dura restricci\'on. Es necesario crear un m\'etodo que cambie las etiquetas. 
     \item \textbf{Los pivotes de cada nodo.} A partir de la funci\'on de entrop\'ia y los datos de entrenamiento se eligen los primeros pivotes de la primera generaci\'on. Pero una vez que el nodo cambia de posici\'on a causa del cruce, el pivote no tiene por qu\'e estar bien elegido. Es necesario entonces un proceso para cambiar los pivotes.
 \end{itemize}
 
- El mecanismo que desarrollaremos en los sucesivos ep\'igrafes, con el que podemos usar para alterar todos estos factores est\'aticos, es la mutaci\'on.\\
+ El mecanismo que desarrollaremos en los sucesivos ep\'igrafes, con el que podemos alterar todos estos factores est\'aticos, es la mutaci\'on.\\
  
  Las mutaciones suceden con cierta probabilidad sobre distintos lugares de los individuos. Seg\'un la naturaleza de estos, se pueden plantear distintos m\'etodos de mutaci\'on.\\
  
  En nuestro caso, se ir\'a recorriendo el \'arbol nodo por nodo desde la ra\'iz hasta las hojas. En cada nodo se toma un entero aleatorio en un rango dado. Seg\'un el valor extra\'ido, se ejecuta una mutaci\'on de par\'ametros, de pivotes, de indicadores de hojas (en caso de que el nodo fuese una hoja) o ninguna. A continuaci\'on se desarrolla cada mutaci\'on.\\
 
 \paragraph{Mutaciones en indicadores}
-El cruce permite cambiar la composici\'on de condiciones que conforman el modelo. No obstante, es un cambio muy general. En ocasiones, cambiando un \'unico indicador de un nodo en mitad de una rama se produzca un cambio muy positivo.\\
+El cruce permite cambiar la composici\'on de condiciones que conforman el modelo. No obstante, es un cambio muy general. En ocasiones, cambiando un \'unico indicador de un nodo en mitad de una rama se produce un cambio muy positivo.\\
 
 Ya sea con el objetivo de provocar estos cambios o simplemente para explorar m\'as \'arboles en el espacio de b\'usqueda similares a la generaci\'on anterior, se propone que, de forma aleatoria, se tome una nueva funci\'on indicadora que suplante a la anterior. \\
 
-En consecuencia a este cambio, mantener el pivote que se situaba en el mismo nodo carece de sentido, pues cada indicador tiene imagen en una horquilla distinta de valores. Se hace obligado, por tanto, recalcular el pivote del nodo.\\  
+En consecuencia con este cambio, mantener el pivote que se situaba en el mismo nodo carece de sentido, pues cada indicador tiene su imagen en una horquilla distinta de valores. Se hace obligatorio, por tanto, recalcular el pivote del nodo.\\  
 
 \paragraph{Mutaciones en los pivotes}
 
-Todos los indicadores utilizados tienen su imagen en $\mathbb{R}$, luego los pivotes que condicionan tambi\'en. Existen varias formas de mutar un valor real. Aqu\'i se propone introducir un ruido basado en la normal.\\
+Todos los indicadores utilizados tienen su imagen contenida en $\mathbb{R}$, luego los pivotes que condicionan el nodo tambi\'en. Existen varias formas de mutar un valor real. Aqu\'i se propone introducir un ruido basado en la normal.\\
 
-En cada mutaci\'on de pivote, el nuevo pivote es un valor extraido de una distribuci\'on normal $N(pivote, |pivote/4|)$, es decir, se saca de una normal centrada en el antiguo valor y con varianza la cuarta parte del antiguo valor.\\
+En cada mutaci\'on de pivote, el nuevo pivote es un valor extra\'ido de una distribuci\'on normal $N(pivote, |pivote/4|)$, es decir, se saca de una normal centrada en el antiguo valor y con varianza la cuarta parte del antiguo valor.\\
 
 \paragraph{Mutaciones en par\'ametros de indicadores}
 La mutaci\'on de par\'ametros es espec\'ifica, seg\'un el indicador al que pertenezca.\\
