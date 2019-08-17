@@ -168,11 +168,11 @@ class Simulate:
 	forest = []
 	numbertree = 60
 	numberiter = 200
-	start_date_train = "2009-03-20"  ## "20XX-03-20" "20XX-09-21"
-	end_date_train   = "2009-09-21"  ## "20XX-09-22" "20XX-03-19"
-	start_date_test  = "2009-09-22"
-	end_date_test    = "2010-03-19"
-	symbol = "CNI"
+	start_date_train = "2009-09-22"  ## "20XX-03-20" "20XX-09-21"
+	end_date_train   = "2010-03-19"  ## "20XX-09-22" "20XX-03-19"
+	start_date_test  = "2010-03-20"
+	end_date_test    = "2010-09-21"
+	symbol = "WPRT"
 
 
 	# Dados dos árboles, intercambia 'aleatoriamente' dos de sus ramas.
@@ -229,7 +229,6 @@ class Simulate:
 
 		# Escalado Min-max para sacar probabilidades (score al intervalo [0,1])
 		pop_score['score'] -= pop_score['score'].min()
-		print(pop_score)
 		aux = pop_score['score'].sum()
 		if aux == 0:
 			aux = 1/pop_score.shape[0]
@@ -318,7 +317,7 @@ class Simulate:
 		cerebro.adddata(df_cerebro)										  # Seleccionar datos
 		cerebro.broker.set_coc(True)
 		cerebro.broker.setcash(10000.0)	# Seleccionar dinero
-		cerebro.broker.setcommission(commission=0.00)
+		cerebro.broker.setcommission(commission=0.005)
 
 		for i in range(self.numberiter):
 			ts = time.time()
@@ -330,6 +329,7 @@ class Simulate:
 			#print(scores)
 			self.NextPopulation(scores['growth'])
 			te = time.time()
+			print("-- ITERACION " + str(i) + " --")
 			print("El tiempo de simulación es: ",(te - ts))
 			#if i > self.halfiter:
 			#	self.forest.append(deepcopy(self.population[6]))
@@ -346,7 +346,7 @@ class Simulate:
 			tot = 0
 			for tree in self.population:
 				tot+=tree.getNumNodes()
-			print(tot/len(self.population))
+			print('La media de nodos es ' + str(tot/len(self.population)))
 
 
 		ret = cerebro.run()
@@ -357,9 +357,6 @@ class Simulate:
 		pop_score['tree'] = [tree for tree in self.population]
 		pop_score['score'] = scores['growth']
 		pop_score = pop_score.sort_values(by=['score'], ascending=False)
-		print(pop_score)
-		print('-----------------')
-		print(pop_score.iloc[0])
 		model = pop_score.iloc[0]['tree']
 
 		indicator.setData(simudatos)
