@@ -8,7 +8,6 @@ import copy
 
 
 deepness = 5
-data = pd.read_csv('tagged_data/SAN.csv')
 indivector = indicator.indivector()
 
 def entropy(v):           # v es la proporcion de la clase (frec/total)
@@ -25,7 +24,7 @@ class Genetreec:
 	sellcount = 0 # Número de veces que ha vendido en el último backtest
 
 	def __init__(self, ind):
-		self.root = Leaf([True] * data.shape[0])
+		self.root = Leaf([True] * indicator.df.shape[0])
 		self.ind = ind
 
 	def warm(self):
@@ -198,8 +197,8 @@ class Leaf:
 		min_index = grill_entropy.index(min( grill_entropy ))
 		pivot = grill[min_index]					# Coge el mejor pivote
 		criteria = values['values'] < pivot			# hace el vector booleano
-		data_count = sum(criteria & self.partition)
-		if data_count < 3 or sum(self.partition)-data_count < 3: # Pocos datos para separar
+		indicator.df_count = sum(criteria & self.partition)
+		if indicator.df_count < 3 or sum(self.partition)-indicator.df_count < 3: # Pocos datos para separar
 			return (0,0)
 
 		return (criteria, pivot)					# Devuelve el pivote y el vector.
@@ -212,8 +211,7 @@ class Leaf:
 #		x < -2       entonces se compra
 #		2 < x		 entonces se vende
 	def setLeaveActions(self):
-		global data
-		df = data[self.partition]
+		df = indicator.df[self.partition]
 		sell_df = sum(df['tag'] > 0)
 		buy_df = sum(df['tag'] < 0)
 		double_sell_df = sum(df['tag'] == 2)
@@ -239,7 +237,6 @@ class Leaf:
 
 # Gráfico del arbol, por ahora es en terminal
 	def plot(self):
-		global data
 		print(self.tag)
 		return None
 

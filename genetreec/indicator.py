@@ -4,7 +4,7 @@ from random import randrange
 from numpy import random
 
 # Datos iniciales
-df = pd.read_csv('tagged_data/SAN.csv')
+df = pd.DataFrame()
 thisday = df.head(1)
 
 # Instanciar datos sobres los que calcular los indicadores
@@ -338,7 +338,7 @@ class _TRANGE(_indicator):
 		#data['Date'] = df['Date']
 		data['values'] = talib.TRANGE(df['High'],
 							df['Low'],
-							df['Close'])
+							df['Close']) / df['Low']
 		df[self.name()] = data['values']
 		if tagged:
 			data['tag'] = df['tag']

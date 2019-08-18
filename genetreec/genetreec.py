@@ -89,58 +89,6 @@ class plotTreeStrategy(bt.Strategy):
 
 
 
-#############################################
-#### COPY OF TreeStrategy   --- Made for forest
-#############################################
-class forestStrategy(bt.Strategy):
-	params=(('forest', None),)
-
-	def __init__(self):
-		self.dataclose = self.datas[0].close
-		# Para mantener las ordenes no ejecutadas
-		self.order = None
-		self.forest = self.params.forest
-
-	def notify_order(self, order):
-		if order.status in [order.Submitted, order.Accepted]:
-			return
-
-		self.order = None
-		return
-
-	def next(self):
-	# Si hay una compraventa pendiente no puedo hacer otra
-		if self.order:
-			return
-		buy = 0
-		sell = 0
-		stop = 0
-		for tree in self.forest:
-			action = tree.evaluate(date=self.datas[0].datetime.date(0))
-			if action == 'Buy':
-				buy += 1
-			elif action == 'Sell':
-				sell += 1
-			else:
-				stop += 1
-
-		print(str(buy) + '-' + str(sell) + '-' + str(stop))
-		if buy > sell:
-			if buy > stop * 0.75:
-				if self.position.size == 0:
-					self.order = self.buy(size = math.floor(self.broker.get_cash()/(self.datas[0].close*1.00)) )
-					## Como estamos usando una comisión del 1% las acciones son un 1% más caras.
-					## La cantidad de acciones que podemos comprar es la parte entera de nuestro
-					## dinero entre el valor de una acción mas su comisión.
-		elif sell > stop * 0.75:
-			if self.position.size > 0:
-				self.order = self.sell(size=self.position.size)
-
-
-
-
-
-
 class EndStats(bt.Analyzer):
 	# Analizador para poder tener en cuenta varias
 	# estrategias de una sola ejecución (optstrategy)
@@ -167,12 +115,12 @@ class Simulate:
 	nextpopulation = None
 	forest = []
 	numbertree = 60
-	numberiter = 100
-	start_date_train = "2010-03-20"  ## "20XX-03-20" "20XX-09-21"
-	end_date_train   = "2010-09-21"  ## "20XX-09-22" "20XX-03-19"
-	start_date_test  = "2010-09-22"
-	end_date_test    = "2011-03-19"
-	symbol = "CAE.TO"
+	numberiter = 150
+	start_date_train = "2010-09-22"  ## "20XX-03-20" "20XX-09-21"
+	end_date_train   = "2011-03-19"  ## "20XX-09-22" "20XX-03-19"
+	start_date_test  = "2011-03-20"
+	end_date_test    = "2011-09-21"
+	symbol = "AQN.TO"
 
 
 	# Dados dos árboles, intercambia 'aleatoriamente' dos de sus ramas.
@@ -295,6 +243,7 @@ class Simulate:
 		tagger.acumtag(self.start_date_train, self.end_date_train, self.symbol)   # Solo se ejecuta la primera vez, el etiquetado es lento
 							# y mejor hacerlo solo una vez
 		self.data = pd.read_csv('tagged_data/' + self.symbol + '.csv')
+		indicator.setData(self.data)
 		self.population = []
 
 		for i in range(self.numbertree):   # Calentamiento de la población 1
