@@ -35,6 +35,8 @@ Una vez conocida la posible clasificaci\'on, se debe desarrollar cu\'ales van a 
      \item BBANDS\_LOW
  \end{itemize}
  
+Se adjunta como anexo una breve explicaci\'on de cada uno de los indicadores utilizados.\\ 
+ 
  En el caso de algunos indicadores, como EMA (\textit{Exponential Moving Average}) o SMA (\textit{Simple Moving Average}), se hace necesaria una ligera modificaci\'on. Esto es debido a que al entrenar un \'arbol en un determinado periodo, en este aparecer\'an reglas como $EMA(10) <= 500$. La potencia del indicador $EMA$ se encuenta al comparar su valor con el valor actual de la acci\'on y observar si se ha producido una bajada o subida importante respecto a los \'ultimos d\'ias.  
 
  
@@ -51,9 +53,6 @@ Pero, en otros casos, resulta fatal. Imaginemos que nuestro modelo aprende en un
 
 En su lugar, se propone modificar este indicador restando o dividiendo a su valor el precio actual de la acci\'on para, de alguna forma, escalar el indicador y hacerlo intemporal. En el caso de la divisi\'on, se obtiene la proporci\'on entre el valor actual y un valor representante de los \'ultimos d\'ias. Por su parte, la resta es un poco menos aconsejable, ya que hay una gran diferencia entre que una acci\'on a 2 euros suba 10, y que una acci\'on de 500 euros suba 10. Ambos casos son positivos, pero el primero es mucho m\'as significativo. \\
 
-
-
-(SE PUEDE A\~NADIR AQU\'I UNA S\'INTESIS SOBRE LOS INDICADORES USADOS Y LAS MODIFICACIONES O PAR\'AMETROS INICIALES (los par\'ametros cambian con el algoritmo genético))
 
 \subsection{Estructura gen\'etica}
 Para construir el \'arbol modelo, se utilizar\'a un patr\'on gen\'etico como el explicado en el apartado \ref{sec:genetico}, en el que, oportunamente, se hizo una explicaci\'on gen\'erica de un algoritmo gen\'etico. A continuaci\'on se procede a replicar esa construcci\'on adapt\'andola a nuestra poblaci\'on, los \'arboles de decisi\'on.\\

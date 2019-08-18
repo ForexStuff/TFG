@@ -241,7 +241,7 @@ class _MOM(_indicator):
 	def calculate(self, tagged):
 		data = pd.DataFrame()
 		#data['Date'] = df['Date']
-		data['values'] = talib.MOM(df['Close'], self.period) / df['Close']
+		data['values'] = talib.MOM(df['Close'], self.period)
 		df[self.name()] = data['values']
 		if tagged:
 			data['tag'] = df['tag']
