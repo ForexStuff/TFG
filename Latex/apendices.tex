@@ -1,6 +1,56 @@
 \begin{appendices}
 \chapter{Indicadores de bolsa}
-En esta secci\'on se detallan los indicadores usados en la realizaci\'on de las condiciones situadas en los nodos de los \'arboles de decisi\'on. La intenci\'on de este anexo es, por tanto, dar unas breves explicaciones para caracterizar cada indicador.
+En esta secci\'on se entra en profundidad en los indicadores usados en la realizaci\'on de las condiciones situadas en los nodos de los \'arboles de decisi\'on. La intenci\'on de este anexo es, por tanto, dar unas breves explicaciones para caracterizar cada indicador, pero no se entrar\'a en sus distintas interpretaciones cl\'asicas.\\
 
+
+\noindent\textbf{SMA \textit{(Simple Moving Average)}}\\
+
+Es el indicador m\'as b\'asico y, como su propio nombre indica, es una media aritm\'etica de los \'ultimos valores.\\
+
+Tiene un \'unico par\'ametro que corresponde con el n\'umero de instantes a incluir en la media. As\'i pues, si notamos a $P_i$ como el precio de la acci\'on $i$ instantes atr\'as, el c\'alculo del \textit{SMA} ser\'ia el siguiente:
+
+\[SMA(period) = \frac{\sum\limits_{i=1}^{period}P_i}{period}\]
+
+\vspace{0.5cm}
+\noindent\textbf{EMA \textit{(Exponential Moving Average)}}\\
+
+La media m\'ovil exponencial es un indicador parecido al \textit{SMA}. Pero, en esta ocasi\'on, los precios de los instantes anteriores no van a tener el mismo peso en la media, es decir, es una media ponderada. Con este indicador, los valores m\'as cercanos en el tiempo son m\'as importantes.\\
+
+La f\'ormula general del \textit{EMA} viene dada por
+
+\[EMA(period) = K_{period} * P_0 + (1 - K_{period}) * EMA_{[-1]}\]
+
+donde $P_0$ es el valor actual de la acci\'on, $EMA_{[-1]}$ es el valor del $EMA$ en el instante anterior y $K_{period} \in (0,1)$ es un valor que depende del periodo escogido. Habitualmente, se toma $K_{period} = \frac{2}{period + 1}$. 
+
+\vspace{0.5cm}
+\noindent\textbf{MACD \textit{(Moving Average Convergence Divergence)}}\\
+
+El nombre de este indicador es algo confuso ya que realmente no es un media, sino una diferencia de medias. En concreto, es la diferencia de dos \textit{EMA} de periodo distinto.\\
+
+En consecuencia, \textit{MACD} tiene dos par\'ametros, los periodos de las dos medias exponenciales. El periodo peque\~no debe ser extrictamente menor que el periodo grande.
+
+\[MACD(period_h, period_l) = EMA(period_l) - EMA(period_h)\] 
+
+\vspace{0.5cm}
+\noindent\textbf{ATR \textit{(Average True Range)}}\\
+
+Este indicador intenta medir la volatilidad\footnote{La volatilidad es un concepto burs\'atil que hace referencia a la rapidez con la que cambia un determinado valor en un periodo fijo de tiempo. Una volatilidad alta suele ser s\'intoma de inseguridad en los inversores o de un cambio de tendencia.} del precio de la acci\'on. Para ello toma un par\'ametro, el periodo, que ser\'a el que marcar\'a la longitud del intervalo. Es necesario tener, para cada instante del periodo, el precio m\'as alto ($H$), el precio m\'as bajo ($L$) y el precio de cierre ($C$). Se define, entonces, el \textit{TR (True Range)} como 
+
+\[TR = max\{ H-L, |H-C|, |L-C|\}\]
+
+Una vez calculado este valor para todos los instantes del periodo, el \textit{ATR} viene dado por
+
+\[ATR(period) = \frac{1}{period}\sum\limits_{i=0}^{period-1}TR_{i}\]
+
+donde $TR_{i}$ es el \textit{True Range} $i$ instantes atr\'as.
+
+\vspace{0.5cm}
+\noindent\textbf{ROC \textit{(Price Rate Of Change)}}\\
+
+El indicador \textit{ROC} nos da un porcentaje de cambio del precio de la acci\'on respecto de un instantes anterior. Tiene un solo par\'ametro, llamado periodo, que indica la distancia del instante anterior a tomar respecto del instante actual.\\
+
+Para calcular este indicador podemos usar la f\'ormula siguiente, donde $C$ es el valor de cierre del instante actual y $C_{period}$ es el valor de cierre del instante $period$ veces atr\'as.
+
+\[ROC(period) = \frac{C - C_{period}}{C_{period}}\]
 
 \end{appendices}
