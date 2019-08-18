@@ -1,11 +1,11 @@
 \begin{appendices}
-\chapter{Indicadores de bolsa}
-En esta secci\'on se entra en profundidad en los indicadores usados en la realizaci\'on de las condiciones situadas en los nodos de los \'arboles de decisi\'on. La intenci\'on de este anexo es, por tanto, dar unas breves explicaciones para caracterizar cada indicador, pero no se entrar\'a en sus distintas interpretaciones cl\'asicas.\\
+\chapter{Indicadores de bolsa}\label{apendice}
+En esta secci\'on se entra en profundidad en los indicadores usados en la realizaci\'on de las condiciones situadas en los nodos de los \'arboles de decisi\'on. La intenci\'on de este anexo es, por tanto, ilustrar como se calcula cada indicador para caracterizarlo, pero no se entrar\'a en sus distintas interpretaciones cl\'asicas.\\
 
 
 \noindent\textbf{SMA \textit{(Simple Moving Average)}}\\
 
-Es el indicador m\'as b\'asico y, como su propio nombre indica, es una media aritm\'etica de los \'ultimos valores.\\
+Es un indicador cl\'asico y, como su propio nombre indica, es una media aritm\'etica de los \'ultimos valores.\\
 
 Tiene un \'unico par\'ametro que corresponde con el n\'umero de instantes a incluir en la media. As\'i pues, si notamos a $P_i$ como el precio de la acci\'on $i$ instantes atr\'as, el c\'alculo del \textit{SMA} ser\'ia el siguiente:
 
@@ -18,9 +18,9 @@ La media m\'ovil exponencial es un indicador parecido al \textit{SMA}. Pero, en 
 
 La f\'ormula general del \textit{EMA} viene dada por
 
-\[EMA(period) = K_{period} * P_0 + (1 - K_{period}) * EMA_{[-1]}\]
+\[EMA(period) = K_{period} * P_0 + (1 - K_{period}) * EMA_{[1]}\]
 
-donde $P_0$ es el valor actual de la acci\'on, $EMA_{[-1]}$ es el valor del $EMA$ en el instante anterior y $K_{period} \in (0,1)$ es un valor que depende del periodo escogido. Habitualmente, se toma $K_{period} = \frac{2}{period + 1}$. 
+donde $P_0$ es el valor actual de la acci\'on, $EMA_{[1]}$ es el valor del $EMA$ en el instante anterior y $K_{period} \in (0,1)$ es un valor que depende del periodo escogido. Habitualmente, se toma $K_{period} = \frac{2}{period + 1}$. 
 
 \vspace{0.5cm}
 \noindent\textbf{MACD \textit{(Moving Average Convergence Divergence)}}\\
@@ -45,6 +45,12 @@ Una vez calculado este valor para todos los instantes del periodo, el \textit{AT
 donde $TR_{i}$ es el \textit{True Range} $i$ instantes atr\'as.
 
 \vspace{0.5cm}
+\noindent\textbf{TRANGE \textit{(True Range)}}\\
+
+Es un caso espec\'ifico del indicador anterior cuando el periodo es 1, no obstante, resulta bastante provechoso incluirlo de nuevo. El \textit{TRANGE} es un estad\'istico que indica la diferencia entre el precio m\'aximo y el precio m\'inimo de una acci\'on en un instante. Por tanto, es un indicador que marca el nivel de volatilidad.\\
+
+
+\vspace{0.5cm}
 \noindent\textbf{ROC \textit{(Price Rate Of Change)}}\\
 
 El indicador \textit{ROC} nos da un porcentaje de cambio del precio de la acci\'on respecto de un instantes anterior. Tiene un solo par\'ametro, llamado periodo, que indica la distancia del instante anterior a tomar respecto del instante actual.\\
@@ -52,5 +58,73 @@ El indicador \textit{ROC} nos da un porcentaje de cambio del precio de la acci\'
 Para calcular este indicador podemos usar la f\'ormula siguiente, donde $C$ es el valor de cierre del instante actual y $C_{period}$ es el valor de cierre del instante $period$ veces atr\'as.
 
 \[ROC(period) = \frac{C - C_{period}}{C_{period}}\]
+
+\vspace{0.5cm}
+\noindent\textbf{Momento}\\
+
+Este indicador es el m\'as simple de todos, simboliza la diferencia del precio de la acci\'on entre el momento actual y un instante anterior. Tiene como par\'ametro la distancia entre el instante actual y el anterior.\\
+
+Su c\'alculo, que es bastante sencillo, puede realizarse como
+
+\[Momento(period) = C - C_{period}\] 
+
+
+\vspace{0.5cm}
+\noindent\textbf{Hill}\\
+
+Este es un indicador propuesto en este proyecto. Es similar al Momento, pero con una diferencia, se divide por el periodo. Por tanto, el indicador representa la variaci\'on del precio por instante.\\
+
+Al analizarlo, se deduce que este indicador es equivalente al Momento, ya que se pueden construir las mismas condiciones a partir de \'el. No obstante, aporta una ventaja, el pivote situado en la condici\'on tiene una magnitud relativa, es decir, cambiar el par\'ametro del indicador Hill sin cambiar el pivote mantiene la informaci\'on. Esta caracter\'ista, por contrario, no se tiene con el Momento. En nuestro caso, este indicador podr\'ia estar mejor preparado para las mutaciones de par\'ametros.\\ 
+
+Como cabe esperar, su c\'alculo viene dado por
+
+\[Hill(period) = \frac{Momento(period)}{period} = \frac{C - C_{period}}{period}\] 
+
+
+\noindent\textbf{RSI \textit{(Relative Strengh Index)}}\\
+
+Este indicador se usa, habitualmente, para detectar cu\'ando hay un periodo de sobreventa o sobrecompra.\footnote{Un periodo de sobrecompra es un periodo en el que se han comprado muchas acciones, provocando una subida del precio. La sobreventa es el concepto an\'alogo. Sendos periodos suelen continuarse con un rebote o correcci\'on, es decir, se efect\'ua el periodo contrario con menos intensidad.} A pesar de que tiene un s\'olo par\'ametro, el periodo, su c\'alculo es algo m\'as complejo que el del resto. Se definen dos funciones an\'alogas:
+
+\[AverageGain(period) = \frac{\sum\limits_{\substack{i=1 \\ C_i - O_i > 0}}^{period}\frac{C_i-O_i}{O_i}}{period}\]
+
+\[AverageLoss(period) = \frac{\sum\limits_{\substack{i=1 \\ C_i - O_i < 0}}^{period}\frac{O_i-C_i}{O_i}}{period}\]
+
+Como se observa, son la media de las ganacias en los d\'ias de ganacia y la media de las p\'erdidas en los d\'ias de p\'erdida, respectivamente. Una vez calculados los dos valores, el indicador RSI se calcula como
+
+\[RSI(period) = 100 - \frac{100}{1+\frac{AverageGain(period)}{AverageLoss(period)}}\]
+
+\vspace{0.5cm}
+\noindent\textbf{OBV \textit{(On-Balance Volume)}}\\
+
+Este es un indicador basado en el volumen de transacciones, es decir, la cantidad de acciones que se compran o venden en un instante. No tiene ningun par\'ametro y, por tanto, la mutaci\'on de par\'ametros no altera nada.\\
+
+La f\'ormula viene dada por
+
+\[   
+OBV = OBV_{1} +
+\begin{cases}
+\text{volume} &\quad\text{si}\quad C < C_{1}\\
+\text{0} &\quad\text{si}\quad   C = C_{1}\\
+\text{-volume} &\quad\text{si}\quad  C < C_{1}\\ 
+\end{cases}
+\]
+
+donde $OBV_{1}$ es el valor de \textit{OBV} en el instante anterior y $C$ y $C_1$ son los precios de cierre actual y anterior, respectivamente.\\
+\newpage
+
+\noindent\textbf{AD \textit{(Accumulation/Distribution)}}\\
+
+El indicador \textit{AD} es un indicador basado tanto en volumen como en el precio. Intenta resumir como se distribuyen las compras de acciones en funcion del volumen. Este indicador, al igual que el anterior, no recibe par\'ametros.\\
+
+Su c\'alculo viene dado por
+
+\[AD = AD_{1} + \frac{(C - L) - (H - C)}{H - L}*Volume \]
+
+donde, como anteriormente, la sub\'indice 1 denota el instante anterior.
+
+\vspace{0.5cm}
+\noindent\textbf{BBANDS\_HIGH y BBANDS\_LOW \textit{(Bollinger Bands)}}\\
+
+
 
 \end{appendices}
