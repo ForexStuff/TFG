@@ -120,10 +120,10 @@ class _ATR(_indicator):
 		return data
 
 	def mutate(self):
-		p = 2*randrange(2) - 1
+		p = randrange(5) - 2
 		self.period += p
-		if self.period == 0:
-			self.period = 1
+		if self.period < 2:
+			self.period = 2
 
 
 class _ROC(_indicator):
@@ -146,10 +146,10 @@ class _ROC(_indicator):
 		return data
 
 	def mutate(self):
-		p = 2*randrange(2) - 1
+		p = randrange(5) - 2
 		self.period += p
-		if self.period == 0:
-			self.period = 1
+		if self.period < 2:
+			self.period = 2
 
 
 class _EMA(_indicator):
@@ -172,9 +172,9 @@ class _EMA(_indicator):
 		return data
 
 	def mutate(self):
-		p = 2*randrange(2) - 1
+		p = randrange(5) - 2
 		self.period += p
-		if self.period == 1:
+		if self.period < 2:
 			self.period = 2
 
 
@@ -198,9 +198,9 @@ class _SMA(_indicator):
 		return data
 
 	def mutate(self):
-		p = 2*randrange(2) - 1
+		p = randrange(5) - 2
 		self.period += p
-		if self.period == 1:
+		if self.period < 2:
 			self.period = 2
 
 
@@ -225,7 +225,7 @@ class _RSI(_indicator):
 	def mutate(self):
 		p = randrange(5) - 2
 		self.period += p
-		if self.period == 1:
+		if self.period < 2:
 			self.period = 2
 
 
@@ -250,7 +250,7 @@ class _MOM(_indicator):
 	def mutate(self):
 		p = randrange(5) - 2
 		self.period += p
-		if self.period == 1:
+		if self.period < 2:
 			self.period = 2
 
 class _HILL(_indicator):
@@ -274,7 +274,7 @@ class _HILL(_indicator):
 	def mutate(self):
 		p = randrange(5) - 2
 		self.period += p
-		if self.period == 1:
+		if self.period < 2:
 			self.period = 2
 
 
