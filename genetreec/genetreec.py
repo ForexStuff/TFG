@@ -167,12 +167,12 @@ class Simulate:
 	nextpopulation = None
 	forest = []
 	numbertree = 60
-	numberiter = 200
-	start_date_train = "2009-09-22"  ## "20XX-03-20" "20XX-09-21"
-	end_date_train   = "2010-03-19"  ## "20XX-09-22" "20XX-03-19"
-	start_date_test  = "2010-03-20"
-	end_date_test    = "2010-09-21"
-	symbol = "WPRT"
+	numberiter = 100
+	start_date_train = "2010-03-20"  ## "20XX-03-20" "20XX-09-21"
+	end_date_train   = "2010-09-21"  ## "20XX-09-22" "20XX-03-19"
+	start_date_test  = "2010-09-22"
+	end_date_test    = "2011-03-19"
+	symbol = "CAE.TO"
 
 
 	# Dados dos árboles, intercambia 'aleatoriamente' dos de sus ramas.
