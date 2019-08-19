@@ -4,8 +4,9 @@ En un intento de mejorar la comprensi\'on de todas las ejecuciones realizadas, s
 
 En el primero de ellos se hace un an\'alisis de los resultados obtenidos haciendo variaciones en los par\'ametros del algoritmo gen\'etico. Estos son el n\'umero de \'arboles, el n\'umero de iteraciones y el tipo de periodo.\\
 
-M\'as tarde, en el segundo ep\'igrafe, se van a comparar los resultados obtenidos, a trav\'es de los mejores par\'ametros, con otro algortimo de naturaleza parecida desarrollado en un art\'iculo.\\
+M\'as tarde, en el segundo ep\'igrafe, se van a comparar los resultados obtenidos, a trav\'es de los mejores par\'ametros, con otro algortimo de naturaleza parecida desarrollado en Mousavi (2014).\\
 
+De aqu\'i en adelante, se muestra varias tablas de resultados. Todas ellas muestran los beneficios obtenidos calculados con \textit{RoR}\footnote{RoR (Rate of Return) es una forma de calcular beneficios bastante com\'un en el mundo de la bolsa. As\'i pues, en lugar de mostrar los beneficios netos de la inversi\'on, se muestra el porcentaje de dinero perdido o ganado respecto al presupuesto inicial. Esto es, si se comienza con 10000 euros y se gana un 5\%, la ganacia neta es de 500 euros.}.
 
 \subsection{An\'alisis de par\'ametros}
 
@@ -156,11 +157,38 @@ En contraposici\'on, encontramos un punto a favor, la precisi\'on para encontrar
      		\label{fig:short_period_downtest}
      	\end{figure} 
 
-\subsection{Contraste con otras estrategias}
+\subsection{Contraste con otra estrategia}
 
+Con el objetivo de comparar el algoritmo desarrollado con otras estrategias, se ha propuesto realizar el siguiente experimiento. Se han tomado 13 empresas que cotizan en la bolsa de Toronto (Canad\'a). Y se han marcado cuatro periodos, de seis meses cada uno, para simular la inversi\'on en bolsa. Para invertir en cada etapa se ha entrenado con el periodo de seis meses inmediatamente anterior.\\
+
+A continuaci\'on, se muestra la comparativa de los beneficios de nuestro algoritmo con los obtenidos por la estrategia cl\'asica \textit{Buy\&Hold} y el modelo gen\'etico de Mousavi (2014). La elecci\'on de estas dos estrategias no es casual. La primera de ellas es una estrateg\'ia b\'asica y, a partir de ella, es f\'acil ver si estamos simulando un periodo a la baja o al alza. La elecci\'on de la segunda estrategia tiene que ver con la similitud que guarda con la desarrollada. Aunque en el algoritmo del art\'iculo un individuo son $n$ \'arboles juntos (uno por empresa a invertir), los cruces entre individuos se realizan de \'arbol i-\'esimo en \'arbol i-\'esimo, es decir, los \'arboles generados para distintas  empresa no se relacionan. Por tanto, los cruces son similares que en el modelo propuesto aqu\'i.\\
+
+La diferencia principal con nuestro modelo radica en la construcci\'on de los \'arboles. A diferencia de nuestro caso, en el que los \'arboles son de decisi\'on, los \'arboles en el algoritmo de Mousavi representan funciones. Esto es, en los nodos se sit\'uan operaciones matem\'aticas y en las hojas, valores constantes o indicadores. Por consiguiente, se tiene la posibilidad de realizar operaciones con varios indicadores, pero encadenar m\'ultiples condiciones es m\'as inusual.
+
+     	\begin{figure}[H]
+     		\centering\leftskip=0px
+     		\includegraphics[scale=2]{imagenes/Mousavi1.png}
+     		\caption[Comparaci\'on de resultados con Mousavi]{Comparaci\'on de resultados con Mousavi. Periodos 1 y 2. Algunas empresas han cambiado de nombre. Para localizarlas f\'acilmente se ha escrito su nombre actual entre par\'entesis. El algoritmo \textit{Genetreec} es el algoritmo propuesto en este proyecto.\\ Fuente: elaboraci\'on propia.}
+     		\label{fig:Mousavi1}
+     	\end{figure} 
+     
+
+En la figura \ref{fig:Mousavi1} se encuentran los resultados de los dos primeros periodos. En sendas ejecuciones se observa, con ayuda de los resultados obtenidos por \textit{Buy\&Hold}, que estamos en periodos crecientes. Adem\'as, los periodos de entrenamiento tambi\'en lo son. Estamos, pues, en la mejor situaci\'on posible para nuestro algoritmo. Los beneficios, en media, son mejores que los de las otras dos estrategias. Sin embargo, en los valores \textit{CLS} y \textit{RY} las ganacias son negativas en el segundo periodo y, en comparaci\'on con los beneficios de Mousavi, no son buenas cifras. En ambos casos se intuye el mismo problema, el periodo de entrenamiento es muy distinto al de prueba.\\
+
+Como se adelantaba, las empresas que est\'an en periodos alcistas en los dos tramos son las que mejores beneficios reportan. Es el caso de \textit{WPT}, que en el primer caso obtiene un beneficio de 54,57\%.\\
+
+Por el contrario, los periodos 3 y 4, obtienen unos resultados mucho peores. El motivo, una vez m\'as, parece ser el gran cambio de tendencia. Por poner algunos ejemplo, en el tercer periodo \textit{CLS} pasa de perder un 23,4\% a ganar un 22\%, \textit{ABX} pasa de ganar un 18\% a perder algo m\'as de un 2\% y \textit{WPT} pasa de 11,6\% a -5,1\%.\\
+
+En el caso del cuarto periodo, los cambios son a\'un m\'as notables. Se tienen como norma general unos resultados nefastos, a excepci\'on de \textit{WPT} que, de forma inesperada, gana un 34,39\% en unas condiciones desfavorables. De este resultado, en principio inusual, podemos extraer un nuevo detalle. Si el periodo de entrenamiento es bajista, pero el de prueba es alcista, el cambio de perfil no produce malos resultados. No obstante, si es al rev\'es, las p\'erdidas son cuantiosas.
+
+     	\begin{figure}[H]
+     		\centering\leftskip=0px
+     		\includegraphics[scale=2]{imagenes/Mousavi2.jpg}
+     		\caption[Comparaci\'on de resultados con Mousavi]{Comparaci\'on de resultados con Mousavi. Periodos 3 y 4. \\ Fuente: elaboraci\'on propia.}
+     		\label{fig:Mousavi2}
+     	\end{figure} 
 
 \newpage
-
 \section{Conclusiones}
 Para finalizar este proyecto, se va a hacer una s\'intesis en la que repasaremos los objetivos que propusimos al inicio.\\
 
@@ -170,18 +198,26 @@ En el segundo punto se propuso implementar mejoras de tiempo para hacer el algor
 
 En el tercer punto se marc\'o como objetivo analizar los resultados obtenidos en diferentes situaciones y, asimismo, comparar estos con otros resultados de la bibliograf\'ia. Gracias al desarrollo de la secci\'on \ref{sec:analisis} podemos considerar este objetivo cumplido.\\
 
-Por \'ultimo, se incluy\'o un punto adicional en el que se ped\'ia mejorar los resultados obtenidos en la literatura.\\
+Por \'ultimo, se incluy\'o un punto adicional en el que se ped\'ia mejorar los resultados obtenidos en la literatura. Al comparar los resultados con los obtenidos por Mousavi (2014), se encuentra un punto a favor. Este es que, en los periodos claramente alcistas o laterales con posibilidad de obtener ganacia, los beneficios son ligeramente mayores. No obstante, en los perfiles bajistas, el algoritmo no produce modelos tan eficientes como el propuesto en el art\'iculo. Consideramos, pues, este \'ultimo objetivo parcialmente conseguido.\\
 
-(.)\\
-
-(.)\\
-
-(.)\\
 
 
 \subsection{Perfil del algoritmo}
 
+A partir de las ejecuciones de la secci\'on \ref{sec:analisis}, se pueden distinguir varios casos en los que el algoritmo obtiene buenos resultados. Por otro lado, tambi\'en se distinguen casos en los que los resultados son francamente malos.\\
+
+Por lo general, los modelos aprenden muy bien de los periodos de entrenamiento. Esto produce una buena inversi\'on en el periodo de prueba siempre que las fluctuaciones de los precios sean similares en sendos periodos, especialmente si son alcistas o laterales. En las etapas claramente bajistas, el modelo aprendido suele producir condiciones que nunca llevan a comprar acciones, por lo que entrenar con este tipo de periodos no es aconsejable.\\
+
+Si, en el caso contrario, los datos de entrenamiento y el periodo de inversi\'on tiene movimientos de precio muy dispares, los resultados son bastante malos. Esto sucede incluso cuando el periodo de prueba es alcista y hasta las estrategias m\'as sencillas producen buenos resultados.\\
+
+Por \'ultimo, hay que destacar la aleatoriedad del modelo. La construcci\'on de los primeros \'arboles, el cruce de estos y las mutaciones producidas incorporan al modelo una gran cantidad de aleatoriedad. Esto produce que, tras varias ejecuciones en las mismas condiciones, los resultados sean dispares. 
 
 \subsection{Trabajos futuros}
+
+Uno de los factores que se debe corregir en primer lugar es la baja adaptabilidad. \'Esta produce muchas p\'erdidas y es una caracter\'istica poco deseable para cualquier estrategia de bolsa. Para corregir este hecho se podr\'ia hacer un entrenamiento m\'ultiple, es decir, entrenar con varios periodos de distintos perfiles. De esta forma, las puntuaciones obtenidas por los \'arboles estar\'ian contrastadas en varios periodos, produciendo as\'i un mejor funcionamiento del modelo en el caso de cambio de tendencias.\\
+
+Otra posibilidad para corregir estos sucesos podr\'ia ser auxiliar al modelo con otros algoritmos capaces de detectar los cambios de tendencia.\\
+
+El segundo fallo que se ha detectado con anterioridad es que el modelo aprendido es muy variable. La aleatoriedad es complicada de suprimir. No obstante, con este objetivo, se sugiere realizar un modelo con varios \'arboles. Imitando al algoritmo \textit{Random Forest}, es posible que las se\~nales enviadas por la mayor\'ia sean m\'as estables. Esto conlleva un problema, dado que existen tres etiquetas y las condiciones en los nodos pueden ser demasiado estrictas, los \'arboles podr\'ian no coincidir en muchos casos. Es m\'as, en muchos instantes primar\'ia la etiqueta \textit{Stop}, lo que produce estrategias f\'utiles.\\
 
 
