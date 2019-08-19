@@ -366,7 +366,7 @@ class _BBANDS_lambda_high(_indicator):
 									self.period,
 									self.nbdevup,
 									self.nbdevdn)
-		data['values'] = (df['High'] - data['upperband']) / (data['lowerband'] - data['upperband'])
+		data['values'] = (df['High'] - data['upperband']) / (data['upperband'] - data['lowerband'])
 		data = data.drop(columns=['upperband','lowerband', 'middleband'])
 		df[self.name()] = data['values']
 		if tagged:
@@ -402,7 +402,7 @@ class _BBANDS_lambda_low(_indicator):
 									self.period,
 									self.nbdevup,
 									self.nbdevdn)
-		data['values'] = (df['Low'] - data['upperband']) / (data['lowerband'] - data['upperband'])
+		data['values'] = (df['Low'] - data['upperband']) / (data['upperband'] - data['lowerband'])
 		data = data.drop(columns=['upperband','lowerband', 'middleband'])
 		df[self.name()] = data['values']
 		if tagged:
@@ -427,9 +427,9 @@ def indivector():
 			_ROC(),
 			_EMA(),
 			_SMA(),
-			_RSI(),  ##
-			_MOM(),  ##
-			_HILL(), ##
+			_RSI(),  
+			_MOM(),  
+			_HILL(), 
 			_OBV(),
 			_AD(),
 			_TRANGE(),

@@ -125,6 +125,20 @@ donde, como anteriormente, la sub\'indice 1 denota el instante anterior.
 \vspace{0.5cm}
 \noindent\textbf{BBANDS\_HIGH y BBANDS\_LOW \textit{(Bollinger Bands)}}\\
 
+Este indicador, compuesto a su vez por dos indicadores, propone construir dos valores, uno superior y otro inferior, que flanqueen al precio de la acci\'on en cada instante. La distancia de estos valores al precio depende del \textit{SMA} y la desviaci\'on t\'ipica de los precios t\'ipicos. A continuaci\'on, se muestra el c\'alculo de los dos valores, pero primero son necesarias algunas definiciones.\\
 
+Los precio t\'ipicos son una correci\'on del precio calculada como la media del precio de cierre, el m\'aximo y el m\'inimo, es decir, $TP = (C + H + L) / 3$. Ahora si, las \textit{Bollinger Bands} se definen como
+
+\[BBAND\_HIGH = SMA_{TP}(period) + m*\sigma_{TP}(period)\] 
+\[BBAND\_LOW = SMA_{TP}(period) - m*\sigma_{TP}(period)\] 
+
+donde $SMA_{TP}(period)$ es la media m\'ovil de los precios t\'ipicos de longitud $period$ y $\sigma_{TP}(period)$ es la desviaci\'on t\'ipica de los precios t\'ipicos.\\
+
+Sin embargo, no se han usado directamente estos valores, los indicadores usados en este proyecto miden la distancia entre el precio y el valor de la \textit{Bollinger Band} y, adem\'as, est\'an normalizados por la apertura de la misma. Esto es
+
+\[D\_HIGH = \frac{H - BBAND\_HIGH}{ BBAND\_HIGH - BBAND\_LOW}\] 
+\[D\_LOW =  \frac{L - BBAND\_HIGH}{ BBAND\_HIGH - BBAND\_LOW}\]
+
+donde $H$ y $L$ son los valores m\'aximo y m\'inimo del precio del instante.
 
 \end{appendices}
