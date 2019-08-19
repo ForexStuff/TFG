@@ -9,8 +9,6 @@ import math
 import numpy as np
 from pandas_datareader import data as pdr
 import time
-import warnings
-#warnings.simplefilter(action='ignore', category=FutureWarning)
 
 
 class TreeStrategy(bt.Strategy):
@@ -120,7 +118,7 @@ class Simulate:
 	end_date_train   = "2011-03-19"  ## "20XX-09-22" "20XX-03-19"
 	start_date_test  = "2011-03-20"
 	end_date_test    = "2011-09-21"
-	symbol = "AQN.TO"
+	symbol = "WPRT"
 
 
 	# Dados dos árboles, intercambia 'aleatoriamente' dos de sus ramas.
