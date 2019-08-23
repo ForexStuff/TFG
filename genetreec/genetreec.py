@@ -4,7 +4,6 @@ import tagger
 import indicator
 import pandas as pd
 import backtrader as bt
-import yfinance as yf
 import math
 import numpy as np
 from pandas_datareader import data as pdr
@@ -102,7 +101,7 @@ class EndStats(bt.Analyzer):
 
 	def get_analysis(self):
 		return {"start": self.start_val, "end": self.end_val,
-				"growth": self.end_val - self.start_val, "return": self.end_val / self.start_val}
+				"growth": self.end_val - self.start_val + 10*self.sells, "return": self.end_val / self.start_val}
 
 
 
@@ -111,14 +110,24 @@ class Simulate:
 	data = None
 	population = None
 	nextpopulation = None
-	forest = []
 	numbertree = 60
 	numberiter = 150
-	start_date_train = "2010-09-22"  ## "20XX-03-20" "20XX-09-21"
-	end_date_train   = "2011-03-19"  ## "20XX-09-22" "20XX-03-19"
+	start_date_train = "2010-09-22"
+	end_date_train   = "2011-03-19"
 	start_date_test  = "2011-03-20"
 	end_date_test    = "2011-09-21"
 	symbol = "WPRT"
+
+
+	def __init__(self, numtree, numiter, symbol, start_train, end_train, start_test, end_test):
+		self.numbertree = numtree
+		self.numberiter = numiter
+		self.start_date_train = start_train
+		self.end_date_train   = end_train
+		self.start_date_test  = start_test
+		self.end_date_test    = end_test
+		self.symbol = symbol
+
 
 
 	# Dados dos árboles, intercambia 'aleatoriamente' dos de sus ramas.
@@ -195,7 +204,6 @@ class Simulate:
 
 		# Los 2 mejores los guardo siempre
 		buy, sell = popu_reprod.iloc[0]['tree'].getBuySell()
-		print('buy=' + str(buy) + ', sell=' + str(sell))
 
 		self.nextpopulation.append(deepcopy(popu_reprod.iloc[0]['tree']))
 		self.nextpopulation.append(deepcopy(popu_reprod.iloc[1]['tree']))
@@ -248,7 +256,7 @@ class Simulate:
 			tree = gentree(i)
 			tree.warm()
 			self.population.append(tree)
-			print('Tree ' + str(i) + ' warmed.')
+			print('Arbol ' + str(i) + ' calentado.')
 
 	def execute(self):
 		simudatos = pdr.get_data_yahoo(self.symbol, start=self.start_date_train, end=self.end_date_train)
@@ -273,13 +281,10 @@ class Simulate:
 			scores = pd.DataFrame({r[0].params.tree.ind: r[0].analyzers.endstats.get_analysis() for r in ret}
 			                      ).T.loc[:, ['end', 'growth', 'return']]
 
-			#print(scores)
 			self.NextPopulation(scores['growth'])
 			te = time.time()
 			print("-- ITERACION " + str(i) + " --")
 			print("El tiempo de simulación es: ",(te - ts))
-			#if i > self.halfiter:
-			#	self.forest.append(deepcopy(self.population[6]))
 
 			indicator.setData(simudatos)
 			cerebro = bt.Cerebro(maxcpus=None)
@@ -288,7 +293,7 @@ class Simulate:
 			cerebro.adddata(df_cerebro)										  # Seleccionar datos
 			cerebro.broker.set_coc(True)
 			cerebro.broker.setcash(10000.0)	# Seleccionar dinero
-			cerebro.broker.setcommission(commission=0.005)
+			cerebro.broker.setcommission(commission=0.01)
 
 			tot = 0
 			for tree in self.population:
@@ -312,7 +317,7 @@ class Simulate:
 		cerebro.adddata(df_cerebro)										  # Seleccionar datos
 		cerebro.broker.set_coc(True)
 		cerebro.broker.setcash(10000.0)	# Seleccionar dinero
-		cerebro.broker.setcommission(commission=0.00)
+		cerebro.broker.setcommission(commission=0.01)
 		cerebro.run()
 		cerebro.plot()
 
@@ -326,14 +331,9 @@ class Simulate:
 		cerebro.adddata(df_cerebro)										  # Seleccionar datos
 		cerebro.broker.set_coc(True)
 		cerebro.broker.setcash(10000.0)	# Seleccionar dinero
-		cerebro.broker.setcommission(commission=0.00)
+		cerebro.broker.setcommission(commission=0.01)
 		cerebro.run()
 		model.root.plot()
 		indicator.printa()
 		cerebro.plot()
 
-
-
-sim = Simulate()
-sim.prepare()
-sim.execute()
