@@ -13,7 +13,12 @@
 \usepackage[backend=biber,style=apa]{biblatex}
 \DeclareLanguageMapping{spanish}{spanish-apa}
 \addbibresource{main.bib}
-\bibliography{main}
+%\bibliography{main}
+
+\DefineBibliographyExtras{spanish}{%
+	\let\finalandcomma\empty
+	\let\finalandsemicolon\empty
+}
 \setlength\bibitemsep{1.5\itemsep}
 \usepackage{chngcntr}
 \counterwithout{section}{chapter}
@@ -120,7 +125,7 @@
 \setcounter{tocdepth}{4}
 \setcounter{secnumdepth}{4}
 
-
+\raggedbottom
 \begin{document}
 \nocite{*}
 \input{portada.tex}

@@ -1,5 +1,6 @@
 
-	\subsection{Herramientas de simulaci\'on}		
+	\section{Herramientas de simulaci\'on}
+	\subsection{Plataformas de \textit{backtesting}}		
 	El prop\'osito central de este proyecto es encontrar un modelo con estrutuctura de \'arbol que sea capaz de invertir en bolsa de forma beneficiosa. Puesto que la ejecuci\'on del modelo es necesaria para medir su bondad, hay que trabajar en un entorno de pruebas en el que poder hacer ensayos. Este entorno no debe ser la bolsa real, porque simular grandes periodos costar\'ia el mismo tiempo que la longitud del periodo y, adem\'as, se estar\'ia haciendo con dinero real, con todas las dificultades que esto puede tener.\\
 	
 	En su lugar, las plataformas de \textit{backtesting} ofrecen las simulaciones que se necesitan. El \textit{backtesting} es el proceso que permite simular un periodo de bolsa e invertir con una estrategia particular de forma sistem\'atica. A continuaci\'on, se mencionan algunas plataformas y un peque\~no an\'alisis de cada una para discernir cu\'al es mejor para esta tarea.\\ 
@@ -216,7 +217,7 @@ class DoubleDownStrategy(bt.Strategy):
 		\end{itemize}
 		
 	
-	\subsection{Conseguir datos hist\'oricos para realizar \textit{backtesting}}\label{sec:get_data}
+	\subsection{Datos hist\'oricos para \textit{backtesting}}\label{sec:get_data}
 		
 		Como vamos a usar \textit{backtrader}, una herramienta de simulaci\'on de bolsa en local, necesitaremos extraer el hist\'orico de la bolsa. En esta secci\'on veremos c\'omo conseguir los valores hist\'oricos en bolsa de diferentes empresas de forma autom\'atica. Aparte de conseguir los datos, se especificar\'a la forma de incorporarlos a backtrader para su posterior uso.\\
 		

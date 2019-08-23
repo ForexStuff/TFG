@@ -36,9 +36,9 @@ En la primera de las ejecuciones, el periodo de entrenamiento comprende desde el
      		\label{fig:large_period}
      	\end{figure}
      	
-A priori puede parecer que los resultados, que se pueden ver en la figura \ref{fig:large_period} son muy buenos. Pero, en realidad, muestran algunas carencias que se hacen obvias cuando se ve el calendario de inversi\'on.\\
+A priori puede parecer que los resultados, que se pueden ver en la figura \ref{fig:large_period} son muy buenos. Pero, en realidad, muestran algunas carencias que se hacen realidad cuando se mira con detenimiento el calendario de inversi\'on.\\
 
-Lo primero que destaca en la figura \ref{fig:large_period_mtrain}, que representa el calendario de inversi\'on del algoritmo con par\'ametros de perfil medio, es que la gran mayor\'ia de las ganancias proviene de una \'unica compraventa. El resto de inversiones son de poca duraci\'on y apenas si producen ganancias. La causa de este hecho puede ser una falta de especializaci\'on. A lo largo de la ejecuci\'on, alg\'un \'arbol ha conseguido hacer esa transacci\'on tan ventajosa y, a partir de esta, no se ha conseguido mejorar pr\'acticamente nada.\\
+Lo primero que destaca en la figura \ref{fig:large_period_mtrain}, que representa el calendario de inversi\'on del algoritmo con par\'ametros de perfil medio en el periodo de entrenamiento, es que la gran mayor\'ia de las ganancias proviene de una \'unica compraventa. El resto de inversiones son de poca duraci\'on y apenas si producen ganancias. La causa de este hecho puede ser una falta de especializaci\'on. Debido a la larga duraci\'on de la ejecuci\'on, cuatro a\~nos, es bastante complicado caracterizar por medio de indicadores los momentos buenos para comprar. Por tanto, es posible que, en lugar de buscar cada uno de los momentos de compra, el algoritmo solo sea capaz de encontrar instantes con caracter\'isticas muy dr\'asticas.\\
 
 Es claro que, una inversi\'on de compra y venta algo m\'as r\'apida nos habr\'ia aportado una mayor ganacia.\\
 
@@ -58,7 +58,7 @@ Cuando analizamos el periodo de prueba, representado en la figura \ref{fig:large
      		\label{fig:large_period_mtest}
      	\end{figure}     	
 
-En resumen, los peridos largos dan muchas posibilidades de compraventa que nuestro algoritmo no sabe aprovechar. La parte positiva es que la mayor\'ia de las veces, cuando invierte, lo hace con beneficio. No obstante, en ocasiones, puede que no invierta y tengamos un modelo f\'util, como es el caso de la ejecuci\'on de par\'ametros de perfil Medio-Corto.\\
+En resumen, los peridos largos dan muchas posibilidades de compraventa que nuestro algoritmo no puede aprovechar. La parte positiva es que la mayor\'ia de las veces, cuando invierte, lo hace con beneficio. No obstante, en ocasiones, puede que no invierta y tengamos un modelo f\'util, como es el caso de la ejecuci\'on de par\'ametros de perfil Medio-Corto. Las simulaciones con periodos largos no parecen demasiado beneficiosas.\\
 
 \subsubsection{Periodo medio}
 
@@ -66,7 +66,7 @@ En este segundo caso, se han elegido dos periodos distintos. En el primer period
 
 El segundo periodo, de car\'acter bajista, est\'a formulado tambi\'en de a\~no en a\~no, el entrenamiento comienza el 1 de noviembre de 2009 y la prueba empieza el 1 de noviembre de 2010.\\
 
-Una vez m\'as, se han tomado fechas en las que los perfiles de los precios se asemejan. \\
+Una vez m\'as, se han tomado fechas en las que los perfiles de los precios se asemejan pero, en esta simulaci\'on, no son iguales. \\
 
      	\begin{figure}[H]
      		\centering\leftskip=-75px
@@ -75,13 +75,13 @@ Una vez m\'as, se han tomado fechas en las que los perfiles de los precios se as
      		\label{fig:medium_period}
      	\end{figure}
      	
-En esta ocasi\'on, los resultados son significativamente peores. Con motivo de ilustrar la adaptaci\'on de los modelos obtenidos en el periodo de entrenamiento, se han tomado periodos de prueba ligeramente peores, es decir, el precio tiende, significativamente, a bajar m\'as que en el entrenamiento.\\
+En esta ocasi\'on, los resultados son algo peores. Con motivo de ilustrar la adaptaci\'on de los modelos obtenidos en el periodo de entrenamiento, se han tomado periodos de prueba ligeramente peores, es decir, el precio tiende, significativamente, a bajar m\'as que en el entrenamiento.\\
 
 En todos los casos, el modelo obtenido con el algoritmo gen\'etico fue mejor que la estrategia \textit{Buy\&Hold} evaluados en el periodo de entrenamiento. Esto quiere decir que el algoritmo es capaz de encontrar condiciones de compra y venta que reportan beneficios en el periodo de aprendizaje. Sin embargo, estas condiciones no devuelven buenos resultados en periodos ligeramente distintos. De hecho, incluso en periodos alcistas, se pierde dinero cuando el modelo en el entrenamiento consigue sacar un 121.02\% de beneficios.\\
 
 Otro punto que se puede destacar es la irregularidad del algoritmo. Habitualmente, otros algoritmos tienden a sobreaprender cuando se insiste demasiado en los datos de entrenamiento. As\'i pues, es habitual encontrar un punto de entrenamiento a partir del cual los resultados obtenidos en las pruebas empeoran.\\
 
-En este algoritmo propuesto, los resultados obtenidos  para el periodo de prueba parecen variar de forma independiente al periodo anterior. Tras m\'ultiples ejecuciones con los mismos par\'ametros se puede observar como, en ocasiones, los resultados var\'ian de forma significativa. Este hecho puede ser la causa de una alta aleatoriedad en algoritmo debida a, posiblemente, la gran cantidad de mutaciones necesarias y la aleatoriedad de la primera generaci\'on.\\
+En este algoritmo propuesto, los resultados obtenidos  para el periodo de prueba parecen variar de forma independiente al periodo anterior. Tras m\'ultiples ejecuciones con los mismos par\'ametros se puede observar como, en ocasiones, los resultados var\'ian de forma significativa. Este hecho puede ser la causa de la aleatoriedad en el algoritmo debida a, posiblemente, la gran cantidad de mutaciones necesarias y la aleatoriedad de la primera generaci\'on.\\
 
      	\begin{figure}[H]
      		\centering\leftskip=40px
@@ -97,7 +97,7 @@ En este algoritmo propuesto, los resultados obtenidos  para el periodo de prueba
      		\label{fig:medium_period_mtest}
      	\end{figure} 
 
-En las figuras \ref{fig:medium_period_mtrain} y \ref{fig:medium_period_mtest} puede observarse bastante bien esta baja adaptaci\'on. En el periodo de entrenamiento se hacen varias inversiones de unas semanas, e incluso de varios meses, entre las cuales se deja un margen de tiempo hasta que es un buen momento de compra. Por el contrario, en el periodo de prueba apenas si hay unas semanas en las que el modelo no tiene nada comprado, es decir, siempre que vende intenta comprar inmediatamente.\\
+Por otro lado, en las figuras \ref{fig:medium_period_mtrain} y \ref{fig:medium_period_mtest}, puede observarse bastante bien esta la adaptaci\'on. En el periodo de entrenamiento se hacen varias inversiones de unas semanas, e incluso de varios meses, entre las cuales se deja un margen de tiempo hasta que es un buen momento de compra. Por el contrario, en el periodo de prueba apenas si hay unas semanas en las que el modelo no tiene nada comprado, es decir, siempre que vende intenta comprar inmediatamente.\\
 
 Se considera, como consecuencia de este hecho, la hip\'otesis de que el algoritmo tiene un buen aprendizaje pero una mala adaptaci\'on a otros periodos.\\
 
@@ -108,7 +108,7 @@ Para la \'ultima de las ejecuciones de par\'ametros, se han escogido tambi\'en d
 
 En primer lugar, el periodo alcista tiene su entrenamiento desde el 1 de julio de 2016 y hasta el 22 de octubre de 2016. Por otro lado, el periodo de prueba empieza a partir de entonces y hasta el 1 de febrero de 2017.\\
 
-En segundo lugar, el periodo lateral comprende un poco m\'as de tres meses. El periodo de entrenamiento empieza el 1 de enero de 2018 y, por su parte, el periodo de prueba comienza el 22 de abril de 2018. La simulaci\'on termina, finalmente, el 22 de julio de 2018. Como ya se ha adelantado, no se esperan buenos resultados. Los modelos generados tienen poca capacidad de adaptaci\'on y, como hemos tomado periodos de entrenamiento y prueba con perfiles muy distintos, la adaptaci\'on debe ser bastante peor.\\
+En segundo lugar, el periodo lateral comprende un poco m\'as de tres meses. El periodo de entrenamiento empieza el 1 de enero de 2018 y, por su parte, el periodo de prueba comienza el 22 de abril de 2018. La simulaci\'on termina, finalmente, el 22 de julio de 2018. Como ya se ha adelantado, no se esperan buenos resultados. Los modelos generados tienen poca capacidad de adaptaci\'on y, como hemos tomado periodos de entrenamiento y prueba con perfiles muy distintos, la adaptaci\'on debe ser peor.\\
 
      	\begin{figure}[H]
      		\centering\leftskip=-75px
@@ -117,7 +117,7 @@ En segundo lugar, el periodo lateral comprende un poco m\'as de tres meses. El p
      		\label{fig:short_period}
      	\end{figure}
 
-Como se observa en la figura \ref{fig:short_period}, en los periodos cortos no se obtienen buenos resultados. De hecho, en el caso del periodo lateral, y prueba bajista, los resultados son p\'esimos. Mientras que, en el entrenamiento, la estrategia propia supera con creces a la estrategia \textit{Buy\&Hold}, en la prueba tiene p\'erdidas estrepitosas al ser un periodo bajista. Esto confirma la hip\'otesis de la baja adaptaci\'on del algoritmo.\\
+Como se observa en la figura \ref{fig:short_period}, en los periodos cortos no se obtienen buenos resultados. De hecho, en el caso del periodo lateral, y prueba bajista, los resultados son negativos. Mientras que, en el entrenamiento, la estrategia propia supera con creces a la estrategia \textit{Buy\&Hold}, en la prueba tiene p\'erdidas estrepitosas al ser un periodo bajista. Esto confirma la hip\'otesis de la baja adaptaci\'on del algoritmo.\\
 
      	\begin{figure}[H]
      		\centering\leftskip=30px
@@ -141,7 +141,7 @@ Por \'ultimo, se propone hacer una an\'alisis del periodo entrenado con perfil l
 
 En el entrenamiento se tiene una inversi\'on muy ajustada, pr\'acticamente inmejorable. No obstante, esto podr\'ia ser fruto de un sobreaprendizaje. Por su parte, en el periodo de prueba, se observan los mismos patrones de compra y venta. Pero al ser las oscilaciones del precio m\'as peque\~nas que en el caso anterior, las comisiones se llevan esos escasos beneficios que pudiera tener.\\
 
-En contraposici\'on, encontramos un punto a favor, la precisi\'on para encontrar los m\'inimos. Los indicadores parecen ser unas buenas herramientas para detectar estos. N\'otese que, tras una acentuada ca\'ida durante el primer mes, se compra en el \'ultimo momento antes de la subida. Por tanto, aunque los resultados no son para nada correctos, las se\~nales de compra y venta no son demasiado err\'oneas. \\
+En contraposici\'on, encontramos un punto a favor, la precisi\'on para encontrar los m\'inimos. Los indicadores parecen ser unas buenas herramientas para detectar estos. N\'otese que, tras una acentuada ca\'ida durante el primer mes, se compra en el \'ultimo momento antes de la subida. Por tanto, aunque los resultados no sean correctos, las se\~nales de compra y venta no son demasiado err\'oneas. \\
      	
       	\begin{figure}[H]
       		\centering\leftskip=40px
@@ -161,7 +161,7 @@ En contraposici\'on, encontramos un punto a favor, la precisi\'on para encontrar
 
 Con el objetivo de comparar el algoritmo desarrollado con otras estrategias, se ha propuesto realizar el siguiente experimiento. Se han tomado 13 empresas que cotizan en la bolsa de Toronto (Canad\'a). Y se han marcado cuatro periodos, de seis meses cada uno, para simular la inversi\'on en bolsa. Para invertir en cada etapa se ha entrenado con el periodo de seis meses inmediatamente anterior.\\
 
-A continuaci\'on, se muestra la comparativa de los beneficios de nuestro algoritmo con los obtenidos por la estrategia cl\'asica \textit{Buy\&Hold} y el modelo gen\'etico de Mousavi (2014). La elecci\'on de estas dos estrategias no es casual. La primera de ellas es una estrateg\'ia b\'asica y, a partir de ella, es f\'acil ver si estamos simulando un periodo a la baja o al alza. La elecci\'on de la segunda estrategia tiene que ver con la similitud que guarda con la desarrollada. Aunque en el algoritmo del art\'iculo un individuo son $n$ \'arboles juntos (uno por empresa a invertir), los cruces entre individuos se realizan de \'arbol i-\'esimo en \'arbol i-\'esimo, es decir, los \'arboles generados para distintas  empresa no se relacionan. Por tanto, los cruces son similares que en el modelo propuesto aqu\'i.\\
+A continuaci\'on, se muestra la comparativa de los beneficios de nuestro algoritmo con los obtenidos por la estrategia cl\'asica \textit{Buy\&Hold} y el modelo gen\'etico de Mousavi (2014). La elecci\'on de estas dos estrategias no es casual. La primera de ellas es una estrateg\'ia b\'asica y, a partir de ella, es f\'acil ver si estamos simulando un periodo a la baja o al alza. La elecci\'on de la segunda estrategia tiene que ver con la similitud que guarda con la desarrollada. Aunque, en el algoritmo del art\'iculo un individuo son $n$ \'arboles juntos (uno por empresa a invertir), los cruces entre individuos se realizan de \'arbol i-\'esimo en \'arbol i-\'esimo, es decir, los \'arboles generados para distintas  empresa no se relacionan. Por tanto, los cruces son similares al modelo propuesto aqu\'i.\\
 
 La diferencia principal con nuestro modelo radica en la construcci\'on de los \'arboles. A diferencia de nuestro caso, en el que los \'arboles son de decisi\'on, los \'arboles en el algoritmo de Mousavi representan funciones. Esto es, en los nodos se sit\'uan operaciones matem\'aticas y en las hojas, valores constantes o indicadores. Por consiguiente, se tiene la posibilidad de realizar operaciones con varios indicadores, pero encadenar m\'ultiples condiciones es m\'as inusual.
 
@@ -177,9 +177,9 @@ En la figura \ref{fig:Mousavi1} se encuentran los resultados de los dos primeros
 
 Como se adelantaba, las empresas que est\'an en periodos alcistas en los dos tramos son las que mejores beneficios reportan. Es el caso de \textit{WPT}, que en el primer caso obtiene un beneficio de 54,57\%.\\
 
-Por el contrario, los periodos 3 y 4, obtienen unos resultados mucho peores. El motivo, una vez m\'as, parece ser el gran cambio de tendencia. Por poner algunos ejemplo, en el tercer periodo \textit{CLS} pasa de perder un 23,4\% a ganar un 22\%, \textit{ABX} pasa de ganar un 18\% a perder algo m\'as de un 2\% y \textit{WPT} pasa de 11,6\% a -5,1\%.\\
+Por otro lado, en los periodos 3 y 4, no se obtienen unos resultados tan buenos. El motivo, una vez m\'as, parece ser el gran cambio de tendencia. Por poner algunos ejemplo, en el tercer periodo \textit{CLS} pasa de perder un 23,4\% a ganar un 22\%, \textit{ABX} pasa de ganar un 18\% a perder algo m\'as de un 2\% y \textit{WPT} pasa de 11,6\% a -5,1\%.\\
 
-En el caso del cuarto periodo, los cambios son a\'un m\'as notables. Se tienen como norma general unos resultados nefastos, a excepci\'on de \textit{WPT} que, de forma inesperada, gana un 34,39\% en unas condiciones desfavorables. De este resultado, en principio inusual, podemos extraer un nuevo detalle. Si el periodo de entrenamiento es bajista, pero el de prueba es alcista, el cambio de perfil no produce malos resultados. No obstante, si es al rev\'es, las p\'erdidas son cuantiosas.
+En el caso del cuarto periodo, los cambios son a\'un m\'as notables. Se tienen como norma general unos resultados mejorables, a excepci\'on de \textit{WPT} que, de forma inesperada, gana un 34,39\% en unas condiciones desfavorables. De este resultado, en principio poco acorde con el resto, podemos extraer un nuevo detalle. Si el periodo de entrenamiento es bajista, pero el de prueba es alcista, el cambio de perfil no produce malos resultados. No obstante, si es al rev\'es, las p\'erdidas si que se producen.
 
      	\begin{figure}[H]
      		\centering\leftskip=0px
@@ -192,32 +192,30 @@ En el caso del cuarto periodo, los cambios son a\'un m\'as notables. Se tienen c
 \section{Conclusiones}
 Para finalizar este proyecto, se va a hacer una s\'intesis en la que repasaremos los objetivos que propusimos al inicio.\\
 
-En primer lugar, se prentend\'ia realizar un algoritmo evolutivo basado en \'arboles para extraer informaci\'on de se\~nales de compra y venta. El dise\~no de este algoritmo se especifica en el punto \ref{sec:algorithm}. El c\'odigo que corresponde al dise\~no no se puede incluir en la memoria por motivos de espacio, no obstante, se incluye como anexo.\\
+En primer lugar, se prentend\'ia realizar un estudio para utilizar t\'ecnicas de aprendizaje con algoritmos evolutivos basados en \'arboles para extraer informaci\'on de se\~nales de compra y venta. El dise\~no de este algoritmo se especifica en el punto \ref{sec:algorithm}. El c\'odigo que corresponde al dise\~no no se puede incluir en la memoria por motivos de espacio, no obstante, se incluye como anexo.\\
 
-En el segundo punto se propuso implementar mejoras de tiempo para hacer el algoritmo eficiente. Tras las mejoras realizadas en la secci\'on \ref{sec:timeimprove}, el software mostr\'o una reducci\'on de tiempo considerable. En el caso de la ejecuci\'on m\'as larga, entrenamiento de cuatro a\~nos y prueba de tres con poblaci\'on de 100 \'arboles y 400 iteraciones, el tiempo total fue de algo menos de cuatro horas. La ejecuci\'on m\'as corta, por su parte, de tres meses de entrenamiento y otros tres de prueba con 40 \'arboles y 60 iteraciones, tuvo un tiempo de apenas dos minutos. Recordando que las ejecuciones fueron realizadas en un ordenador convencional de cuatro n\'ucleos y 3.4GHz, la eficiencia es satisfactoria.\\
+Adem\'as, debido al alto coste computacional de los modelos generados, se han realizado mejoras, detalladas en la secci\'on \ref{sec:timeimprove}, del software que mostraron una reducci\'on de tiempo considerable. En el caso de la ejecuci\'on m\'as larga, entrenamiento de cuatro a\~nos y prueba de tres con poblaci\'on de 100 \'arboles y 400 iteraciones, el tiempo total fue de algo menos de cuatro horas. La ejecuci\'on m\'as corta, por su parte, de tres meses de entrenamiento y otros tres de prueba con 40 \'arboles y 60 iteraciones, tuvo un tiempo de apenas dos minutos. Recordando que las ejecuciones fueron realizadas en un ordenador convencional de cuatro n\'ucleos y 3.4GHz, la eficiencia es satisfactoria.\\
 
-En el tercer punto se marc\'o como objetivo analizar los resultados obtenidos en diferentes situaciones y, asimismo, comparar estos con otros resultados de la bibliograf\'ia. Gracias al desarrollo de la secci\'on \ref{sec:analisis} podemos considerar este objetivo cumplido.\\
-
-Por \'ultimo, se incluy\'o un punto adicional en el que se ped\'ia mejorar los resultados obtenidos en la literatura. Al comparar los resultados con los obtenidos por Mousavi (2014), se encuentra un punto a favor. Este es que, en los periodos claramente alcistas o laterales con posibilidad de obtener ganacia, los beneficios son ligeramente mayores. No obstante, en los perfiles bajistas, el algoritmo no produce modelos tan eficientes como el propuesto en el art\'iculo. Consideramos, pues, este \'ultimo objetivo parcialmente conseguido.\\
+En el segundo punto se marc\'o como objetivo analizar los resultados obtenidos en diferentes situaciones y, asimismo, comparar estos con otros resultados de la bibliograf\'ia. Gracias al desarrollo de la secci\'on \ref{sec:analisis} podemos considerar este objetivo cumplido. Al comparar los resultados con los obtenidos por Mousavi (2014), se encuentra un punto a favor. Este es que, en los periodos claramente alcistas o laterales con posibilidad de obtener ganacia, los beneficios son ligeramente mayores. No obstante, en las simulaciones en las que los periodos de entrenamiento son alcista y los de prueba son bajistas, el algoritmo no produce modelos tan eficientes como el propuesto en el art\'iculo. Consideramos, pues, condicionar la bondad del modelo a los periodos de simulaci\'on.\\
 
 
 
 \subsection{Perfil del algoritmo}
 
-A partir de las ejecuciones de la secci\'on \ref{sec:analisis}, se pueden distinguir varios casos en los que el algoritmo obtiene buenos resultados. Por otro lado, tambi\'en se distinguen casos en los que los resultados son francamente malos.\\
+A partir de las ejecuciones de la secci\'on \ref{sec:analisis}, se pueden distinguir varios casos en los que el algoritmo obtiene buenos resultados. Por otro lado, tambi\'en se distinguen casos en los que los resultados no son deseables.\\
 
 Por lo general, los modelos aprenden muy bien de los periodos de entrenamiento. Esto produce una buena inversi\'on en el periodo de prueba siempre que las fluctuaciones de los precios sean similares en sendos periodos, especialmente si son alcistas o laterales. En las etapas claramente bajistas, el modelo aprendido suele producir condiciones que nunca llevan a comprar acciones, por lo que entrenar con este tipo de periodos no es aconsejable.\\
 
-Si, en el caso contrario, los datos de entrenamiento y el periodo de inversi\'on tiene movimientos de precio muy dispares, los resultados son bastante malos. Esto sucede incluso cuando el periodo de prueba es alcista y hasta las estrategias m\'as sencillas producen buenos resultados.\\
+Si, en el caso contrario, los datos de entrenamiento y el periodo de inversi\'on tiene movimientos de precio muy dispares, el algoritmo suele producir algunas p\'erdidas.\\
 
-Por \'ultimo, hay que destacar la aleatoriedad del modelo. La construcci\'on de los primeros \'arboles, el cruce de estos y las mutaciones producidas incorporan al modelo una gran cantidad de aleatoriedad. Esto produce que, tras varias ejecuciones en las mismas condiciones, los resultados sean dispares. 
+Por tanto, el algoritmo es bastante eficaz en el caso de que nos aseguremos de que el periodo en el que se invierte es similar al periodo del que se aprende. Esta condici\'on, a priori deseable en todos los problemas de aprendizaje a partir de datos, es un problema com\'un en el mundo de la bolsa.
+
+Por \'ultimo, hay que notar la aleatoriedad del modelo. La construcci\'on de los primeros \'arboles, el cruce de estos y las mutaciones producidas incorporan al modelo una gran cantidad de aleatoriedad. Esto produce que espacio de b\'usqueda sea inspeccionado de forma m\'as eficaz pero, a la hora de extraer un modelo, va a producir resultados distintos.
 
 \subsection{Trabajos futuros}
 
-Uno de los factores que se debe corregir en primer lugar es la baja adaptabilidad. \'Esta produce muchas p\'erdidas y es una caracter\'istica poco deseable para cualquier estrategia de bolsa. Para corregir este hecho se podr\'ia hacer un entrenamiento m\'ultiple, es decir, entrenar con varios periodos de distintos perfiles. De esta forma, las puntuaciones obtenidas por los \'arboles estar\'ian contrastadas en varios periodos, produciendo as\'i un mejor funcionamiento del modelo en el caso de cambio de tendencias.\\
+Uno de los factores que se debe auxiliar en primer lugar es la baja adaptabilidad. Esta produce muchas p\'erdidas y es una caracter\'istica poco deseable para cualquier estrategia de bolsa. Para corregir este hecho se podr\'ia hacer un entrenamiento m\'ultiple, es decir, entrenar con varios periodos de distintos perfiles. De esta forma, las puntuaciones obtenidas por los \'arboles estar\'ian contrastadas en varios periodos, produciendo as\'i un mejor funcionamiento del modelo en el caso de cambio de tendencias.\\
 
-Otra posibilidad para corregir estos sucesos podr\'ia ser auxiliar al modelo con otros algoritmos capaces de detectar los cambios de tendencia.\\
+Otra posibilidad para corregir estos sucesos podr\'ia ser auxiliar al modelo con otros algoritmos capaces de detectar los cambios de tendencia. De hecho, en el cl\'asico an\'alisis de indicadores, es com\'un utilizar algunos indicadores, como el \textit{RSI}, para percibir cambios de tendencia en los precios de las acciones. De esta forma, se podr\'ia crear una estrategia condicionada a las tendencias predichas. Si se espera una tendencia fija durante algunos meses, se usa el algoritmo desarrollado en el proyecto. En caso contrario, se puede usar un algoritmo especializado en los periodos irregulares. \\
 
-El segundo fallo que se ha detectado con anterioridad es que el modelo aprendido es muy variable. La aleatoriedad es complicada de suprimir. No obstante, con este objetivo, se sugiere realizar un modelo con varios \'arboles. Imitando al algoritmo \textit{Random Forest}, es posible que las se\~nales enviadas por la mayor\'ia sean m\'as estables. Esto conlleva un problema, dado que existen tres etiquetas y las condiciones en los nodos pueden ser demasiado estrictas, los \'arboles podr\'ian no coincidir en muchos casos. Es m\'as, en muchos instantes primar\'ia la etiqueta \textit{Stop}, lo que produce estrategias f\'utiles.\\
-
-
+Otra de las mejoras que se sugiere es realizar un modelo con varios \'arboles, imitando al algoritmo \textit{Random Forest}. Es posible que las se\~nales enviadas por la mayor\'ia de los individuos generados sean m\'as acertadas. Esto conlleva un problema, dado que existen tres etiquetas y las condiciones en los nodos pueden ser demasiado estrictas, los \'arboles podr\'ian no coincidir en muchos casos. Es m\'as, en muchos instantes primar\'ia la etiqueta \textit{Stop}, lo que produce estrategias f\'utiles.
