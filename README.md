@@ -10,13 +10,13 @@ Further information can be found on TFG.pdf
 
 This project has been developed on Ubuntu. Using it with other SO could fail. First at all, you need to ensure you have installed python3 and pip3 as they are the main tools used for this project. For test them run:
 
-'''python3 -V
-pip3 -V'''
+```python3 -V
+pip3 -V```
 
 If you have not installed any of them, you can do it by writting the command:
 
-'''sudo apt-get install python3
-sudo apt-get install python3-pip'''
+```sudo apt-get install python3
+sudo apt-get install python3-pip```
 
 ## Installation
 
