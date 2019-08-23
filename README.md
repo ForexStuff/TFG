@@ -1,6 +1,6 @@
 # TFG: Una estrategia para bolsa basada en algoritmos evolutivos y su implementación en una plataforma de trading
 
-Bacherlor's Thesis at University of Granada (UGR) about evolving algorithm for prediction on stock market.
+Bacherlor's Thesis at University of Granada (UGR) about evolutionary algorithm for prediction on stock market.
 
 The algorith is based on genetics programming, that means that a population (some decision trees with stock indicators) is evaluated on a period (with the framework backtrader) an, depending of the score, crossover and mutation are made. The process is iterated a variable number of times.
 
