@@ -52,10 +52,11 @@ python3 genetreec/exec_test.py <number of trees> <number of iterations> <symbol>
 
 For example:
 ```
-python3 genetreec/exec_test.py 10 5 SAN 2010-09-22 2011-03-19 2011-03-20 2011-09-21
+python3 genetreec/exec_test.py 10 5 SAN 2009-03-20 2009-09-21 2009-09-22 2010-03-19
 ```
 
 Output are two images, first with the best decision tree on training period and second with the same tree on test period.
+
 ![alt text](https://github.com/MiguelAngelTorres/TFG/blob/master/Resultados/Mousavi/1_WPT.TO_train.png)
 ![alt text](https://github.com/MiguelAngelTorres/TFG/blob/master/Resultados/Mousavi/1_WPT.TO_test.png)
 
