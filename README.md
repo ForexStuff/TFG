@@ -47,7 +47,7 @@ pip3 install -r dependencies.txt
 The code is placed at the folder named genetreec. The main file is genetreec.py. You will need to import this to use the algorithm. An example is given in exec_test.py. You can run it by writting:
 
 ```
-python3 genetreec/exec_test.py <number of trees> <number of iterations> <symbol> <start train date> <end train date> <start test date> <end test date>
+python3 genetreec/exec_test.py <number of trees> <number of iterations> <symbol> <start training date> <end training date> <start testing date> <end testing date>
 ```
 
 For example:
@@ -55,4 +55,7 @@ For example:
 python3 genetreec/exec_test.py 10 5 SAN 2010-09-22 2011-03-19 2011-03-20 2011-09-21
 ```
 
+Output are two images, first with the best decision tree on training period and second with the same tree on test period.
+![alt text](https://github.com/MiguelAngelTorres/TFG/blob/master/Resultados/Mousavi/1_WPT.TO_train.png)
+![alt text](https://github.com/MiguelAngelTorres/TFG/blob/master/Resultados/Mousavi/1_WPT.TO_test.png)
 
