@@ -27,7 +27,7 @@ sudo apt-get install python3-pip
 The source code can be download with:
 
 ```
-it clone https://github.com/MiguelAngelTorres/TFG
+git clone https://github.com/MiguelAngelTorres/TFG
 ```
 
 Once downloaded, go into the main folder. You should activate a python enviroment for protect you older packages with:
