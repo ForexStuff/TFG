@@ -7,7 +7,7 @@ import tagger
 import copy
 
 
-deepness = 5
+deepness = 10
 indivector = indicator.indivector()
 
 def entropy(v):           # v es la proporcion de la clase (frec/total)
