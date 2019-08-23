@@ -141,4 +141,54 @@ Sin embargo, no se han usado directamente estos valores, los indicadores usados 
 
 donde $H$ y $L$ son los valores m\'aximo y m\'inimo del precio del instante.
 
+\chapter{Instalaci\'on y prueba del algoritmo}
+
+En este anexo se va a mostrar se puede instalar y ejecutar el algoritmo desarrollado en el proyecto sin requisitos previos. El algoritmo ha sido desarrollado en Ubuntu 16.04, luego se espera que se pueda ejecutar en cualquier versi\'on de Linux. No obstante, puede que el proceso no coincida en su totalidad con el expuesto a continuaci\'on.\\
+
+Primero, se debe comprobar si se tienen instalados \textit{python3} y \textit{pip3} en la consola. Para ello, se pueden utilizar sendos comandos:
+
+\begin{lstlisting}[basicstyle=\small]
+python3 -V
+pip3 -V
+\end{lstlisting}
+
+En el caso de que alguno de los dos no se tuviera instalado, se deben instalar utilizando los comandos:
+
+\begin{lstlisting}[basicstyle=\small]
+sudo apt-get install python3
+sudo apt-get install python3-pip
+\end{lstlisting}
+
+Una vez que se ha realizado lo anterior, se debe descargar el c\'odigo fuente. Este se encuentra disponible en \textit{Github} a trav\'es del enlace \url{https://github.com/MiguelAngelTorres/TFG}. Tambi\'en se puede descargar directamente desde la consola de comandos con el comando:
+
+\begin{lstlisting}[basicstyle=\small]
+git clone https://github.com/MiguelAngelTorres/TFG
+\end{lstlisting}
+
+Con el c\'odigo descargado, es necesario dirigirse al interior del directorio. All\'i se encuentra todo lo necesario para la utilizaci\'on del algoritmo. Pero, antes de seguir adelante con la instalaci\'on, se recomienda activar un entorno virtual\footnote{Este paso no es realmente necesario, pero es bastante \'util para mantener aislada la prueba. Los entornos virtuales permiten instalar paquetes que solo aparecer\'an instalados de forma activa mientras estemos con el entorno en uso. Por tanto, una vez terminado el ensayo, se puede eliminar del entorno y los paquetes instalados para \textit{Python} desaparecer\'an.}. Para ello se aporta la estructura ya construida. Solo ser\'a necesario ejecutar el siguiente comando en la consola:
+
+\begin{lstlisting}[basicstyle=\small]
+source env/bin/activate
+\end{lstlisting}
+
+En el \'ultimo paso de este proceso, nos disponemos a instalar los paquetes con los que tiene dependencias. Todos ellos est\'an indicados en el archivo \textit{dependencies.txt}. Se pueden instalar usando \textit{pip3}:
+
+\begin{lstlisting}[basicstyle=\small]
+pip3 install -r dependencies.txt
+\end{lstlisting}
+
+Si todo lo anterior ha funcionado, deber\'iamos de poder ejecutar la primera simulaci\'on. El c\'odigo se encuentra en el directorio \textit{/genetreec}. El archivo principal es \textit{genetreec.py}, que debe importarse al \textit{script} que ejecutaremos. Se aporta un \textit{script} de prueba nombrado como \textit{exec\_test.py}, que se puede ejecutar como se muestra:
+
+\begin{lstlisting}[basicstyle=\small]
+python3 genetreec/exec_test.py <number of trees> <number of iterations> <symbol> <start training date> <end training date> <start testing date> <end testing date>
+\end{lstlisting}
+
+Por ejemplo, si quisi\'eramos entrenar en el periodo que va desde el 20 de marzo de 2009 hasta el 21 de septiembre del mismo a\~no, probar el algoritmo del 22 de septiembre de 2009 hasta el 19 de marzo de 2010, con diez \'arboles y cinco iteraciones para el \textit{Banco Santander}, bastar\'ia con ejecutar el siguiente comando:
+
+\begin{lstlisting}[basicstyle=\small]
+python3 genetreec/exec_test.py 10 5 SAN 2009-03-20 2009-09-21 2009-09-22 2010-03-19
+\end{lstlisting}
+
+Como salida se obtiene los calendarios de inversi\'on del mejor \'arbol en los periodos de entrenamiento y prueba. Asimismo, se mostrar\'a en la ventana de comandos una versi\'on en texto del \'arbol. Cada nueva l\'inea consecutiva significa que se ha avanzado al nodo izquierdo, es decir, el camino de condici\'on positivo. Una l\'inea en vac\'ia signfica que se ha ascendido en el \'arbol.
+
 \end{appendices}

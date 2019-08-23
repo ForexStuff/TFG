@@ -334,6 +334,5 @@ class Simulate:
 		cerebro.broker.setcommission(commission=0.01)
 		cerebro.run()
 		model.root.plot()
-		indicator.printa()
 		cerebro.plot()
 
