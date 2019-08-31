@@ -74,14 +74,14 @@ El mismo periodo que se va a usar para entrenar el algoritmo gen\'etico va a ser
     Nombremos m\'axima subida, y lo notamos como $M$, a la siguiente expresi\'on:\\
     \begin{align*}
     \begin{split}
-        M = max\{cierre_{i} - cierre_{j} \:|\: \forall z\: con \:i < z\leq j\: cierre_{z-1} - cierre_{z} \geq 0 \}
+        M = \max\limits_{\substack{i,j\in\mathbb{N} \\ i<j}} \{cierre_{j} - cierre_{i} \:|\: \forall z\: con \:i < z\leq j\: cierre_{z-1} - cierre_{z} \geq 0 \}
     \end{split}
     \end{align*}
     
     De forma an\'aloga, se obtiene la m\'axima bajada, notada como m:
     \begin{align*}
     \begin{split}
-        m = max\{cierre_{i} - cierre_{j} \:|\: \forall z\: con \:i < z\leq j\:s cierre_{z-1} - cierre_{z} \leq 0 \}
+        m = \max\limits_{\substack{i,j\in\mathbb{N} \\ i<j}} \{cierre_{j} - cierre_{i} \:|\: \forall z\: con \:i < z\leq j\: cierre_{z-1} - cierre_{z} \leq 0 \}
     \end{split}
     \end{align*}
 
@@ -293,7 +293,7 @@ La mutaci\'on de par\'ametros es espec\'ifica, seg\'un el indicador al que perte
 
 Los par\'ametros que se mueven en $\mathbb{R}$ pueden calcularse, igual que la mutaci\'on de pivotes, a partir de una distribuci\'on normal. En el caso de que el par\'ametro se mueva en $\mathbb{R}_0^+$, como en el caso de las \textit{Bollinger Bands}, se debe rectificar con un valor absoluto.\\
 
-En cuanto a los par\'ametros que se mueven en $\mathbb{N}$ o subconjuntos del mismo, optamos por hacer una mutaci\'on discreta sumando o restando 2. \\
+En cuanto a los par\'ametros que se mueven en $\mathbb{N}$ o subconjuntos del mismo, optamos por hacer una mutaci\'on basada en una distribuci\'on uniforme discreta en el intervalo [-2,2]. \\
 
 \paragraph{Mutaciones en las hojas}
 Las mutaciones en una hoja son bastante sencillas. Una hoja puede tener los valores \textit{'Compra'}, \textit{'Vende'} o \textit{'Stop'}. Basta con tomar una nueva etiqueta de forma aleatoria.\\
