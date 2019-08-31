@@ -111,12 +111,12 @@ class Simulate:
 	population = None
 	nextpopulation = None
 	numbertree = 60
-	numberiter = 150
-	start_date_train = "2010-09-22"
-	end_date_train   = "2011-03-19"
-	start_date_test  = "2011-03-20"
-	end_date_test    = "2011-09-21"
-	symbol = "WPRT"
+	numberiter = 200
+	start_date_train = "2009-03-20"
+	end_date_train   = "2009-09-21"
+	start_date_test  = "2009-09-22"
+	end_date_test    = "2010-03-19"
+	symbol = "ENB.TO"
 
 
 	def __init__(self, numtree, numiter, symbol, start_train, end_train, start_test, end_test):
@@ -246,8 +246,7 @@ class Simulate:
 
 
 	def prepare(self):
-		tagger.acumtag(self.start_date_train, self.end_date_train, self.symbol)   # Solo se ejecuta la primera vez, el etiquetado es lento
-							# y mejor hacerlo solo una vez
+		tagger.acumtag(self.start_date_train, self.end_date_train, self.symbol)
 		self.data = pd.read_csv('tagged_data/' + self.symbol + '.csv')
 		indicator.setData(self.data)
 		self.population = []
@@ -260,10 +259,8 @@ class Simulate:
 
 	def execute(self):
 		simudatos = pdr.get_data_yahoo(self.symbol, start=self.start_date_train, end=self.end_date_train)
-		# df = yf.download(self.symbol, start="2017-01-01", end="2017-04-30")  # Otra forma de coger los datos
 		df_cerebro = bt.feeds.PandasData(dataname = simudatos)
 		indicator.setData(simudatos)
-
 
 
 		cerebro = bt.Cerebro(maxcpus=None)
@@ -273,7 +270,8 @@ class Simulate:
 		cerebro.broker.set_coc(True)
 		cerebro.broker.setcash(10000.0)	# Seleccionar dinero
 		cerebro.broker.setcommission(commission=0.005)
-
+		testsimudatos = pdr.get_data_yahoo(self.symbol, start=self.start_date_test, end=self.end_date_test)
+		
 		for i in range(self.numberiter):
 			ts = time.time()
 			ret = cerebro.run()   # EJECUTAR BACKTESTING
@@ -300,7 +298,6 @@ class Simulate:
 				tot+=tree.getNumNodes()
 			print('La media de nodos es ' + str(tot/len(self.population)))
 
-
 		ret = cerebro.run()
 		scores = pd.DataFrame({r[0].params.tree.ind: r[0].analyzers.endstats.get_analysis() for r in ret}
 		                      ).T.loc[:, ['end', 'growth', 'return']]
@@ -323,9 +320,8 @@ class Simulate:
 
 
 
-		simudatos = pdr.get_data_yahoo(self.symbol, start=self.start_date_test, end=self.end_date_test)
-		df_cerebro = bt.feeds.PandasData(dataname = simudatos)
-		indicator.setData(simudatos)
+		df_cerebro = bt.feeds.PandasData(dataname = testsimudatos)
+		indicator.setData(testsimudatos)
 		cerebro = bt.Cerebro(maxcpus=1)
 		cerebro.addstrategy(plotTreeStrategy, tree=model)   # Seleccionar estrategia
 		cerebro.adddata(df_cerebro)										  # Seleccionar datos
