@@ -3,3 +3,4 @@ pandas-datareader==0.7.0
 numpy==1.16.4
 TA-Lib==0.4.17
 backtrader==1.9.74.123
+matplotlib==2.2.4
