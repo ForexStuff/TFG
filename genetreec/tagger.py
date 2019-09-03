@@ -6,7 +6,7 @@ from pandas_datareader import data as pdr
 
 def acumtag(start_date, end_date, symbol):
 	data = pdr.get_data_yahoo(symbol, start=start_date, end=end_date)
-	data['dif'] = talib.MOM(data['Close'],1)  # Calculate the difference with last day
+	data['dif'] = talib.MOM(data['Close'],1)  # Calcula la diferencia con el dia anterior
 	data['dif'][0] = -0.01
 	data_tag = [0] * data.shape[0]
 
@@ -17,20 +17,20 @@ def acumtag(start_date, end_date, symbol):
 
 	positive = True
 
-	# Taking the max positive and negative diference consecutive
+	# Calcular la maxima subida y la maxima bajada consecutivas
 	for dif in data['dif']:
-		if positive: # Crescent Trend
-			if dif > 0: # If still crescent sum acumulation
+		if positive: # Tendencia creciente
+			if dif > 0: # Si todavia es creciente, suma la subida
 				positive_acum += dif
-			else:   # If started decrescent save the acumulation
+			else:   #     Si comienza una bajada, cambia de contador
 				max_positive_acum = max(positive_acum, max_positive_acum)
 				negative_acum = dif
 				positive = False
 
-		else:      # Descendent Trend
-			if dif < 0: # If still decrescent sum acumulation
+		else:      # Tendencia decreciente
+			if dif < 0: # Si todavia es decreciente, suma la bajada
 				negative_acum += dif
-			else: # If started crescent save the acumulation
+			else: #       Si comienza una subida, cambia de contador
 				max_negative_acum = min(negative_acum, max_negative_acum)
 				positive_acum = dif
 				positive = True
@@ -40,19 +40,18 @@ def acumtag(start_date, end_date, symbol):
 	negative_acum = 0
 	positive_acum = 0
 	ichange = 0
-	max_negative_acum = (max_negative_acum)/6		# The trend is considered to change when the rupture
-	max_positive_acum = (max_positive_acum)/6		# is greater than 1/6 of the max trend
-
+	max_negative_acum = (max_negative_acum)/6		# Se considera una ruptura de tendencia si
+	max_positive_acum = (max_positive_acum)/6		# si el cambio es mayor de 1/6 la maxima tendencia
 
 	for dif,i in zip(data['dif'],list(range(0,data.shape[0]))):
 		if positive:
 			data_tag[i] = 1 #Tag 1 if crescent
 			if dif < 0:
-				if negative_acum == 0:    # Rectification
+				if negative_acum == 0:    # Rectificacion
 					ichange = i-1
 				negative_acum += dif
-				if negative_acum < max_negative_acum:  # Limit of rectification trespassed - TAG 2 for the last max
-					data_tag[ichange:i+1] = [-1]*(i-ichange+1) # Retag all the rectification days - TAG -1 for decrescent
+				if negative_acum < max_negative_acum:  # Limite de rectificacion traspasado - TAG 2 para el ultimo positivo
+					data_tag[ichange:i+1] = [-1]*(i-ichange+1) # Volver a etiquetar los anteriores - TAG -1
 					data_tag[ichange] = 2
 					positive = False
 					positive_acum = 0
@@ -66,11 +65,11 @@ def acumtag(start_date, end_date, symbol):
 		else:
 			data_tag[i] = -1 #Tag -1 if decrescent
 			if dif > 0:
-				if positive_acum == 0:  # Rectification
+				if positive_acum == 0:  # Rectificacion
 					ichange = i-1
 				positive_acum += dif
-				if positive_acum > max_positive_acum: # Limit of rectification trespassed - TAG -2 for the last min
-					data_tag[ichange:i+1] = [1]*(i-ichange+1) # Retag all the rectification days - TAG -1 for decrescent
+				if positive_acum > max_positive_acum: # Limite de rectificacion traspasado - TAG -2 para el minimo
+					data_tag[ichange:i+1] = [1]*(i-ichange+1) # Volver a etiquetar por la rectificacion - TAG -1
 					data_tag[ichange] = -2
 					positive = True
 					negative_acum = 0
@@ -83,5 +82,4 @@ def acumtag(start_date, end_date, symbol):
 					ichange = i
 
 	data['tag'] = data_tag
-	#print('max_neg_acum:' + str(max_negative_acum) + ' max_pos_acum:' + str(max_positive_acum))
 	data.to_csv("tagged_data/"+ symbol + ".csv")
